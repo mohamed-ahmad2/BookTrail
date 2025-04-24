@@ -61,6 +61,18 @@ flutter pub get
 flutter run
 ```
 
+### 4. Upgrade dependencies
+
+```bash
+flutter pub upgrade
+```
+
+### 5. Upgrade flutter
+
+```bash
+flutter upgrade
+```
+
 ---
 
 ## 👥 Team Workflow
@@ -89,11 +101,11 @@ Once you finish your feature:
 git push origin feature/your-name
 ```
 
-2. Go to the GitHub repo: [BookTrail](https://github.com/mohamed-ahmad2/BookTrail)
-3. Click on **"Compare & pull request"**
-4. Write a short description of what you added or changed
-5. Click **"Create pull request"**
-6. Another team member reviews and clicks **"Merge pull request"** into `main`
+2.Go to the GitHub repo: [BookTrail](https://github.com/mohamed-ahmad2/BookTrail)
+3.Click on **"Compare & pull request"**
+4.Write a short description of what you added or changed
+5.Click **"Create pull request"**
+6.Another team member reviews and clicks **"Merge pull request"** into `main`
 
 > Make sure you pulled the latest `main` before starting to avoid conflicts:
 
@@ -110,10 +122,6 @@ git merge main
 ```
 
 Resolve any conflicts before pushing.
-
----
-
-> Collaborators should be added via GitHub Settings → Collaborators → Add usernames
 
 ---
 
