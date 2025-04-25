@@ -1,0 +1,20 @@
+name: Upload APK to GitHub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload APK to GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
