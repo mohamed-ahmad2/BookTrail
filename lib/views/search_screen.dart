@@ -25,7 +25,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           CustomSearchBarSearch(),
-          Expanded(child: BookListView(books: books)),
+          Expanded(
+            child: BookListView(books: books)
+            ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
