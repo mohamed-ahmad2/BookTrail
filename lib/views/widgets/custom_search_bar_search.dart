@@ -15,7 +15,7 @@ class CustomSearchBarSearch extends StatelessWidget {
           hintText: "search text",
           prefixIcon: Icon(Icons.search),
           suffixIcon: Padding(
-            padding: const EdgeInsets.only(right: 15),
+            padding: const EdgeInsets.only(right: 17),
             child: Icon(Icons.qr_code_scanner),
           ),
           border: OutlineInputBorder(
