@@ -19,6 +19,7 @@ class BookCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal:9, vertical: 3),
       child: Card(
+        color: Color.fromRGBO(252, 233, 254, 1),
         shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
