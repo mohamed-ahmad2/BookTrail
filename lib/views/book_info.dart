@@ -13,7 +13,7 @@ class _BookInfoState extends State<BookInfo> {
   DateTime? _startDate;
   DateTime? _endDate;
   String? _readingStatus;
-  int _rating = 0; 
+  int _rating = 0;
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -43,25 +43,42 @@ class _BookInfoState extends State<BookInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              Container(
-                // the image of the book will be here
-                height: 150,
-                width: 150,
-                color: Colors.grey[300],
-                child: Stack(),
+              Row(
+                children: [
+                  Container(
+                    // the image of the book will be here
+                    height: 150,
+                    width: 150,
+                    color: Colors.grey[300],
+                    child: Stack(),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Name book',
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 55),
+                      Text(
+                        'Author: ',
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 16),
+
               // Book name
-              Text(
-                'Name book',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: 8),
+
               // Author
-              Text(
-                'Author: ',
-                style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-              ),
               SizedBox(height: 16),
               // Summary label
               Text(
@@ -70,97 +87,104 @@ class _BookInfoState extends State<BookInfo> {
               ),
               SizedBox(height: 8),
               // Summary text field
-              Text( 
+              Text(
                 "it will be a text just for display the summary of the book",
                 style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-
               ),
               SizedBox(height: 16),
-              
+
               // Rating
               Row(
                 children: [
-                   Text('Rating:', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 8.0),
-            Row(
-              children: List.generate(5, (index) {
-                return IconButton(
-                  icon: Icon(
-                    index < _rating ? Icons.star : Icons.star_border,
-                    color: Colors.amber,
-                    size: 30.0,
+                  Text(
+                    'Rating:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _rating = index + 1; 
-                    });
-                  },
-                );
-              }),
-            ),
-            SizedBox(width: 8.0),
-            Text(
-              'Selected Rating: $_rating/5',
-              style: TextStyle(color: Colors.grey, fontSize: 14.0),
-            ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < _rating ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _rating = index + 1;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                  SizedBox(width: 8.0),
+                  Text(
+                    'Selected Rating: $_rating/5',
+                    style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                  ),
                 ],
               ),
               SizedBox(height: 16),
-              Text('Reading Status:', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 8.0),
-            // Read
-            Row(
-              children: [
-                Radio<String>(
-                  value: 'read',
-                  groupValue: _readingStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _readingStatus = value!;
-                    });
-                  },
-                ),
-                Icon(Icons.check_circle, color: Colors.green),
-                SizedBox(width: 8.0),
-                Text('read'),
-              ],
-            ),
-            // Reading
-            Row(
-              children: [
-                Radio<String>(
-                  value: 'reading',
-                  groupValue: _readingStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _readingStatus = value!;
-                    });
-                  },
-                ),
-                Icon(Icons.bookmark, color: Colors.blue),
-                SizedBox(width: 8.0),
-                Text('reading'),
-              ],
-            ),
-            // Want to Read
-            Row(
-              children: [
-                Radio<String>(
-                  value: 'want to read',
-                  groupValue: _readingStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      _readingStatus = value!;
-                    });
-                  },
-                ),
-                Icon(Icons.favorite, color: const Color.fromARGB(255, 55, 57, 57)),
-                SizedBox(width: 8.0),
-                Text('want to read'),
-              ],
-            ),
-            SizedBox(height: 16.0),
-              SizedBox(height: 20.0),
+              Text(
+                'Reading Status:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8.0),
+              // Read
+              Row(
+                children: [
+                  Radio<String>(
+                    value: 'read',
+                    groupValue: _readingStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        _readingStatus = value!;
+                      });
+                    },
+                  ),
+                  Icon(Icons.check_circle, color: Colors.green),
+                  SizedBox(width: 8.0),
+                  Text('read'),
+                ],
+              ),
+              // Reading
+              Row(
+                children: [
+                  Radio<String>(
+                    value: 'reading',
+                    groupValue: _readingStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        _readingStatus = value!;
+                      });
+                    },
+                  ),
+                  Icon(Icons.bookmark, color: Colors.blue),
+                  SizedBox(width: 8.0),
+                  Text('reading'),
+                ],
+              ),
+              // Want to Read
+              Row(
+                children: [
+                  Radio<String>(
+                    value: 'want to read',
+                    groupValue: _readingStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        _readingStatus = value!;
+                      });
+                    },
+                  ),
+                  Icon(
+                    Icons.favorite,
+                    color: const Color.fromARGB(255, 55, 57, 57),
+                  ),
+                  SizedBox(width: 8.0),
+                  Text('want to read'),
+                ],
+              ),
+              SizedBox(height: 16.0),
 
               Text('Start date', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 8.0),
@@ -239,8 +263,6 @@ class _BookInfoState extends State<BookInfo> {
                     hintText: 'Add your notes here',
                   ),
                 ),
-                
-              
               ),
               SizedBox(height: 16.0),
             ],
