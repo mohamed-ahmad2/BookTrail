@@ -1,3 +1,4 @@
+import 'package:book_trail/views/widgets/custom_app_bar_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -6,11 +7,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(252, 233, 254, 1),
-        centerTitle: true,
-        title: Text("search"),
-      ),
+      appBar: CustomAppBarSearch(),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: TextField(
