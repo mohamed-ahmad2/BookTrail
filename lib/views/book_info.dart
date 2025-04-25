@@ -12,6 +12,7 @@ class _BookInfoState extends State<BookInfo> {
   final TextEditingController _statusController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
+  String? _readingStatus;
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -79,6 +80,7 @@ class _BookInfoState extends State<BookInfo> {
                 ),
               ),
               SizedBox(height: 16),
+              
               // Rating
               Row(
                 children: [
@@ -96,13 +98,60 @@ class _BookInfoState extends State<BookInfo> {
                 ],
               ),
               SizedBox(height: 16),
-              TextField(
-                controller: _statusController,
-                decoration: InputDecoration(
-                  labelText: 'Reading Status',
-                  border: OutlineInputBorder(),
+              Text('Reading Status:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.0),
+            // Read
+            Row(
+              children: [
+                Radio<String>(
+                  value: 'read',
+                  groupValue: _readingStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      _readingStatus = value!;
+                    });
+                  },
                 ),
-              ),
+                Icon(Icons.check_circle, color: Colors.green),
+                SizedBox(width: 8.0),
+                Text('read'),
+              ],
+            ),
+            // Reading
+            Row(
+              children: [
+                Radio<String>(
+                  value: 'reading',
+                  groupValue: _readingStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      _readingStatus = value!;
+                    });
+                  },
+                ),
+                Icon(Icons.bookmark, color: Colors.blue),
+                SizedBox(width: 8.0),
+                Text('reading'),
+              ],
+            ),
+            // Want to Read
+            Row(
+              children: [
+                Radio<String>(
+                  value: 'want to read',
+                  groupValue: _readingStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      _readingStatus = value!;
+                    });
+                  },
+                ),
+                Icon(Icons.favorite, color: const Color.fromARGB(255, 55, 57, 57)),
+                SizedBox(width: 8.0),
+                Text('want to read'),
+              ],
+            ),
+            SizedBox(height: 16.0),
               SizedBox(height: 20.0),
 
               Text('Start date', style: TextStyle(fontWeight: FontWeight.bold)),
