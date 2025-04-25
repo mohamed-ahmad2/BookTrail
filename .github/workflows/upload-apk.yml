@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Upload APK to GitHub
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+    - name: Upload APK to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release.apk
+        path: build/app/outputs/flutter-apk/app-release.apk
