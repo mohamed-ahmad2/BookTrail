@@ -103,7 +103,7 @@ class _BookInfoState extends State<BookInfo> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 20.0),
 
               Text('Start date', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 8.0),
@@ -132,23 +132,7 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _startDate = null;
-                      });
-                    },
-                    child: Text('Clear'),
-                  ),
-                  TextButton(onPressed: () {}, child: Text('Cancel')),
-                  TextButton(onPressed: () {}, child: Text('OK')),
-                ],
-              ),
               SizedBox(height: 16.0),
-
               Text('End date', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 8.0),
               GestureDetector(
@@ -175,21 +159,7 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _endDate = null;
-                      });
-                    },
-                    child: Text('Clear'),
-                  ),
-                  TextButton(onPressed: () {}, child: Text('Cancel')),
-                  TextButton(onPressed: () {}, child: Text('OK')),
-                ],
-              ),
+
               SizedBox(height: 16.0),
             ],
           ),
