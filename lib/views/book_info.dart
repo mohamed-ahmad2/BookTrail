@@ -13,6 +13,7 @@ class _BookInfoState extends State<BookInfo> {
   DateTime? _startDate;
   DateTime? _endDate;
   String? _readingStatus;
+  int _rating = 0; 
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -69,32 +70,39 @@ class _BookInfoState extends State<BookInfo> {
               ),
               SizedBox(height: 8),
               // Summary text field
-              TextFormField(
-                maxLines: 5,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(color: Colors.grey[400]!),
-                  ),
-                  hintText: 'Enter summary here...',
-                ),
+              Text( 
+                "it will be a text just for display the summary of the book",
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+
               ),
               SizedBox(height: 16),
               
               // Rating
               Row(
                 children: [
-                  Text(
-                    'Rating: ',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                   Text('Rating:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.0),
+            Row(
+              children: List.generate(5, (index) {
+                return IconButton(
+                  icon: Icon(
+                    index < _rating ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                    size: 30.0,
                   ),
-                  Row(
-                    children: List.generate(
-                      5,
-                      (index) =>
-                          Icon(Icons.star, color: Colors.yellow[700], size: 24),
-                    ),
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      _rating = index + 1; 
+                    });
+                  },
+                );
+              }),
+            ),
+            SizedBox(width: 8.0),
+            Text(
+              'Selected Rating: $_rating/5',
+              style: TextStyle(color: Colors.grey, fontSize: 14.0),
+            ),
                 ],
               ),
               SizedBox(height: 16),
@@ -209,6 +217,31 @@ class _BookInfoState extends State<BookInfo> {
                 ),
               ),
 
+              SizedBox(height: 16.0),
+              Text(
+                'Notes',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                padding: EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: _statusController,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Add your notes here',
+                  ),
+                ),
+                
+              
+              ),
               SizedBox(height: 16.0),
             ],
           ),
