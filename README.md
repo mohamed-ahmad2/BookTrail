@@ -81,6 +81,7 @@ flutter upgrade
 
 ```bash
 git checkout -b feature/your-name
+git push -u origin feature/your-name
 ```
 
 - Make changes → commit → push:
