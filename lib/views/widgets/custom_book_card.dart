@@ -18,20 +18,25 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal:9, vertical: 3),
-      child: Card(
-        color: Color.fromRGBO(252, 233, 254, 1),
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        child: ListTile(
-          leading: Icon(Icons.image),
-          title: Text(title),
-          subtitle: Text(author),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [Icon(icon), Text(status)],
+      child: SizedBox(
+        height: 100,
+        child: Card(
+          color: Color.fromRGBO(252, 233, 254, 1),
+          shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          child: Center(
+            child: ListTile(
+              leading: Icon(Icons.image),
+              title: Text(title),
+              subtitle: Text(author),
+              trailing: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [Icon(icon), Text(status)],
+              ),
+            ),
           ),
         ),
       ),
