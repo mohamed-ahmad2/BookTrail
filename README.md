@@ -118,8 +118,8 @@ git pull origin main
 > Then update your branch:
 
 ```bash
-git checkout feature/your-name
-git merge main
+git merge feature/your-name
+git push origin main
 ```
 
 Resolve any conflicts before pushing.
