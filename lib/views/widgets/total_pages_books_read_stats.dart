@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ReadFinishWantStats extends StatelessWidget {
+class TotalPagesBooksReadStats extends StatelessWidget {
   final int count;
-  final IconData iconStats;
   final String nameStats;
-  const ReadFinishWantStats({super.key, required this.count, required this.iconStats, required this.nameStats});
+  const TotalPagesBooksReadStats({super.key, required this.count, required this.nameStats});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +11,6 @@ class ReadFinishWantStats extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Row(
             children: [
-              Icon(iconStats, size: 24, color: Colors.black),
-              SizedBox(width: 8),
               Expanded(
                 child: Text(
                   nameStats,

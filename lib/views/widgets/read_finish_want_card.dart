@@ -12,19 +12,19 @@ class ReadFinishWantCard extends StatelessWidget {
     return Column(
       children: [
         ReadFinishWantStats(
-          finishedCount: finishedCount,
+          count: finishedCount,
           iconStats: Icons.check_circle_outline,
           nameStats: "Finished",
         ),
 
         ReadFinishWantStats(
-          finishedCount: readingCount,
+          count: readingCount,
           iconStats: Icons.library_books,
           nameStats: "Reading",
         ),
 
         ReadFinishWantStats(
-          finishedCount: toReadCount,
+          count: toReadCount,
           iconStats: Icons.bookmark_border,
           nameStats: "To Read",
         ),

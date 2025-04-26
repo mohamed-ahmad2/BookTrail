@@ -3,6 +3,7 @@ import 'package:book_trail/views/widgets/color_text_pi_chart.dart';
 import 'package:book_trail/views/widgets/pie_chart_stats_screen.dart';
 import 'package:book_trail/views/widgets/progress_read_card_stats.dart';
 import 'package:book_trail/views/widgets/read_finish_want_card.dart';
+import 'package:book_trail/views/widgets/total_pages_books_read.dart';
 import 'package:flutter/material.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -33,12 +34,22 @@ class _StatsScreenState extends State<StatsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Text(
+              "CHART",
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            ),
+
             CardStats(
               cards: [
                 PieChartStatsScreen(categories: categories, numberOfBooks: 135),
                 SizedBox(height: 20),
                 ColorTextPiChart(categories: categories),
               ],
+            ),
+
+            Text(
+              "TOTAL PAGES",
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
 
             SizedBox(
@@ -64,8 +75,23 @@ class _StatsScreenState extends State<StatsScreen> {
                   finishedCount: 45,
                   readingCount: 30,
                   toReadCount: 100,
-                )
-              ]
+                ),
+              ],
+            ),
+
+            Text(
+              "BOOKS BY STATUS",
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            ),
+
+            CardStats(
+              cards: [
+                TotalPagesBooksRead(
+                  countBooks: 135,
+                  countPages: 50000,
+                  countRead: 20389,
+                ),
+              ],
             ),
           ],
         ),
