@@ -1,6 +1,4 @@
 import 'package:book_trail/views/widgets/book_list_view.dart';
-import 'package:book_trail/views/widgets/custom_app_bar_search.dart';
-import 'package:book_trail/views/widgets/custom_navigation_bar.dart';
 import 'package:book_trail/views/widgets/custom_search_bar_search.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +19,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarSearch(),
       body: Column(
         children: [
           CustomSearchBarSearch(),
@@ -29,10 +26,6 @@ class _SearchScreenState extends State<SearchScreen> {
             child: BookListView(books: books)
             ),
         ],
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: 3,
-        onTap: (index) {},
       ),
     );
   }
