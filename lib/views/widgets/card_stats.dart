@@ -8,8 +8,9 @@ class CardStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical:  5),
       child: Card(
+        elevation: 4,
         color: Color.fromRGBO(244, 244, 244, 1),
         shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

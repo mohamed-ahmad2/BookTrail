@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StatsScreen(),
+      home: StatsScreen(totalPages: 40000, numberOfPages: 20389,),
     );
   }
 }

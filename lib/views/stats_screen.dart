@@ -1,10 +1,18 @@
 import 'package:book_trail/views/widgets/card_stats.dart';
 import 'package:book_trail/views/widgets/color_text_pi_chart.dart';
 import 'package:book_trail/views/widgets/pie_chart_stats_screen.dart';
+import 'package:book_trail/views/widgets/progress_read_card_stats.dart';
 import 'package:flutter/material.dart';
 
 class StatsScreen extends StatefulWidget {
-  const StatsScreen({super.key});
+  const StatsScreen({
+    super.key,
+    required this.totalPages,
+    required this.numberOfPages,
+  });
+
+  final int numberOfPages;
+  final int totalPages;
 
   @override
   State<StatsScreen> createState() => _StatsScreenState();
@@ -30,6 +38,28 @@ class _StatsScreenState extends State<StatsScreen> {
               ColorTextPiChart(categories: categories),
             ],
           ),
+
+          SizedBox(
+            width: double.maxFinite,
+            child: CardStats(
+              cards: [
+                ProgressReadCardStats(
+                  numberOfPages: widget.numberOfPages,
+                  totalPages: widget.totalPages,
+                ),
+              ],
+            ),
+          ),
+
+          Text(
+            "BOOKS BY STATUS",
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+          ),
+
+          CardStats(
+            cards: [
+            ]
+            ),
         ],
       ),
     );
