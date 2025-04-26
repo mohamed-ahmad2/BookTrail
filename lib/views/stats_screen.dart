@@ -22,9 +22,10 @@ class _StatsScreenState extends State<StatsScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CardStats(card: PieChartStatsScreen(categories: categories, numberOfBooks: 135),),
+          CardStats(
+            cards: [
+              PieChartStatsScreen(categories: categories, numberOfBooks: 135),
+            ],
           ),
         ],
       ),
