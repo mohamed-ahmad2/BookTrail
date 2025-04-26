@@ -13,7 +13,7 @@ class _LoginThefirstlookState extends State<LoginThefirstlook> {
     return Column(
       children: [
         Image.network(
-          'https://cdn-icons-png.flaticon.com/512/4/4259.png',
+          'images/logo.png',
           width: 100,
         ),
         Center(

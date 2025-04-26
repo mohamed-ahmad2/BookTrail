@@ -1,4 +1,5 @@
 import 'package:book_trail/views/_login.dart';
+import 'package:book_trail/views/widgets/_animatedpulserectangle.dart';
 import 'package:flutter/material.dart';
 
 class BodyScreen extends StatefulWidget {
@@ -8,7 +9,8 @@ class BodyScreen extends StatefulWidget {
   State<BodyScreen> createState() => _BodyScreenState();
 }
 
-class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateMixin {
+class _BodyScreenState extends State<BodyScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
@@ -47,28 +49,32 @@ class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FadeTransition(
-          opacity: _fadeAnimation, // Bind the Animation to the image
-          child: Image.network(
-            'https://cdn-icons-png.flaticon.com/512/4/4259.png',
-            height: 250,
-            width: 250,
+    return Center(
+      child: Column(
+        children: [
+          FadeTransition(
+            opacity: _fadeAnimation, // Bind the Animation to the image
+            child: Image.asset(
+              'images/logo.png', 
+              height: 250, 
+              width: 250
+              ),
           ),
-        ),
-        FadeTransition(
-          opacity: _fadeAnimation, // Bind the Animation to the text
-          child: const Text(
-            "BookTrail",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 55,
-              fontWeight: FontWeight.bold,
+          FadeTransition(
+            opacity: _fadeAnimation, // Bind the Animation to the text
+            child: const Text(
+              "BookTrail",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 55,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 30),
+          AnimatedPulseRectangle(opacityAnimation: _fadeAnimation),
+        ],
+      ),
     );
   }
 }
