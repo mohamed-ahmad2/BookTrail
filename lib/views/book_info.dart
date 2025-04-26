@@ -1,3 +1,5 @@
+import 'package:book_trail/views/widgets/book_details.dart';
+import 'package:book_trail/views/widgets/texts_summery.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -43,56 +45,9 @@ class _BookInfoState extends State<BookInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              Row(
-                children: [
-                  Container(
-                    // the image of the book will be here
-                    height: 150,
-                    width: 150,
-                    color: Colors.grey[300],
-                    child: Stack(),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Name book',
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 55),
-                      Text(
-                        'Author: ',
-                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-                      ),
-                      SizedBox(height: 8),
-                    ],
-                  ),
-                ],
-              ),
-
-              // Book name
-              SizedBox(height: 8),
-
-              // Author
+              BookDetails(), // Custom widget for book details
               SizedBox(height: 16),
-              // Summary label
-              Text(
-                'Summary book',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              // Summary text field
-              Text(
-                "it will be a text just for display the summary of the book",
-                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 16),
-
+              TextsSummery(), // Custom widget for summary
               // Rating
               Row(
                 children: [
@@ -185,7 +140,6 @@ class _BookInfoState extends State<BookInfo> {
                 ],
               ),
               SizedBox(height: 16.0),
-
               Text('Start date', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 8.0),
               GestureDetector(
