@@ -1,4 +1,4 @@
-import 'package:book_trail/widgets/custom_book_card.dart';
+import 'package:book_trail/widgets/home_favorite/custom_book_card.dart';
 import 'package:flutter/material.dart';
 
 class BookListView extends StatelessWidget {

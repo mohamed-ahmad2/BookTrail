@@ -1,6 +1,20 @@
-import 'package:book_trail/views/home_screen.dart';
+import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(home: HomeScreen(), debugShowCheckedModeBanner: false));
+  runApp(const BookTrailApp());
+}
+
+class BookTrailApp extends StatelessWidget {
+  const BookTrailApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Book Trail',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MainLayout(),
+    );
+  }
 }
