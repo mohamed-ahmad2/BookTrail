@@ -1,4 +1,5 @@
 import 'package:book_trail/views/search_screen.dart';
+import 'package:book_trail/views/stats_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SearchScreen(),
+      home: StatsScreen(),
     );
   }
 }
