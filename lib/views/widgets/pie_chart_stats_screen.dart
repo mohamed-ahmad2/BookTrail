@@ -3,7 +3,9 @@ import 'package:book_trail/views/widgets/text_in_center_pi_chart.dart';
 import 'package:flutter/material.dart';
 
 class PieChartStatsScreen extends StatelessWidget {
-  const PieChartStatsScreen({super.key});
+  final int numberOfBooks;
+  final List<Map<String, dynamic>> categories;
+  const PieChartStatsScreen({super.key, required this.categories, required this.numberOfBooks});
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +15,8 @@ class PieChartStatsScreen extends StatelessWidget {
         width: 300,
         child: Stack(
           children: [
-            CustomPiChartData(),
-            TextInCenterPiChart(),
+            CustomPiChartData(categories: categories),
+            TextInCenterPiChart(numberOfBooks: numberOfBooks),
           ],
         ),
       ),
