@@ -37,7 +37,7 @@ class BookListView extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 6.0,
-          ), // هنا بتحط مسافة فوق وتحت كل كارت
+          ),
           child: BookCard(
             title: book.title,
             author: book.author,
