@@ -3,12 +3,10 @@ import 'package:book_trail/views/widgets/_animatedpulserectangle.dart';
 import 'package:flutter/material.dart';
 
 class BodyScreen extends StatefulWidget {
-  final bool isDarkMode;
-  final Function(bool) toggleTheme;
+
   const BodyScreen({
     super.key,
-    required this.isDarkMode,
-    required this.toggleTheme,
+ 
   });
 
   @override
@@ -42,8 +40,7 @@ class _BodyScreenState extends State<BodyScreen>
             MaterialPageRoute(
               builder:
                   (context) => LoginScreen(
-                    isDarkMode: widget.isDarkMode,
-                    toggleTheme: widget.toggleTheme,
+                  
                   ),
             ),
           );

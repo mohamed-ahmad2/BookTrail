@@ -12,7 +12,11 @@ class TextInCenterPiChart extends StatelessWidget {
         children: [
           Text(
             numberOfBooks.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 60),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 60,
+              color: Colors.black
+              ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,

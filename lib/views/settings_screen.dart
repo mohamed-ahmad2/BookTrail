@@ -1,17 +1,11 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final bool isDarkMode;
-  final Function(bool) toggleTheme;
-
-  const SettingsScreen({
-    super.key,
-    required this.isDarkMode,
-    required this.toggleTheme,
-  });
+  const SettingsScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -20,13 +14,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = widget.isDarkMode ? Colors.white : Colors.black;
-    Color secondaryTextColor =
-        widget.isDarkMode ? Colors.white70 : Colors.grey[800]!;
-    Color cardColor = widget.isDarkMode ? Colors.grey[900]! : Colors.grey[200]!;
-    Color iconColor = widget.isDarkMode ? Colors.white : Colors.black;
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+        backgroundColor: Colors.purple[800],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -38,7 +32,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Username
               Card(
                 elevation: 4.0,
-                color: cardColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -48,17 +41,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Username:',
-                        style: TextStyle(fontSize: 16, color: textColor),
-                      ),
-                      Text(
-                        '',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: secondaryTextColor,
-                        ),
-                      ),
+                      Text('Username:', style: TextStyle(fontSize: 16)),
+                      Text('', style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -68,7 +52,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Email
               Card(
                 elevation: 4.0,
-                color: cardColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -78,17 +61,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Email:',
-                        style: TextStyle(fontSize: 16, color: textColor),
-                      ),
-                      Text(
-                        '',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: secondaryTextColor,
-                        ),
-                      ),
+                      Text('Email:', style: TextStyle(fontSize: 16)),
+                      Text('', style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -98,7 +72,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Dark Mode
               Card(
                 elevation: 4.0,
-                color: cardColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -110,18 +83,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.dark_mode, color: iconColor),
+                          Icon(Icons.dark_mode),
                           const SizedBox(width: 10),
-                          Text(
-                            'Dark mode',
-                            style: TextStyle(fontSize: 16, color: textColor),
-                          ),
+                          Text('Dark mode', style: TextStyle(fontSize: 16)),
                         ],
                       ),
                       Switch(
-                        value: widget.isDarkMode,
+                        value: themeProvider.isDarkMode,
                         onChanged: (value) {
-                          widget.toggleTheme(value);
+                          themeProvider.toggleDarkMode(); // تغيير القيمة
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,
@@ -135,7 +105,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Notifications
               Card(
                 elevation: 4.0,
-                color: cardColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -145,10 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Notifications',
-                        style: TextStyle(fontSize: 16, color: textColor),
-                      ),
+                      Text('Notifications', style: TextStyle(fontSize: 16)),
                       Switch(
                         value: _notificationsEnabled,
                         onChanged: (value) {
@@ -168,7 +134,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Language
               Card(
                 elevation: 4.0,
-                color: cardColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -178,17 +143,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Language:',
-                        style: TextStyle(fontSize: 16, color: textColor),
-                      ),
-                      Text(
-                        'English',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: secondaryTextColor,
-                        ),
-                      ),
+                      Text('Language:', style: TextStyle(fontSize: 16)),
+                      Text('English', style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),

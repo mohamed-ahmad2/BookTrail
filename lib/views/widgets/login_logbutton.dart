@@ -2,14 +2,7 @@ import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
 class LoginLogbutton extends StatefulWidget {
-  final bool isDarkMode;
-  final Function(bool) toggleTheme;
-
-  const LoginLogbutton({
-    super.key,
-    required this.isDarkMode,
-    required this.toggleTheme,
-  });
+  const LoginLogbutton({super.key});
 
   @override
   State<LoginLogbutton> createState() => _LoginLogbuttonState();
@@ -29,15 +22,9 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder:
-                  (context) => MainLayout(
-                    isDarkMode: widget.isDarkMode,
-                    toggleTheme: widget.toggleTheme,
-                  ),
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => MainLayout()));
         },
         child: const Text(
           'Log in',
