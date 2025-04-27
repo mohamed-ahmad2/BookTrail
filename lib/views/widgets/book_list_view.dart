@@ -14,6 +14,9 @@ class _BookListViewState extends State<BookListView> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       itemCount: widget.books.length,
       itemBuilder: (context, index) {
         final book = widget.books[index];

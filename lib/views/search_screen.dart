@@ -19,13 +19,16 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CustomSearchBarSearch(),
-          Expanded(
-            child: BookListView(books: books)
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 40.0),
+              child: CustomSearchBarSearch(),
             ),
-        ],
+            BookListView(books: books),
+          ],
+        ),
       ),
     );
   }
