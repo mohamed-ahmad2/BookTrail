@@ -7,7 +7,7 @@ class BookListView extends StatelessWidget {
   final List<String> favoriteTitles;
   final Function(String) toggleFavorite;
 
-  const BookListView({
+  const BookListView({super.key, 
     required this.books,
     required this.favoriteTitles,
     required this.toggleFavorite,

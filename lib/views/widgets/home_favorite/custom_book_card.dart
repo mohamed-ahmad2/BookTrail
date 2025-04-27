@@ -7,7 +7,7 @@ class BookCard extends StatelessWidget {
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
 
-  const BookCard({
+  const BookCard({super.key, 
     required this.title,
     required this.author,
     required this.status,
