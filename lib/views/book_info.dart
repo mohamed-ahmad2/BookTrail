@@ -73,9 +73,7 @@ class _BookInfoState extends State<BookInfo> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
-                            height: 30,
-                          ), // تقليل المسافة لإفساح المجال لـ Classification
+                          SizedBox(height: 30),
                           Text(
                             'Author: ',
                             style: TextStyle(
@@ -85,7 +83,7 @@ class _BookInfoState extends State<BookInfo> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Classification:', // يمكنك تغيير "Fiction" إلى أي تصنيف
+                            'Classification:',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.grey[700],
@@ -110,6 +108,7 @@ class _BookInfoState extends State<BookInfo> {
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
+                  // ignore: sized_box_for_whitespace
                   child: Container(
                     height: 100,
                     width: double.infinity,
@@ -143,21 +142,38 @@ class _BookInfoState extends State<BookInfo> {
               // Rating
               Card(
                 elevation: 4.0,
-                color: Colors.grey[200],
+                color: Colors.grey[100],
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                  side: BorderSide(color: Colors.grey[300]!),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
+                  padding: EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Rating:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      // عنوان Rating مظلل
+                      Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 4.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          'Rating',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      SizedBox(width: 8.0),
+                      SizedBox(height: 8.0),
+                      // النجوم
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(5, (index) {
                           return IconButton(
                             icon: Icon(
@@ -173,19 +189,20 @@ class _BookInfoState extends State<BookInfo> {
                           );
                         }),
                       ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        'Selected Rating: $_rating/5',
-                        style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                      SizedBox(height: 8.0),
+                      Center(
+                        child: Text(
+                          'Selected Rating: $_rating/5',
+                          style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
+              SizedBox(height: 8.0),
 
               SizedBox(height: 8),
-
-              // قسم Reading Status
               Card(
                 elevation: 4.0,
                 color: Colors.grey[100],
@@ -199,7 +216,6 @@ class _BookInfoState extends State<BookInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // عنوان Reading Status مع تظليل
                       Container(
                         width: double.infinity,
                         alignment: Alignment.center,
@@ -299,9 +315,7 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-
               SizedBox(height: 8.0),
-
               // Start Date
               Card(
                 elevation: 4.0,
@@ -378,9 +392,7 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-
               SizedBox(height: 8.0),
-
               // End Date
               Card(
                 elevation: 4.0,
@@ -457,9 +469,7 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-
               SizedBox(height: 8.0),
-
               // Notes
               Card(
                 elevation: 4.0,
@@ -512,7 +522,6 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-
               SizedBox(height: 8.0),
             ],
           ),
