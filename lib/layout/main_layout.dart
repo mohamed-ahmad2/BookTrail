@@ -61,7 +61,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
     final List<Widget> screens = [
       HomeScreen(tabController: _tabController),
       FavoritesScreen(tabController: _tabController),
-      const StatsScreen(),
+      const StatsScreen(totalPages: 50000, numberOfPages: 20389,),
       const SearchScreen(),
       SettingsScreen(
         isDarkMode: widget.isDarkMode,
