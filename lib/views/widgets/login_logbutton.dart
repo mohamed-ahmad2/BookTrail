@@ -31,10 +31,11 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => MainLayout(
-                isDarkMode: widget.isDarkMode,
-                toggleTheme: widget.toggleTheme,
-              ),
+              builder:
+                  (context) => MainLayout(
+                    isDarkMode: widget.isDarkMode,
+                    toggleTheme: widget.toggleTheme,
+                  ),
             ),
           );
         },

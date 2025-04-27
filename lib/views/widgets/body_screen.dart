@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class BodyScreen extends StatefulWidget {
   final bool isDarkMode;
   final Function(bool) toggleTheme;
-  const BodyScreen({super.key ,required this.isDarkMode,
-    required this.toggleTheme,});
+  const BodyScreen({
+    super.key,
+    required this.isDarkMode,
+    required this.toggleTheme,
+  });
 
   @override
   State<BodyScreen> createState() => _BodyScreenState();
@@ -36,8 +39,13 @@ class _BodyScreenState extends State<BodyScreen>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen(isDarkMode: widget.isDarkMode,
-          toggleTheme: widget.toggleTheme)),
+            MaterialPageRoute(
+              builder:
+                  (context) => LoginScreen(
+                    isDarkMode: widget.isDarkMode,
+                    toggleTheme: widget.toggleTheme,
+                  ),
+            ),
           );
         });
       });
@@ -58,11 +66,7 @@ class _BodyScreenState extends State<BodyScreen>
         children: [
           FadeTransition(
             opacity: _fadeAnimation, // Bind the Animation to the image
-            child: Image.asset(
-              'images/logo.png', 
-              height: 250, 
-              width: 250
-              ),
+            child: Image.asset('images/logo.png', height: 250, width: 250),
           ),
           FadeTransition(
             opacity: _fadeAnimation, // Bind the Animation to the text

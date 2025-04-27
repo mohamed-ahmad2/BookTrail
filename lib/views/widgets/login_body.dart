@@ -10,7 +10,11 @@ class LoginBody extends StatefulWidget {
   final bool isDarkMode;
   final Function(bool) toggleTheme;
 
-  const LoginBody({super.key ,required this.isDarkMode, required this.toggleTheme,});
+  const LoginBody({
+    super.key,
+    required this.isDarkMode,
+    required this.toggleTheme,
+  });
 
   @override
   State<LoginBody> createState() => _LoginBodyState();
@@ -18,7 +22,6 @@ class LoginBody extends StatefulWidget {
 
 class _LoginBodyState extends State<LoginBody> {
   final formkey = GlobalKey<FormState>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +39,14 @@ class _LoginBodyState extends State<LoginBody> {
               SizedBox(height: 20),
               LoginPassword(),
               SizedBox(height: 25),
-              LoginLogbutton(isDarkMode: widget.isDarkMode,
-              toggleTheme: widget.toggleTheme,),
+              LoginLogbutton(
+                isDarkMode: widget.isDarkMode,
+                toggleTheme: widget.toggleTheme,
+              ),
               SizedBox(height: 40),
               Text(
                 '------------------------------Or------------------------------',
-                style: TextStyle(
-                  color: Colors.grey
-                ),
+                style: TextStyle(color: Colors.grey),
               ),
               SizedBox(height: 25),
               LoginRegbutton(),
