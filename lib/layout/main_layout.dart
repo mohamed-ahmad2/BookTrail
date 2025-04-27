@@ -9,13 +9,10 @@ import 'package:book_trail/views/stats_screen.dart';
 import 'package:book_trail/views/search_screen.dart';
 
 class MainLayout extends StatefulWidget {
-  final bool isDarkMode;
-  final Function(bool) toggleTheme;
+
 
   const MainLayout({
     super.key,
-    required this.isDarkMode,
-    required this.toggleTheme,
   });
 
   @override
@@ -64,8 +61,6 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
       const StatsScreen(totalPages: 50000, numberOfPages: 20389),
       const SearchScreen(),
       SettingsScreen(
-        isDarkMode: widget.isDarkMode,
-        toggleTheme: widget.toggleTheme,
       ),
     ];
 

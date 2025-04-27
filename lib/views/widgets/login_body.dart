@@ -7,13 +7,11 @@ import 'package:book_trail/views/widgets/login_username.dart';
 import 'package:flutter/material.dart';
 
 class LoginBody extends StatefulWidget {
-  final bool isDarkMode;
-  final Function(bool) toggleTheme;
+
 
   const LoginBody({
     super.key,
-    required this.isDarkMode,
-    required this.toggleTheme,
+
   });
 
   @override
@@ -40,8 +38,7 @@ class _LoginBodyState extends State<LoginBody> {
               LoginPassword(),
               SizedBox(height: 25),
               LoginLogbutton(
-                isDarkMode: widget.isDarkMode,
-                toggleTheme: widget.toggleTheme,
+          
               ),
               SizedBox(height: 40),
               Text(
