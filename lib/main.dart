@@ -39,9 +39,20 @@ class _BookTrailAppState extends State<BookTrailApp> {
       title: 'Book Trail',
       debugShowCheckedModeBanner: false,
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      home: MainView(
+      home: _isSplashFinished
+          ? MainView(
               isDarkMode: _isDarkMode,
               toggleTheme: _toggleTheme,
+            )
+          : Scaffold(
+              body: Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
     );
   }

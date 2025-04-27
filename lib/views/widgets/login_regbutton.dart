@@ -21,7 +21,7 @@ class _LoginRegbuttonState extends State<LoginRegbutton> {
           ),
         ),
         onPressed: () {
-          print('Register');
+          
         },
         child: const Text(
           'Register',
