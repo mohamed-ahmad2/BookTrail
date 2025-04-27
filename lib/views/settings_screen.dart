@@ -21,7 +21,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     Color textColor = widget.isDarkMode ? Colors.white : Colors.black;
-    Color secondaryTextColor = widget.isDarkMode ? Colors.white70 : Colors.grey[800]!;
+    Color secondaryTextColor =
+        widget.isDarkMode ? Colors.white70 : Colors.grey[800]!;
     Color cardColor = widget.isDarkMode ? Colors.grey[900]! : Colors.grey[200]!;
     Color iconColor = widget.isDarkMode ? Colors.white : Colors.black;
 
@@ -44,8 +45,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Username:', style: TextStyle(fontSize: 16, color: textColor)),
-                    Text('', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                    Text(
+                      'Username:',
+                      style: TextStyle(fontSize: 16, color: textColor),
+                    ),
+                    Text(
+                      '',
+                      style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                    ),
                   ],
                 ),
               ),
@@ -65,8 +72,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Email:', style: TextStyle(fontSize: 16, color: textColor)),
-                    Text('', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                    Text(
+                      'Email:',
+                      style: TextStyle(fontSize: 16, color: textColor),
+                    ),
+                    Text(
+                      '',
+                      style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                    ),
                   ],
                 ),
               ),
@@ -90,7 +103,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Icon(Icons.dark_mode, color: iconColor),
                         SizedBox(width: 10),
-                        Text('Dark mode', style: TextStyle(fontSize: 16, color: textColor)),
+                        Text(
+                          'Dark mode',
+                          style: TextStyle(fontSize: 16, color: textColor),
+                        ),
                       ],
                     ),
                     Switch(
@@ -120,7 +136,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Notifications', style: TextStyle(fontSize: 16, color: textColor)),
+                    Text(
+                      'Notifications',
+                      style: TextStyle(fontSize: 16, color: textColor),
+                    ),
                     Switch(
                       value: _notificationsEnabled,
                       onChanged: (value) {
@@ -150,8 +169,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Language:', style: TextStyle(fontSize: 16, color: textColor)),
-                    Text('English', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                    Text(
+                      'Language:',
+                      style: TextStyle(fontSize: 16, color: textColor),
+                    ),
+                    Text(
+                      'English',
+                      style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                    ),
                   ],
                 ),
               ),
