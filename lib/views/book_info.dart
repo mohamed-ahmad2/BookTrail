@@ -14,7 +14,7 @@ class _BookInfoState extends State<BookInfo> {
   DateTime? _endDate;
   String? _readingStatus;
   int _rating = 0;
-  
+
   get image => null;
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
@@ -57,7 +57,8 @@ class _BookInfoState extends State<BookInfo> {
                   padding: EdgeInsets.all(16.0),
                   child: Row(
                     children: [
-                      Container( //here is the image of the book
+                      Container(
+                        //here is the image of the book
                         width: 200,
                         height: 150,
                         decoration: BoxDecoration(
@@ -69,7 +70,6 @@ class _BookInfoState extends State<BookInfo> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        
                       ),
                       SizedBox(width: 16),
                       Column(

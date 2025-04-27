@@ -1,53 +1,4 @@
-// import 'package:book_trail/views/main_view.dart';
-// import 'package:book_trail/layout/main_layout.dart';
-// import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(const BookTrailApp());
-// }
-
-// class BookTrailApp extends StatefulWidget {
-//   const BookTrailApp({super.key});
-
-//   @override
-//   State<BookTrailApp> createState() => _BookTrailAppState();
-// }
-
-// class _BookTrailAppState extends State<BookTrailApp> {
-//   bool _isDarkMode = false;
-
-//   void _toggleTheme(bool value) {
-//     setState(() {
-//       _isDarkMode = value;
-//     });
-//   }
-
-
-// void main() {
-//   runApp(const Splash());
-// }
-
-// class Splash extends StatefulWidget {
-//   const Splash({super.key});
-
-//   @override
-//   State<Splash> createState() => _SplashState();
-// }
-
-// class _SplashState extends State<Splash> {
-  
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Book Trail',
-//       debugShowCheckedModeBanner: false,
-//       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
-//       home: MainView(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
-//     );
-//   }
-// }
-// }
 import 'package:flutter/material.dart';
 import 'package:book_trail/views/main_view.dart';
 
@@ -99,14 +50,14 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // تنتظر 2 ثانية ثم تذهب إلى MainView
     Future.delayed(const Duration(seconds: 2), () {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => MainView(
-          isDarkMode: widget.isDarkMode,
-          toggleTheme: widget.toggleTheme,
-        ),
-      ));
+  builder: (context) => MainView(
+    isDarkMode: widget.isDarkMode,
+    toggleTheme: widget.toggleTheme,
+  ),
+));
     });
   }
 
