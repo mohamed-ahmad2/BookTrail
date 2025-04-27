@@ -1,4 +1,4 @@
-import 'package:book_trail/views/widgets/login_body.dart';
+import 'package:book_trail/views/widgets/login_register/login_body.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {

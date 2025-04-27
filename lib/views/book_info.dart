@@ -163,7 +163,6 @@ class _BookInfoState extends State<BookInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // عنوان Rating مظلل
                       Container(
                         width: double.infinity,
                         alignment: Alignment.center,
@@ -181,7 +180,6 @@ class _BookInfoState extends State<BookInfo> {
                         ),
                       ),
                       SizedBox(height: 8.0),
-                      // النجوم
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(5, (index) {

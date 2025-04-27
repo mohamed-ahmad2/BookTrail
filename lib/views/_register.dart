@@ -1,4 +1,4 @@
-import 'package:book_trail/views/widgets/register_body.dart';
+import 'package:book_trail/views/widgets/login_register/register_body.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {

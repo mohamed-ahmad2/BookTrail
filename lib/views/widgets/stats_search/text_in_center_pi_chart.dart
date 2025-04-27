@@ -1,4 +1,6 @@
+//import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+//import 'package:provider/provider.dart';
 
 class TextInCenterPiChart extends StatelessWidget {
   final int numberOfBooks;
@@ -6,6 +8,8 @@ class TextInCenterPiChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -15,8 +19,8 @@ class TextInCenterPiChart extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 60,
-              color: Colors.black
-              ),
+              color: Colors.black,
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
