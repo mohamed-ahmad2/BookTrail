@@ -15,7 +15,7 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
       width: 400,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Color(0xFF65558f),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(35),
           ),

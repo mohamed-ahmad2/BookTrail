@@ -1,3 +1,4 @@
+import 'package:book_trail/views/widgets/login_guest_textbutton.dart';
 import 'package:book_trail/views/widgets/login_logbutton.dart';
 import 'package:book_trail/views/widgets/login_password.dart';
 import 'package:book_trail/views/widgets/login_regbutton.dart';
@@ -29,9 +30,16 @@ class _LoginBodyState extends State<LoginBody> {
             SizedBox(height: 25),
             LoginLogbutton(),
             SizedBox(height: 40),
-            Text('--------------------------------------Or--------------------------------------'),
+            Text(
+              '------------------------------Or------------------------------',
+              style: TextStyle(
+                color: Colors.grey
+              ),
+            ),
             SizedBox(height: 25),
             LoginRegbutton(),
+            SizedBox(height: 30),
+            LoginGuestTextbutton(),
           ],
         ),
     );
