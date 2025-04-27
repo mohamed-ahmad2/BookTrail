@@ -7,12 +7,7 @@ import 'package:book_trail/views/widgets/login_register/login_username.dart';
 import 'package:flutter/material.dart';
 
 class LoginBody extends StatefulWidget {
-
-
-  const LoginBody({
-    super.key,
-
-  });
+  const LoginBody({super.key});
 
   @override
   State<LoginBody> createState() => _LoginBodyState();
@@ -37,9 +32,7 @@ class _LoginBodyState extends State<LoginBody> {
               SizedBox(height: 20),
               LoginPassword(),
               SizedBox(height: 25),
-              LoginLogbutton(
-          
-              ),
+              LoginLogbutton(),
               SizedBox(height: 40),
               Text(
                 '------------------------------Or------------------------------',

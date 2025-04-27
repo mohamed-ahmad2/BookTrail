@@ -3,11 +3,7 @@ import 'package:book_trail/views/widgets/_animatedpulserectangle.dart';
 import 'package:flutter/material.dart';
 
 class BodyScreen extends StatefulWidget {
-
-  const BodyScreen({
-    super.key,
- 
-  });
+  const BodyScreen({super.key});
 
   @override
   State<BodyScreen> createState() => _BodyScreenState();
@@ -37,12 +33,7 @@ class _BodyScreenState extends State<BodyScreen>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder:
-                  (context) => LoginScreen(
-                  
-                  ),
-            ),
+            MaterialPageRoute(builder: (context) => LoginScreen()),
           );
         });
       });
@@ -62,11 +53,11 @@ class _BodyScreenState extends State<BodyScreen>
       child: Column(
         children: [
           FadeTransition(
-            opacity: _fadeAnimation, // Bind the Animation to the image
+            opacity: _fadeAnimation,
             child: Image.asset('images/logo.png', height: 250, width: 250),
           ),
           FadeTransition(
-            opacity: _fadeAnimation, // Bind the Animation to the text
+            opacity: _fadeAnimation,
             child: const Text(
               "BookTrail",
               style: TextStyle(
