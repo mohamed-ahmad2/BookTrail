@@ -14,7 +14,6 @@ class BookTrailApp extends StatefulWidget {
 
 class _BookTrailAppState extends State<BookTrailApp> {
   bool _isDarkMode = false;
-  bool _isSplashFinished = false;
 
   void _toggleTheme(bool value) {
     setState(() {
@@ -27,9 +26,7 @@ class _BookTrailAppState extends State<BookTrailApp> {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      setState(() {
-        _isSplashFinished = true;
-      });
+      setState(() {});
     });
   }
 
@@ -39,21 +36,7 @@ class _BookTrailAppState extends State<BookTrailApp> {
       title: 'Book Trail',
       debugShowCheckedModeBanner: false,
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      home: _isSplashFinished
-          ? MainView(
-              isDarkMode: _isDarkMode,
-              toggleTheme: _toggleTheme,
-            )
-          : Scaffold(
-              body: Center(
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: 150,
-                  height: 150,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
+      home: MainView(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
     );
   }
 }
