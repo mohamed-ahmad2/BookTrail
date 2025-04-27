@@ -1,5 +1,5 @@
-//import 'package:book_trail/views/book_info.dart';
-import 'package:book_trail/views/settings_screen.dart';
+import 'package:book_trail/views/book_info.dart';
+//import 'package:book_trail/views/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 // check
@@ -21,7 +21,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isDarkMode = value;
     });
-    
   }
 
   // This widget is the root of your application.
@@ -31,10 +30,8 @@ class _MyAppState extends State<MyApp> {
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
       title: 'Book Trail',
       debugShowCheckedModeBanner: false,
-      home: SettingsScreen(
-        isDarkMode: _isDarkMode,
-        toggleTheme: _toggleTheme,
-      ),
+      home: const BookInfo(), 
+      //SettingsScreen(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
     );
   }
 }
