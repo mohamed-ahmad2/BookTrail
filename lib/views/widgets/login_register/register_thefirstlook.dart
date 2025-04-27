@@ -12,10 +12,8 @@ class _RegisterThefirstlookState extends State<RegisterThefirstlook> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.network(
-          'images/logo.png',
-          width: 100,
-        ),
+        SizedBox(height: 50),
+        Image.asset('images/logo.png', width: 100, height: 100),
         Center(
           child: Text(
             'BookTrail',
