@@ -14,17 +14,37 @@ class BookListView extends StatelessWidget {
   });
 
   @override
+  // Widget build(BuildContext context) {
+  //   return ListView.builder(
+  //     itemCount: books.length,
+  //     itemBuilder: (context, index) {
+  //       final book = books[index];
+  //       return BookCard(
+  //         title: book.title,
+  //         author: book.author,
+  //         status: book.status,
+  //         isFavorite: favoriteTitles.contains(book.title),
+  //         onFavoriteToggle: () => toggleFavorite(book.title),
+  //       );
+  //     },
+  //   );
+  // }
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
-        return BookCard(
-          title: book.title,
-          author: book.author,
-          status: book.status,
-          isFavorite: favoriteTitles.contains(book.title),
-          onFavoriteToggle: () => toggleFavorite(book.title),
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 6.0,
+          ), // هنا بتحط مسافة فوق وتحت كل كارت
+          child: BookCard(
+            title: book.title,
+            author: book.author,
+            status: book.status,
+            isFavorite: favoriteTitles.contains(book.title),
+            onFavoriteToggle: () => toggleFavorite(book.title),
+          ),
         );
       },
     );
