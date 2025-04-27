@@ -33,7 +33,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+
               // Username
               Card(
                 elevation: 4.0,
@@ -41,9 +42,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -53,14 +54,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Text(
                         '',
-                        style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: secondaryTextColor,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-        
+              const SizedBox(height: 8),
+
               // Email
               Card(
                 elevation: 4.0,
@@ -68,9 +72,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -80,14 +84,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Text(
                         '',
-                        style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: secondaryTextColor,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-        
+              const SizedBox(height: 8),
+
               // Dark Mode
               Card(
                 elevation: 4.0,
@@ -95,16 +102,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           Icon(Icons.dark_mode, color: iconColor),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Text(
                             'Dark mode',
                             style: TextStyle(fontSize: 16, color: textColor),
@@ -123,8 +130,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-        
+              const SizedBox(height: 8),
+
               // Notifications
               Card(
                 elevation: 4.0,
@@ -132,9 +139,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -156,8 +163,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-        
+              const SizedBox(height: 8),
+
               // Language
               Card(
                 elevation: 4.0,
@@ -165,9 +172,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -177,14 +184,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Text(
                         'English',
-                        style: TextStyle(fontSize: 16, color: secondaryTextColor),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: secondaryTextColor,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-        
+              const SizedBox(height: 16),
+
               // Change Password Button
               SizedBox(
                 width: double.infinity,
@@ -192,19 +202,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple[800],
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Change Password',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-        
+              const SizedBox(height: 8),
+
               // Delete Data Button
               SizedBox(
                 width: double.infinity,
@@ -212,18 +222,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[800],
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Delete Data',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
             ],
           ),
         ),

@@ -1,20 +1,18 @@
-//import 'package:book_trail/views/book_info.dart';
-import 'package:book_trail/views/settings_screen.dart';
+import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
-// check
 void main() {
-  runApp(const MyApp());
+  runApp(const BookTrailApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class BookTrailApp extends StatefulWidget {
+  const BookTrailApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<BookTrailApp> createState() => _BookTrailAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _BookTrailAppState extends State<BookTrailApp> {
   bool _isDarkMode = false;
 
   void _toggleTheme(bool value) {
@@ -23,15 +21,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
       title: 'Book Trail',
       debugShowCheckedModeBanner: false,
-      home: //const BookInfo(), 
-      SettingsScreen(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
+      theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: MainLayout(isDarkMode: _isDarkMode, toggleTheme: _toggleTheme),
     );
   }
 }
