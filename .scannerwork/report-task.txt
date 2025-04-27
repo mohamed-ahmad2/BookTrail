@@ -1,0 +1,6 @@
+projectKey=mohamed-ahmad2_BookTrail_775d23c3-66fe-4a05-adab-95912fa96cf8
+serverUrl=http://localhost:9000
+serverVersion=25.4.0.105899
+dashboardUrl=http://localhost:9000/dashboard?id=mohamed-ahmad2_BookTrail_775d23c3-66fe-4a05-adab-95912fa96cf8
+ceTaskId=00155831-b542-4df8-be64-e1f97080b3f4
+ceTaskUrl=http://localhost:9000/api/ce/task?id=00155831-b542-4df8-be64-e1f97080b3f4

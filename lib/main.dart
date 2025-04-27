@@ -99,7 +99,6 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    // تنتظر 2 ثانية ثم تذهب إلى MainView
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => MainView(
