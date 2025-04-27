@@ -20,115 +20,143 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = widget.isDarkMode ? Colors.white : Colors.black;
+    Color secondaryTextColor = widget.isDarkMode ? Colors.white70 : Colors.grey[800]!;
+    Color cardColor = widget.isDarkMode ? Colors.grey[900]! : Colors.grey[200]!;
+    Color iconColor = widget.isDarkMode ? Colors.white : Colors.black;
+
     return Scaffold(
-      
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Username
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4.0,
+              color: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Username:', style: TextStyle(fontSize: 16)),
-                  Text('', style: TextStyle(fontSize: 16)),
-                ],
+              margin: EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Username:', style: TextStyle(fontSize: 16, color: textColor)),
+                    Text('', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Email
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4.0,
+              color: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Email:', style: TextStyle(fontSize: 16)),
-                  Text('', style: TextStyle(fontSize: 16)),
-                ],
+              margin: EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Email:', style: TextStyle(fontSize: 16, color: textColor)),
+                    Text('', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Dark Mode
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4.0,
+              color: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.dark_mode),
-                      SizedBox(width: 10),
-                      Text('Dark mode', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                  Switch(
-                    value: widget.isDarkMode,
-                    onChanged: (value) {
-                      widget.toggleTheme(value);
-                    },
-                  ),
-                ],
+              margin: EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.dark_mode, color: iconColor),
+                        SizedBox(width: 10),
+                        Text('Dark mode', style: TextStyle(fontSize: 16, color: textColor)),
+                      ],
+                    ),
+                    Switch(
+                      value: widget.isDarkMode,
+                      onChanged: (value) {
+                        widget.toggleTheme(value);
+                      },
+                      activeColor: Colors.blue,
+                      inactiveThumbColor: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Notifications
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4.0,
+              color: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Notifications', style: TextStyle(fontSize: 16)),
-                  Switch(
-                    value: _notificationsEnabled,
-                    onChanged: (value) {
-                      setState(() {
-                        _notificationsEnabled = value;
-                      });
-                    },
-                  ),
-                ],
+              margin: EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Notifications', style: TextStyle(fontSize: 16, color: textColor)),
+                    Switch(
+                      value: _notificationsEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          _notificationsEnabled = value;
+                        });
+                      },
+                      activeColor: Colors.blue,
+                      inactiveThumbColor: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Language
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4.0,
+              color: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Language:', style: TextStyle(fontSize: 16)),
-                  Text('English', style: TextStyle(fontSize: 16)),
-                ],
+              margin: EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Language:', style: TextStyle(fontSize: 16, color: textColor)),
+                    Text('English', style: TextStyle(fontSize: 16, color: secondaryTextColor)),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
 
             // Change Password Button
             SizedBox(
@@ -148,7 +176,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
 
             // Delete Data Button
             SizedBox(
@@ -168,6 +196,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
+            SizedBox(height: 8),
           ],
         ),
       ),
