@@ -1,4 +1,4 @@
-name: Build, Analyze and Upload APK
+name: Upload APK to GitHub
 
 on:
   push:
@@ -6,15 +6,12 @@ on:
       - main
 
 jobs:
-  build-and-analyze:
-    name: Build, Analyze and Upload APK
+  upload-apk:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -24,12 +21,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: SonarQube Analysis
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
       - name: Upload APK to GitHub
         uses: actions/upload-artifact@v4
         with:
@@ -37,10 +28,3 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # If you want to fail the job when the Quality Gate fails (optional):
-    # - name: SonarQube Quality Gate Check
-    #   uses: SonarSource/sonarqube-quality-gate-action@v1
-    #   timeout-minutes: 5
-    #   env:
-    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

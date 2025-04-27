@@ -1,4 +1,4 @@
-import 'package:book_trail/views/widgets/read_finish_want_stats.dart';
+import 'package:book_trail/views/widgets/stats_search/read_finish_want_stats.dart';
 import 'package:flutter/material.dart';
 
 class ReadFinishWantCard extends StatelessWidget {

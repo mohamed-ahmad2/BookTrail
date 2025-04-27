@@ -1,6 +1,6 @@
 
-import 'package:book_trail/views/widgets/book_list_view.dart';
-import 'package:book_trail/views/widgets/custom_search_bar_search.dart';
+import 'package:book_trail/views/widgets/stats_search/book_list_view.dart';
+import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {

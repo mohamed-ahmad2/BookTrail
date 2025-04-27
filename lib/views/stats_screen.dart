@@ -1,10 +1,9 @@
-
-import 'package:book_trail/views/widgets/card_stats.dart';
-import 'package:book_trail/views/widgets/color_text_pi_chart.dart';
-import 'package:book_trail/views/widgets/pie_chart_stats_screen.dart';
-import 'package:book_trail/views/widgets/progress_read_card_stats.dart';
-import 'package:book_trail/views/widgets/read_finish_want_card.dart';
-import 'package:book_trail/views/widgets/total_pages_books_read.dart';
+import 'package:book_trail/views/widgets/stats_search/card_stats.dart';
+import 'package:book_trail/views/widgets/stats_search/color_text_pi_chart.dart';
+import 'package:book_trail/views/widgets/stats_search/pie_chart_stats_screen.dart';
+import 'package:book_trail/views/widgets/stats_search/progress_read_card_stats.dart';
+import 'package:book_trail/views/widgets/stats_search/read_finish_want_card.dart';
+import 'package:book_trail/views/widgets/stats_search/total_pages_books_read.dart';
 import 'package:flutter/material.dart';
 
 class StatsScreen extends StatefulWidget {

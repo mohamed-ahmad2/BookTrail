@@ -1,4 +1,4 @@
-import 'package:book_trail/views/widgets/total_pages_books_read_stats.dart';
+import 'package:book_trail/views/widgets/stats_search/total_pages_books_read_stats.dart';
 import 'package:flutter/material.dart';
 
 class TotalPagesBooksRead extends StatelessWidget {
