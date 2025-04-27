@@ -75,6 +75,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   finishedCount: 45,
                   readingCount: 30,
                   toReadCount: 100,
+                  avgRate: 4,
                 ),
               ],
             ),

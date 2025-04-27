@@ -5,7 +5,8 @@ class ReadFinishWantCard extends StatelessWidget {
   final int finishedCount;
   final int readingCount;
   final int toReadCount;
-  const ReadFinishWantCard({super.key, required this.finishedCount, required this.readingCount, required this.toReadCount});
+  final int avgRate;
+  const ReadFinishWantCard({super.key, required this.finishedCount, required this.readingCount, required this.toReadCount, required this.avgRate});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,12 @@ class ReadFinishWantCard extends StatelessWidget {
           count: toReadCount,
           iconStats: Icons.bookmark_border,
           nameStats: "To Read",
+        ),
+
+        ReadFinishWantStats(
+          count: avgRate,
+          iconStats: Icons.star_border_outlined,
+          nameStats: "Avg Star",
         ),
       ],
     );
