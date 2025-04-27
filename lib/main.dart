@@ -1,4 +1,3 @@
-import 'package:book_trail/views/search_screen.dart';
 import 'package:book_trail/views/stats_screen.dart';
 import 'package:flutter/material.dart';
 
