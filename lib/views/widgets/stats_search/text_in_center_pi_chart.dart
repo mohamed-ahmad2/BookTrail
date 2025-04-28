@@ -1,6 +1,6 @@
-//import 'package:book_trail/theme_provider.dart';
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class TextInCenterPiChart extends StatelessWidget {
   final int numberOfBooks;
@@ -8,7 +8,7 @@ class TextInCenterPiChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Center(
       child: Column(
@@ -19,7 +19,7 @@ class TextInCenterPiChart extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 60,
-              color: Colors.black,
+              color: themeProvider.isDarkMode ? const Color(0xFFFFFFFF) : Colors.black,
             ),
           ),
           Row(
@@ -28,14 +28,14 @@ class TextInCenterPiChart extends StatelessWidget {
               Icon(
                 Icons.book,
                 size: 25,
-                color: const Color.fromARGB(255, 78, 78, 78),
+                color: themeProvider.isDarkMode ? const Color(0xFFB0BEC5) : Color(0xFF4E4E4E),
               ),
               Text(
                 "Books",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
-                  color: const Color.fromARGB(255, 78, 78, 78),
+                  color: themeProvider.isDarkMode ? const Color(0xFFB0BEC5) : Color(0xFF4E4E4E),
                 ),
               ),
             ],

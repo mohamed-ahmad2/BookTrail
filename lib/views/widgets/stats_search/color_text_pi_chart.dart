@@ -1,4 +1,6 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ColorTextPiChart extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
@@ -6,6 +8,7 @@ class ColorTextPiChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Column(
@@ -16,7 +19,6 @@ class ColorTextPiChart extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 12, left: 20, right: 20),
                 child: Row(
                   children: [
-
                     Container(
                       width: 16,
                       height: 16,
@@ -33,7 +35,10 @@ class ColorTextPiChart extends StatelessWidget {
                         category['name'],
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black
+                          color:
+                              themeProvider.isDarkMode
+                                  ? const Color(0xFFFFFFFF)
+                                  : Colors.black,
                         ),
                       ),
                     ),
@@ -43,10 +48,12 @@ class ColorTextPiChart extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color:
+                            themeProvider.isDarkMode
+                                ? const Color(0xFFFFFFFF)
+                                : Colors.black,
                       ),
                     ),
-
                   ],
                 ),
               );
