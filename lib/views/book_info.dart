@@ -61,7 +61,7 @@ class _BookInfoState extends State<BookInfo> {
                     color:
                         themeProvider.isDarkMode
                             ? Colors.grey[200]!
-                            : Colors.grey[800]!, 
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -69,7 +69,7 @@ class _BookInfoState extends State<BookInfo> {
                   padding: EdgeInsets.all(16.0),
                   child: Row(
                     children: [
-               Card(
+                      Card(
                         elevation: 4.0,
                         color:
                             themeProvider.isDarkMode
@@ -159,6 +159,7 @@ class _BookInfoState extends State<BookInfo> {
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
+                  // ignore: sized_box_for_whitespace
                   child: Container(
                     height: 100,
                     width: double.infinity,
@@ -194,11 +195,17 @@ class _BookInfoState extends State<BookInfo> {
               // Rating
               Card(
                 elevation: 4.0,
-                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -220,8 +227,13 @@ class _BookInfoState extends State<BookInfo> {
                         ),
                         child: Text(
                           'Rating',
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                          color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.black,),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                themeProvider.isDarkMode
+                                    ? Colors.grey[900]
+                                    : Colors.black,
+                          ),
                         ),
                       ),
                       SizedBox(height: 8.0),
@@ -258,11 +270,17 @@ class _BookInfoState extends State<BookInfo> {
               SizedBox(height: 8),
               Card(
                 elevation: 4.0,
-                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -284,8 +302,13 @@ class _BookInfoState extends State<BookInfo> {
                         ),
                         child: Text(
                           'Reading Status',
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                          color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.black,),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                themeProvider.isDarkMode
+                                    ? Colors.grey[900]
+                                    : Colors.black,
+                          ),
                         ),
                       ),
                       SizedBox(height: 8.0),
@@ -375,11 +398,17 @@ class _BookInfoState extends State<BookInfo> {
 
               Card(
                 elevation: 4.0,
-                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -434,14 +463,24 @@ class _BookInfoState extends State<BookInfo> {
                             },
                             child: Text(
                               'Clear',
-                              style: TextStyle(color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],),
+                              style: TextStyle(
+                                color:
+                                    themeProvider.isDarkMode
+                                        ? Colors.grey[200]
+                                        : Colors.grey[800],
+                              ),
                             ),
                           ),
                           TextButton(
                             onPressed: () {},
                             child: Text(
                               'OK',
-                              style: TextStyle(color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],),
+                              style: TextStyle(
+                                color:
+                                    themeProvider.isDarkMode
+                                        ? Colors.grey[200]
+                                        : Colors.grey[800],
+                              ),
                             ),
                           ),
                         ],
@@ -454,11 +493,17 @@ class _BookInfoState extends State<BookInfo> {
 
               Card(
                 elevation: 4.0,
-                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -513,14 +558,24 @@ class _BookInfoState extends State<BookInfo> {
                             },
                             child: Text(
                               'Clear',
-                              style: TextStyle(color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],),
+                              style: TextStyle(
+                                color:
+                                    themeProvider.isDarkMode
+                                        ? Colors.grey[200]
+                                        : Colors.grey[800],
+                              ),
                             ),
                           ),
                           TextButton(
                             onPressed: () {},
                             child: Text(
                               'OK',
-                              style: TextStyle(color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],),
+                              style: TextStyle(
+                                color:
+                                    themeProvider.isDarkMode
+                                        ? Colors.grey[200]
+                                        : Colors.grey[800],
+                              ),
                             ),
                           ),
                         ],
@@ -533,11 +588,17 @@ class _BookInfoState extends State<BookInfo> {
 
               Card(
                 elevation: 4.0,
-                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
                   ),
                 ),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
