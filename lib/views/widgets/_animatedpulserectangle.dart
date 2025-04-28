@@ -1,4 +1,6 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnimatedPulseRectangle  extends StatefulWidget {
   final Animation<double> opacityAnimation;
@@ -31,6 +33,7 @@ class _AnimatedPulseRectangleState extends State<AnimatedPulseRectangle > with S
 
   @override
 Widget build(BuildContext context) {
+  final themeProvider = Provider.of<ThemeProvider>(context);
   return FadeTransition(
     opacity: widget.opacityAnimation,
     child: AnimatedBuilder(
@@ -40,7 +43,7 @@ Widget build(BuildContext context) {
           width: _widthAnimation.value,
           height: 10,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: themeProvider.isDarkMode ? Colors.white : Colors.black,
             borderRadius: BorderRadius.circular(5),
           ),
         );

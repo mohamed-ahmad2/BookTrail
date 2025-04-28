@@ -1,4 +1,6 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterThefirstlook extends StatefulWidget {
   const RegisterThefirstlook({super.key});
@@ -10,19 +12,21 @@ class RegisterThefirstlook extends StatefulWidget {
 class _RegisterThefirstlookState extends State<RegisterThefirstlook> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Column(
       children: [
         Image.network(
           'images/logo.png',
           width: 100,
+          color: themeProvider.isDarkMode ? Colors.white : Colors.black,
         ),
         Center(
           child: Text(
             'BookTrail',
             style: TextStyle(
-              color: Colors.black,
               fontSize: 40,
               fontWeight: FontWeight.bold,
+              color: themeProvider.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
         ),
@@ -31,9 +35,9 @@ class _RegisterThefirstlookState extends State<RegisterThefirstlook> {
           child: Text(
             'Register',
             style: TextStyle(
-              color: Colors.black,
               fontSize: 30,
               fontWeight: FontWeight.bold,
+              color: themeProvider.isDarkMode ? Colors.white : Colors.black,
             ),
           ),
         ),

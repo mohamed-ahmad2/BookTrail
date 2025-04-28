@@ -1,20 +1,21 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:book_trail/views/_login.dart';
 import 'package:book_trail/views/widgets/_animatedpulserectangle.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BodyScreen extends StatefulWidget {
 
   const BodyScreen({
     super.key,
- 
+
   });
 
   @override
   State<BodyScreen> createState() => _BodyScreenState();
 }
 
-class _BodyScreenState extends State<BodyScreen>
-    with SingleTickerProviderStateMixin {
+class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
@@ -58,19 +59,25 @@ class _BodyScreenState extends State<BodyScreen>
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Center(
       child: Column(
         children: [
           FadeTransition(
             opacity: _fadeAnimation, // Bind the Animation to the image
-            child: Image.asset('images/logo.png', height: 250, width: 250),
+            child: Image.asset(
+              'images/logo.png',
+              height: 250,
+              width: 250,
+              color: themeProvider.isDarkMode ? Colors.white : Colors.black,
+              ),
           ),
           FadeTransition(
             opacity: _fadeAnimation, // Bind the Animation to the text
-            child: const Text(
+            child: Text(
               "BookTrail",
               style: TextStyle(
-                color: Colors.black,
+                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
                 fontSize: 55,
                 fontWeight: FontWeight.bold,
               ),

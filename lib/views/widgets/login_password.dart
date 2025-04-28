@@ -1,4 +1,6 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPassword extends StatefulWidget {
   const LoginPassword({super.key});
@@ -12,6 +14,7 @@ class _LoginPasswordState extends State<LoginPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return TextFormField(
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -26,7 +29,7 @@ class _LoginPasswordState extends State<LoginPassword> {
         suffixIcon: IconButton(
           icon: Icon(
             passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
+            color: themeProvider.isDarkMode ? Colors.white : Colors.black,
           ),
           onPressed: () {
             setState(() {
