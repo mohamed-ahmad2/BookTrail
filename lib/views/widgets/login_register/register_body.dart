@@ -1,9 +1,9 @@
-import 'package:book_trail/views/widgets/register_email.dart';
-import 'package:book_trail/views/widgets/register_logbutton.dart';
-import 'package:book_trail/views/widgets/register_password.dart';
-import 'package:book_trail/views/widgets/register_regbutton.dart';
-import 'package:book_trail/views/widgets/register_thefirstlook.dart';
-import 'package:book_trail/views/widgets/register_username.dart';
+import 'package:book_trail/views/widgets/login_register/register_email.dart';
+import 'package:book_trail/views/widgets/login_register/register_logbutton.dart';
+import 'package:book_trail/views/widgets/login_register/register_password.dart';
+import 'package:book_trail/views/widgets/login_register/register_regbutton.dart';
+import 'package:book_trail/views/widgets/login_register/register_thefirstlook.dart';
+import 'package:book_trail/views/widgets/login_register/register_username.dart';
 import 'package:flutter/material.dart';
 
 class RegisterBody extends StatefulWidget {

@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Switch(
                         value: themeProvider.isDarkMode,
                         onChanged: (value) {
-                          themeProvider.toggleDarkMode(); 
+themeProvider.toggleDarkMode();
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,

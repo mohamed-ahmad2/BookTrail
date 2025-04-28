@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-class LoginThefirstlook extends StatefulWidget {
-  const LoginThefirstlook({super.key});
+class RegisterThefirstlook extends StatefulWidget {
+  const RegisterThefirstlook({super.key});
 
   @override
-  State<LoginThefirstlook> createState() => _LoginThefirstlookState();
+  State<RegisterThefirstlook> createState() => _RegisterThefirstlookState();
 }
 
-class _LoginThefirstlookState extends State<LoginThefirstlook> {
+class _RegisterThefirstlookState extends State<RegisterThefirstlook> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.network(
-          'images/logo.png',
-          width: 100,
-        ),
+        SizedBox(height: 50),
+        Image.asset('images/logo.png', width: 100, height: 100),
         Center(
           child: Text(
             'BookTrail',
@@ -29,7 +27,7 @@ class _LoginThefirstlookState extends State<LoginThefirstlook> {
         SizedBox(height: 25),
         Center(
           child: Text(
-            'Login',
+            'Register',
             style: TextStyle(
               color: Colors.black,
               fontSize: 30,
