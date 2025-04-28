@@ -2,22 +2,23 @@ import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginThefirstlook extends StatefulWidget {
-  const LoginThefirstlook({super.key});
+class RegisterThefirstlook extends StatefulWidget {
+  const RegisterThefirstlook({super.key});
 
   @override
-  State<LoginThefirstlook> createState() => _LoginThefirstlookState();
+  State<RegisterThefirstlook> createState() => _RegisterThefirstlookState();
 }
 
-class _LoginThefirstlookState extends State<LoginThefirstlook> {
+class _RegisterThefirstlookState extends State<RegisterThefirstlook> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Column(
       children: [
-        Image.network(
+        Image.asset(
           'images/logo.png',
           width: 100,
+          height: 100,
           color: themeProvider.isDarkMode ? Colors.white : Colors.black,
         ),
         Center(
@@ -33,7 +34,7 @@ class _LoginThefirstlookState extends State<LoginThefirstlook> {
         SizedBox(height: 25),
         Center(
           child: Text(
-            'Login',
+            'Register',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

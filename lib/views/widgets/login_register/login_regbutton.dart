@@ -20,9 +20,7 @@ class _LoginRegbuttonState extends State<LoginRegbutton> {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {
-          
-        },
+        onPressed: () {},
         child: const Text(
           'Register',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

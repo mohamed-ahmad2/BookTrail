@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BodyScreen extends StatefulWidget {
-
-  const BodyScreen({
-    super.key,
-
-  });
+  const BodyScreen({super.key});
 
   @override
   State<BodyScreen> createState() => _BodyScreenState();
@@ -38,12 +34,7 @@ class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateM
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder:
-                  (context) => LoginScreen(
-                  
-                  ),
-            ),
+            MaterialPageRoute(builder: (context) => LoginScreen()),
           );
         });
       });
@@ -73,7 +64,7 @@ class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateM
               ),
           ),
           FadeTransition(
-            opacity: _fadeAnimation, // Bind the Animation to the text
+            opacity: _fadeAnimation,
             child: Text(
               "BookTrail",
               style: TextStyle(

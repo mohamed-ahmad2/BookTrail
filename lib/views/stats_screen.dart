@@ -1,3 +1,4 @@
+import 'package:book_trail/theme_provider.dart';
 import 'package:book_trail/views/widgets/stats_search/card_stats.dart';
 import 'package:book_trail/views/widgets/stats_search/color_text_pi_chart.dart';
 import 'package:book_trail/views/widgets/stats_search/pie_chart_stats_screen.dart';
@@ -5,6 +6,7 @@ import 'package:book_trail/views/widgets/stats_search/progress_read_card_stats.d
 import 'package:book_trail/views/widgets/stats_search/read_finish_want_card.dart';
 import 'package:book_trail/views/widgets/stats_search/total_pages_books_read.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({
@@ -22,21 +24,28 @@ class StatsScreen extends StatefulWidget {
 
 class _StatsScreenState extends State<StatsScreen> {
   final List<Map<String, dynamic>> categories = [
-    {'name': 'Fantasy', 'value': 40, 'color': Color(0xFF59abe1)},
-    {'name': 'Horror', 'value': 28, 'color': Color(0xFF59c4bd)},
-    {'name': 'Adventures', 'value': 32, 'color': Color(0xFFa358d7)},
-    {'name': 'Mystery', 'value': 23, 'color': Color(0xFFf7ce46)},
+    {'name': 'Fantasy', 'value': 40, 'color': Color(0xFF42A5F5)},
+    {'name': 'Horror', 'value': 28, 'color': Color(0xFF4CAF50)},
+    {'name': 'Adventures', 'value': 32, 'color': Color(0xFFAB47BC)},
+    {'name': 'Mystery', 'value': 23, 'color': Color(0xFFFFB300)},
   ];
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             Text(
               "CHART",
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color:
+                    themeProvider.isDarkMode
+                        ? Color(0xFFB0BEC5)
+                        : Colors.grey[600],
+              ),
             ),
 
             CardStats(
@@ -49,7 +58,13 @@ class _StatsScreenState extends State<StatsScreen> {
 
             Text(
               "TOTAL PAGES",
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color:
+                    themeProvider.isDarkMode
+                        ? Color(0xFFB0BEC5)
+                        : Colors.grey[600],
+              ),
             ),
 
             SizedBox(
@@ -66,7 +81,13 @@ class _StatsScreenState extends State<StatsScreen> {
 
             Text(
               "BOOKS BY STATUS",
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color:
+                    themeProvider.isDarkMode
+                        ? Color(0xFFB0BEC5)
+                        : Colors.grey[600],
+              ),
             ),
 
             CardStats(
@@ -82,7 +103,13 @@ class _StatsScreenState extends State<StatsScreen> {
 
             Text(
               "BOOKS BY STATUS",
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color:
+                    themeProvider.isDarkMode
+                        ? Color(0xFFB0BEC5)
+                        : Colors.grey[600],
+              ),
             ),
 
             CardStats(

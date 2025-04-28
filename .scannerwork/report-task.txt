@@ -1,6 +1,6 @@
-projectKey=mohamed-ahmad2_BookTrail_775d23c3-66fe-4a05-adab-95912fa96cf8
+projectKey=mohamed-ahmad2_BookTrail_61240d0b-2119-45f4-925d-230e7d3b93cf
 serverUrl=http://localhost:9000
 serverVersion=25.4.0.105899
-dashboardUrl=http://localhost:9000/dashboard?id=mohamed-ahmad2_BookTrail_775d23c3-66fe-4a05-adab-95912fa96cf8
-ceTaskId=00155831-b542-4df8-be64-e1f97080b3f4
-ceTaskUrl=http://localhost:9000/api/ce/task?id=00155831-b542-4df8-be64-e1f97080b3f4
+dashboardUrl=http://localhost:9000/dashboard?id=mohamed-ahmad2_BookTrail_61240d0b-2119-45f4-925d-230e7d3b93cf
+ceTaskId=39083936-51c5-4d55-9e08-3bcdf2bfd3a0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=39083936-51c5-4d55-9e08-3bcdf2bfd3a0
