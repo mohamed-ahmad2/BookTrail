@@ -1,12 +1,23 @@
 workflows:
-  build_apk:
-    name: Build APK
+  build_apk_and_analyze_with_sonarqube:
+    name: Build APK and Analyze with SonarQube
     max_build_duration: 60
     environment:
       flutter: stable
     scripts:
       - flutter pub get
       - flutter build apk --release
+
+      - name: Analyze with SonarQube
+        script: |
+
+          brew install sonar-scanner
+
+          sonar-scanner \
+            -Dsonar.projectKey=your_project_key \
+            -Dsonar.sources=lib \
+            -Dsonar.host.url=https://your-sonarqube-server-url \
+            -Dsonar.login=sqp_8e76a573a99344ee5efb87051788617e88b6d2a5
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
     triggering:

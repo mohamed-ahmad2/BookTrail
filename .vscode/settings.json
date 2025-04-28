@@ -3,5 +3,12 @@
   "flutterTools.displayMobxContextMenu": false,
   "flutterTools.displayRiverpodContextMenu": false,
   "flutterTools.displayModularContextMenu": false,
-  "cSpell.words": ["Logbutton", "Regbutton", "Thefirstlook"]
+  "cSpell.words": [
+    "Dsonar",
+    "Logbutton",
+    "Qube",
+    "Regbutton",
+    "sonarqube",
+    "Thefirstlook"
+  ]
 }
