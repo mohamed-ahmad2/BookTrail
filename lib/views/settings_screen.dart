@@ -6,6 +6,7 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -91,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Switch(
                         value: themeProvider.isDarkMode,
                         onChanged: (value) {
-                          themeProvider.toggleDarkMode(); // تغيير القيمة
+                          themeProvider.toggleDarkMode(); 
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,
