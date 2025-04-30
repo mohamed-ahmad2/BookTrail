@@ -1,8 +1,12 @@
+import 'package:book_trail/book_operation.dart';
+
 import 'package:book_trail/models/book.dart';
-import 'package:book_trail/views/widgets/home_favorite/book_list_view.dart';
+
 import 'package:book_trail/views/widgets/stats_search/book_service.dart';
 import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
+import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
 import 'package:flutter/material.dart';
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,7 +17,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Book> books = [];
-  List<String> favoriteTitles = [];
   String searchQuery = '';
   bool isLoading = false;
 
@@ -58,18 +61,9 @@ class _SearchScreenState extends State<SearchScreen> {
     }).toList();
   }
 
-  void toggleFavorite(String title) {
-    setState(() {
-      if (favoriteTitles.contains(title)) {
-        favoriteTitles.remove(title);
-      } else {
-        favoriteTitles.add(title);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -93,8 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: MediaQuery.of(context).size.height - 150,
                   child: BookListView(
                     books: _filterBooks(),
-                    favoriteTitles: favoriteTitles,
-                    toggleFavorite: toggleFavorite,
+                    bookOperation: BookOperation(),
                   ),
                 ),
           ],

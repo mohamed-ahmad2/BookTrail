@@ -1,4 +1,3 @@
-
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,10 @@ class BookInfo extends StatefulWidget {
     this.classification = 'Classification',
     this.summary =
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    this.imageUrl = '', required String status, required bool isFavorite, required VoidCallback onFavoriteToggle,
+    this.imageUrl = '',
+    required String status,
+    bool? isFavorite,
+    VoidCallback? onFavoriteToggle,
   });
 
   @override
