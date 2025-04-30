@@ -1,7 +1,7 @@
 import 'package:book_trail/book_operation.dart';
 
 import 'package:book_trail/models/book.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+
 import 'package:book_trail/views/widgets/stats_search/book_service.dart';
 import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
 import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
@@ -26,21 +26,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchBooks(String query) async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    // ignore: unrelated_type_equality_checks
-    if (connectivityResult == ConnectivityResult.none) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('No internet connection')));
-      }
-      return;
-    }
-
     setState(() {
       isLoading = true;
     });
-
     try {
       final bookList = await BookService.searchBooks(query);
       if (!mounted) return;
