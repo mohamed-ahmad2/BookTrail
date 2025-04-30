@@ -22,13 +22,18 @@ class BookInfoDataAdapter extends TypeAdapter<BookInfoData> {
       startDate: fields[2] as DateTime?,
       endDate: fields[3] as DateTime?,
       notes: fields[4] as String?,
+      title: fields[5] as String?,
+      author: fields[6] as String?,
+      classification: fields[7] as String?,
+      summary: fields[8] as String?,
+      imageUrl: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BookInfoData obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.readingStatus)
       ..writeByte(1)
@@ -38,7 +43,17 @@ class BookInfoDataAdapter extends TypeAdapter<BookInfoData> {
       ..writeByte(3)
       ..write(obj.endDate)
       ..writeByte(4)
-      ..write(obj.notes);
+      ..write(obj.notes)
+      ..writeByte(5)
+      ..write(obj.title)
+      ..writeByte(6)
+      ..write(obj.author)
+      ..writeByte(7)
+      ..write(obj.classification)
+      ..writeByte(8)
+      ..write(obj.summary)
+      ..writeByte(9)
+      ..write(obj.imageUrl);
   }
 
   @override
