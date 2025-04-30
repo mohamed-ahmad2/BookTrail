@@ -1,4 +1,5 @@
-// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
