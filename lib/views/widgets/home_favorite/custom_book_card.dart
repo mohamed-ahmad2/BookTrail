@@ -7,9 +7,7 @@ class BookCard extends StatelessWidget {
   final String status;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
-  final String classification;
-  final String summary;
-  final String imageUrl;
+
 
 
   const BookCard({super.key, 
@@ -18,9 +16,7 @@ class BookCard extends StatelessWidget {
     required this.status,
     required this.isFavorite,
     required this.onFavoriteToggle,
-    required this.classification,
-    required this.summary,
-    required this.imageUrl,
+ 
   });
 
   @override
@@ -34,8 +30,15 @@ class BookCard extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => BookInfo(bookId: '', title: title, author: author, status: status, isFavorite: isFavorite, onFavoriteToggle: onFavoriteToggle, classification: classification, summary: summary, imageUrl: imageUrl,)),
-        );
+          MaterialPageRoute(
+            builder: (context) => BookInfo(
+              bookId: '',
+              status: status,
+              isFavorite: isFavorite,
+              onFavoriteToggle: onFavoriteToggle,
+            ),
+          ),
+        );        
       },
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
