@@ -1,4 +1,4 @@
-import 'package:book_trail/models/book_info_data.g.dart';
+import 'package:book_trail/models/book_info_data.dart';
 import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
