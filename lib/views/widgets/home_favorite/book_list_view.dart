@@ -7,7 +7,8 @@ class BookListView extends StatelessWidget {
   final List<String> favoriteTitles;
   final Function(String) toggleFavorite;
 
-  const BookListView({super.key, 
+  const BookListView({
+    super.key,
     required this.books,
     required this.favoriteTitles,
     required this.toggleFavorite,
@@ -35,9 +36,7 @@ class BookListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final book = books[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 6.0,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: BookCard(
             title: book.title,
             author: book.author,

@@ -7,12 +7,15 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Material(
-      color: Colors.white,
+      color: theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface,
       child: TabBar(
         controller: tabController,
-        labelColor: Colors.blue,
-        unselectedLabelColor: Colors.grey,
+        labelColor: theme.colorScheme.primary,
+        unselectedLabelColor: theme.unselectedWidgetColor,
+        indicatorColor: theme.colorScheme.primary,
         tabs: const [
           Tab(text: "All"),
           Tab(text: "Read"),
