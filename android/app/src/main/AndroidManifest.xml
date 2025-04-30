@@ -3,7 +3,6 @@
         android:label="book_trail"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
