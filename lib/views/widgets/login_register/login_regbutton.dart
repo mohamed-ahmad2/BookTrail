@@ -1,3 +1,4 @@
+import 'package:book_trail/views/_register.dart';
 import 'package:flutter/material.dart';
 
 class LoginRegbutton extends StatefulWidget {
@@ -20,7 +21,12 @@ class _LoginRegbuttonState extends State<LoginRegbutton> {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Register()),
+          );
+        },
         child: const Text(
           'Register',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

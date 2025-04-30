@@ -14,29 +14,54 @@ class RegisterBody extends StatefulWidget {
 }
 
 class _RegisterBodyState extends State<RegisterBody> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            RegisterThefirstlook(),
-            SizedBox(height: 25),
-            RegisterUsername(),
-            SizedBox(height: 20),
-            RegisterEmail(),
-            SizedBox(height: 20),
-            RegisterPassword(),
-            SizedBox(height: 25),
-            RegisterRegbutton(),
-            SizedBox(height: 40),
-            Text('--------------------------------------Or--------------------------------------'),
-            SizedBox(height: 25),
-            RegisterLogbutton(),
-          ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RegisterThefirstlook(),
+              SizedBox(height: 25),
+              RegisterUsername(controller: _usernameController),
+              SizedBox(height: 20),
+              RegisterEmail(controller: _emailController),
+              SizedBox(height: 20),
+              RegisterPassword(controller: _passwordController),
+              SizedBox(height: 25),
+              RegisterRegbutton(
+                formKey: _formKey,
+                usernameController: _usernameController,
+                emailController: _emailController,
+                passwordController: _passwordController,
+              ), // زر التسجيل
+              SizedBox(height: 40),
+              Text(
+                '------------------------------Or------------------------------',
+                style: TextStyle(color: Colors.grey),
+              ),
+              SizedBox(height: 25),
+              RegisterLogbutton(),
+            ],
+          ),
         ),
+      ),
     );
   }
 }

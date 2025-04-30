@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
 class LoginUsername extends StatefulWidget {
-  const LoginUsername({super.key});
+  final TextEditingController controller;
+  const LoginUsername({super.key, required this.controller});
 
   @override
   State<LoginUsername> createState() => _LoginUsernameState();
 }
 
 class _LoginUsernameState extends State<LoginUsername> {
-  TextEditingController usernameController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: usernameController,
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "please enter your Username !";
+          return "Please enter your Username";
+        }
+        if (value.length < 3) {
+          return "Username must be at least 3 characters long !";
         }
         return null;
       },

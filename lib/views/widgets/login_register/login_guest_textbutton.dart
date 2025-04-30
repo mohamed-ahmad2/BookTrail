@@ -1,3 +1,4 @@
+import 'package:book_trail/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginGuestTextbutton extends StatefulWidget {
@@ -74,9 +75,18 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
                         style: TextStyle(color: Colors.redAccent),
                       ),
                     ),
+                    // "Yes" button
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(
+                              tabController: TabController(length: 4, vsync: Navigator.of(context)),
+                            ),
+                          ),
+                        );
                       },
                       child: const Text(
                         'Yes',

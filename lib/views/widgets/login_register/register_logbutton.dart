@@ -1,3 +1,4 @@
+import 'package:book_trail/views/_login.dart';
 import 'package:flutter/material.dart';
 
 class RegisterLogbutton extends StatefulWidget {
@@ -21,7 +22,10 @@ class _RegisterLogbuttonState extends State<RegisterLogbutton> {
           ),
         ),
         onPressed: () {
-          
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
         },
         child: const Text(
           'Log in',

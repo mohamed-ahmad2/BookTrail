@@ -15,6 +15,7 @@ class _LoginThefirstlookState extends State<LoginThefirstlook> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Column(
       children: [
+        SizedBox(height: 15),
         Image.asset(
           'images/logo.png',
           width: 100,

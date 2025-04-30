@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPassword extends StatefulWidget {
-  const RegisterPassword({super.key});
+  final TextEditingController controller;
+  const RegisterPassword({super.key, required this.controller});
 
   @override
   State<RegisterPassword> createState() => _RegisterPasswordState();
@@ -16,9 +17,17 @@ class _RegisterPasswordState extends State<RegisterPassword> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return TextFormField(
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "please enter your password !";
+          return "Please enter your Password";
+        }
+        if (value.length < 8) {
+          return "Password must be at least 8 characters long !";
+        }
+        final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*!?&]{8,}$');
+        if (!passwordRegex.hasMatch(value)) {
+          return "The Password must contain letters , numbers and special symbols !";
         }
         return null;
       },

@@ -1,8 +1,17 @@
-import 'package:book_trail/layout/main_layout.dart';
+import 'package:book_trail/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginLogbutton extends StatefulWidget {
-  const LoginLogbutton({super.key});
+  final GlobalKey<FormState> formKey;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+
+  const LoginLogbutton({
+    super.key,
+    required this.formKey,
+    required this.usernameController,
+    required this.passwordController,
+  });
 
   @override
   State<LoginLogbutton> createState() => _LoginLogbuttonState();
@@ -22,9 +31,16 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
           ),
         ),
         onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (context) => MainLayout()));
+          if (widget.formKey.currentState!.validate()) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                  tabController: TabController(length: 4, vsync: Navigator.of(context)),
+                ),
+              ),
+            );
+          }
         },
         child: const Text(
           'Log in',
