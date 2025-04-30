@@ -56,7 +56,6 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
                 return;
               }
 
-              // If not exists, add the book
               Book book = Book(
                 bookId: widget.bookId,
                 title: widget.title,

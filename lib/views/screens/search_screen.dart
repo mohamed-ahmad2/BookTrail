@@ -7,7 +7,6 @@ import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.d
 import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
 import 'package:flutter/material.dart';
 
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -63,7 +62,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

@@ -25,7 +25,12 @@ class CustomSearchBarSearch extends StatelessWidget {
           prefixIcon: Icon(Icons.search),
           suffixIcon: Padding(
             padding: const EdgeInsets.only(right: 17),
-            child: Icon(Icons.qr_code_scanner),
+            child: IconButton(
+              icon: Icon(
+                Icons.qr_code_scanner,
+
+              ), onPressed: () {  },
+            ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
