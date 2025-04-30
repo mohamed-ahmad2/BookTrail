@@ -1,8 +1,7 @@
 import 'package:book_trail/kconstant.dart';
-import 'package:book_trail/models/book_info_data.dart';
+import 'package:book_trail/models/book.dart';
 import 'package:book_trail/views/main_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'theme_provider.dart';
@@ -12,9 +11,9 @@ import 'theme_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(BookInfoDataAdapter());
+  Hive.registerAdapter(BookAdapter());
   late final  userId = 5;
-  await Hive.openBox<BookInfoData>(kBookBox(userId));
+  await Hive.openBox<Book>(kBookBox(userId));
   runApp(const BookTrailApp());
 }
 

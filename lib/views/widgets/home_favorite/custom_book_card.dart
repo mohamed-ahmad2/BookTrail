@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class BookCard extends StatelessWidget {
   final String title;
+  final String bookId;
   final String author;
   final String status;
   final bool isFavorite;
@@ -12,6 +13,7 @@ class BookCard extends StatelessWidget {
 
   const BookCard({super.key, 
     required this.title,
+    required this.bookId,
     required this.author,
     required this.status,
     required this.isFavorite,

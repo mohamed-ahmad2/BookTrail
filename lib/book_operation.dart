@@ -1,12 +1,12 @@
-import 'package:book_trail/models/book_info_data.dart';
+import 'package:book_trail/models/book.dart';
 import 'package:hive/hive.dart';
 
 class BookOperation {
-  final Box<BookInfoData> box;
+  final Box<Book> box;
 
   BookOperation(this.box);
 
-  Future<void> addBook(BookInfoData book) async {
+  Future<void> addBook(Book book) async {
     await box.put(book.bookId!, book);
   }
 
@@ -14,19 +14,19 @@ class BookOperation {
     await box.deleteAt(index);
   }
 
-  Future<void> deleteBook(BookInfoData book) async {
+  Future<void> deleteBook(Book book) async {
     await box.delete(book.bookId!);
   }
 
-  Future<void> updateBookWithIndex(int index, BookInfoData book) async {
+  Future<void> updateBookWithIndex(int index, Book book) async {
     await box.putAt(index, book);
   }
 
-  Future<void> updateBook(BookInfoData book) async {
+  Future<void> updateBook(Book book) async {
     await box.put(book.bookId!, book);
   }
 
-  List<BookInfoData> getAllBooks() {
+  List<Book> getAllBooks() {
     return box.values.toList();
   }
 }

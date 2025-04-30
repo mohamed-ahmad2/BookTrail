@@ -1,22 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'book_info_data.dart';
+part of 'book.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BookInfoDataAdapter extends TypeAdapter<BookInfoData> {
+class BookAdapter extends TypeAdapter<Book> {
   @override
   final int typeId = 0;
 
   @override
-  BookInfoData read(BinaryReader reader) {
+  Book read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BookInfoData(
+    return Book(
+      bookId: fields[0] as String?,
       readingStatus: fields[1] as String?,
       rating: fields[2] as int?,
       startDate: fields[3] as DateTime?,
@@ -28,11 +29,11 @@ class BookInfoDataAdapter extends TypeAdapter<BookInfoData> {
       summary: fields[9] as String?,
       imageUrl: fields[10] as String?,
       userId: fields[11] as String?,
-    )..bookId = fields[0] as String?;
+    );
   }
 
   @override
-  void write(BinaryWriter writer, BookInfoData obj) {
+  void write(BinaryWriter writer, Book obj) {
     writer
       ..writeByte(12)
       ..writeByte(0)
@@ -67,7 +68,7 @@ class BookInfoDataAdapter extends TypeAdapter<BookInfoData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BookInfoDataAdapter &&
+      other is BookAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

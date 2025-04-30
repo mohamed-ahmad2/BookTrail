@@ -7,43 +7,34 @@ class BookListView extends StatelessWidget {
   final List<String> favoriteTitles;
   final Function(String) toggleFavorite;
 
-  const BookListView({super.key, 
+  const BookListView({
+    super.key,
     required this.books,
     required this.favoriteTitles,
     required this.toggleFavorite,
   });
 
   @override
-  // Widget build(BuildContext context) {
-  //   return ListView.builder(
-  //     itemCount: books.length,
-  //     itemBuilder: (context, index) {
-  //       final book = books[index];
-  //       return BookCard(
-  //         title: book.title,
-  //         author: book.author,
-  //         status: book.status,
-  //         isFavorite: favoriteTitles.contains(book.title),
-  //         onFavoriteToggle: () => toggleFavorite(book.title),
-  //       );
-  //     },
-  //   );
-  // }
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
+        // Use null checks to provide fallback values
+        final title = book.title ?? 'Unknown Title';
+        final author = book.author ?? 'Unknown Author';
+        final readingStatus = book.readingStatus ?? 'None';
+        final bookId = book.bookId ?? 'unknown_${index.hashCode}';
+
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 6.0,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: BookCard(
-            title: book.title,
-            author: book.author,
-            status: book.status,
-            isFavorite: favoriteTitles.contains(book.title),
-            onFavoriteToggle: () => toggleFavorite(book.title),
+            title: title,
+            author: author,
+            status: readingStatus,
+            bookId: bookId,
+            isFavorite: book.title != null ? favoriteTitles.contains(book.title) : false,
+            onFavoriteToggle: () => toggleFavorite(title),
           ),
         );
       },
