@@ -13,10 +13,10 @@ class CustomSearchBarSearch extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: TextField(
         onChanged: (value) {
-          onSearch(value); // Call onSearch on every input change
+          onSearch(value);
         },
         onSubmitted: (value) {
-          onSearch(value); // Also call onSearch on submit
+          onSearch(value);
         },
         decoration: InputDecoration(
           filled: true,
