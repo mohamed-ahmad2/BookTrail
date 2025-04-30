@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "543144659055",
+    "project_id": "book-trail-firebase",
+    "storage_bucket": "book-trail-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543144659055:android:671f113e4e991ebc47e59a",
+        "android_client_info": {
+          "package_name": "com.example.book_trail"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_MwiNwlB2SzaDzE701cHlHEz9cT-0Aks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
