@@ -1,7 +1,6 @@
 import 'package:book_trail/models/book_info_data.g.dart';
 import 'package:book_trail/views/main_view.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'theme_provider.dart';
@@ -10,7 +9,7 @@ import 'theme_provider.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(BookInfoDataAdapter()); 
+  Hive.registerAdapter(BookInfoDataAdapter());
   runApp(const BookTrailApp());
 }
 
@@ -29,7 +28,8 @@ class BookTrailApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(brightness: Brightness.light),
             darkTheme: ThemeData(brightness: Brightness.dark),
-            themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            themeMode:
+                themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             home: const MainView(),
           );
         },
