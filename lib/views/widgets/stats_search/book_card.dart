@@ -1,14 +1,16 @@
+import 'package:book_trail/book_operation.dart';
+
 import 'package:book_trail/views/book_info.dart';
+import 'package:book_trail/views/widgets/stats_search/icon_button_search_card.dart';
 import 'package:flutter/material.dart';
 
-class BookCard extends StatelessWidget {
+class BookCard extends StatefulWidget {
   final String title;
   final String bookId;
   final String author;
   final String status;
   final String? imageUrl;
-  final bool isFavorite;
-  final VoidCallback onFavoriteToggle;
+  final BookOperation bookOperation;
 
   const BookCard({
     super.key,
@@ -16,10 +18,16 @@ class BookCard extends StatelessWidget {
     required this.bookId,
     required this.author,
     required this.status,
-    required this.isFavorite,
-    required this.onFavoriteToggle,
+    required this.bookOperation,
     this.imageUrl,
   });
+
+  @override
+  State<BookCard> createState() => _BookCardState();
+}
+
+class _BookCardState extends State<BookCard> {
+  bool isButtonDisabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,26 +42,21 @@ class BookCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder:
-                (context) => BookInfo(
-                  bookId: bookId,
-                  status: status,
-                  isFavorite: isFavorite,
-                  onFavoriteToggle: onFavoriteToggle,
-
-                ),
+                (context) =>
+                    BookInfo(bookId: widget.bookId, status: widget.status),
           ),
         );
       },
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              imageUrl != null
+              widget.imageUrl != null && widget.imageUrl!.isNotEmpty
                   ? Image.network(
-                    imageUrl!,
+                    widget.imageUrl!,
                     width: 50,
                     height: 70,
                     fit: BoxFit.cover,
@@ -66,28 +69,33 @@ class BookCard extends StatelessWidget {
                     },
                   )
                   : const Icon(Icons.image, size: 50),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 4),
-                    Text(author, style: TextStyle(color: Colors.grey)),
+                    Text(
+                      widget.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.author,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                   ],
                 ),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      isFavorite ? Icons.star : Icons.star_border,
-                      color: isFavorite ? Colors.yellow : null,
-                    ),
-                    onPressed: onFavoriteToggle,
+                  IconButtonSearchCard(
+                    title: widget.title,
+                    bookId: widget.bookId,
+                    status: widget.status,
+                    bookOperation: widget.bookOperation,
                   ),
-                  Text(status, style: TextStyle(fontSize: 10)),
+                  Text(widget.status, style: const TextStyle(fontSize: 10)),
                 ],
               ),
             ],

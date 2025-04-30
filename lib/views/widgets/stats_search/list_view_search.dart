@@ -1,17 +1,16 @@
+import 'package:book_trail/book_operation.dart';
+import 'package:book_trail/views/widgets/stats_search/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:book_trail/models/book.dart';
-import 'package:book_trail/views/widgets/home_favorite/custom_book_card.dart';
 
 class BookListView extends StatelessWidget {
   final List<Book> books;
-  final List<String> favoriteTitles;
-  final Function(String) toggleFavorite;
+  final BookOperation bookOperation;
 
   const BookListView({
     super.key,
     required this.books,
-    required this.favoriteTitles,
-    required this.toggleFavorite,
+    required this.bookOperation,
   });
 
   @override
@@ -24,6 +23,7 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
+        final imageUrl = book.imageUrl;
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -32,8 +32,8 @@ class BookListView extends StatelessWidget {
             author: author,
             status: readingStatus,
             bookId: bookId,
-            isFavorite: book.title != null ? favoriteTitles.contains(book.title) : false,
-            onFavoriteToggle: () => toggleFavorite(title),
+            imageUrl: imageUrl,
+            bookOperation: bookOperation,
           ),
         );
       },

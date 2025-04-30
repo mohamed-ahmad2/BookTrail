@@ -1,4 +1,4 @@
-import 'package:book_trail/models/book_info_data.g.dart';
+import 'package:book_trail/models/book.dart';
 import 'package:book_trail/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +21,10 @@ class BookInfo extends StatefulWidget {
     this.classification = 'Classification',
     this.summary =
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    this.imageUrl = '', required String status, required bool isFavorite, required VoidCallback onFavoriteToggle,
+    this.imageUrl = '',
+    required String status,
+    bool? isFavorite,
+    VoidCallback? onFavoriteToggle,
   });
 
   @override
@@ -34,7 +37,7 @@ class _BookInfoState extends State<BookInfo> {
   DateTime? _endDate;
   String? _readingStatus;
   int _rating = 0;
-  late Box<BookInfoData> _bookInfoBox;
+  late Box<Book> _bookInfoBox;
 
   // Variables to hold the book info (so we can save them to Hive)
   late String _title;
@@ -58,7 +61,7 @@ class _BookInfoState extends State<BookInfo> {
   }
 
   Future<void> _openHiveBox() async {
-    _bookInfoBox = await Hive.openBox<BookInfoData>('bookInfoBox');
+    _bookInfoBox = await Hive.openBox<Book>('bookInfoBox');
   }
 
   Future<void> _loadBookInfo() async {
@@ -81,7 +84,7 @@ class _BookInfoState extends State<BookInfo> {
   }
 
   Future<void> _saveBookInfo() async {
-    final bookData = BookInfoData(
+    final bookData = Book(
       readingStatus: _readingStatus,
       rating: _rating,
       startDate: _startDate,
