@@ -19,7 +19,7 @@ class BookInfo extends StatefulWidget {
     this.title = 'Name book',
     this.author = 'Author',
     this.classification = 'Classification',
-    this.summary = 'It will be a text just for display the summary of the book',
+    this.summary ='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     this.imageUrl = '',
   });
 
@@ -247,28 +247,27 @@ class _BookInfoState extends State<BookInfo> {
                 ),
               ),
               const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+              // ignore: sized_box_for_whitespace
+              Container(
+                width: double.infinity,
+                child: Card(
+                  elevation: 4.0,
+                  color:
+                      themeProvider.isDarkMode
+                          ? Colors.grey[800]
+                          : Colors.grey[200],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[200]!
+                              : Colors.grey[800]!,
+                    ),
                   ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  // ignore: sized_box_for_whitespace
-                  child: Container(
-                    height: 100,
-                    width: double.infinity,
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
