@@ -44,6 +44,9 @@ class BookListView extends StatelessWidget {
             status: book.status,
             isFavorite: favoriteTitles.contains(book.title),
             onFavoriteToggle: () => toggleFavorite(book.title),
+            classification: book.classification,
+            summary: book.summary,
+            imageUrl: book.imageUrl,
           ),
         );
       },

@@ -17,10 +17,11 @@ class BookInfo extends StatefulWidget {
     super.key,
     required this.bookId,
     this.title = 'Name book',
-    this.author = 'Author',
+    this.author = 'The Great Author',
     this.classification = 'Classification',
-    this.summary ='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    this.imageUrl = '',
+    this.summary =
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    this.imageUrl = '', required String status, required bool isFavorite, required VoidCallback onFavoriteToggle,
   });
 
   @override
