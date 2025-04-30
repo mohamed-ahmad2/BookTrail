@@ -15,4 +15,10 @@ class Book {
 
   @override
   int get hashCode => title.hashCode ^ author.hashCode;
+
+  get classification => null;
+
+  get summary => null;
+
+  get imageUrl => null;
 }
