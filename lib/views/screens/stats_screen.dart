@@ -1,4 +1,4 @@
-import 'package:book_trail/theme_provider.dart';
+import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/views/widgets/stats_search/card_stats.dart';
 import 'package:book_trail/views/widgets/stats_search/color_text_pi_chart.dart';
 import 'package:book_trail/views/widgets/stats_search/pie_chart_stats_screen.dart';

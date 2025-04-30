@@ -1,19 +1,15 @@
-import 'package:book_trail/views/settings_screen.dart';
+import 'package:book_trail/views/screens/favorites_screen.dart';
+import 'package:book_trail/views/screens/home_screen.dart';
+import 'package:book_trail/views/screens/search_screen.dart';
+import 'package:book_trail/views/screens/settings_screen.dart';
+import 'package:book_trail/views/screens/stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:book_trail/views/widgets/home_favorite/custom_appbar.dart';
 import 'package:book_trail/views/widgets/home_favorite/custom_navigation_bar.dart';
 import 'package:book_trail/views/widgets/home_favorite/custom_tabbar.dart';
-import 'package:book_trail/views/home_screen.dart';
-import 'package:book_trail/views/favorites_screen.dart';
-import 'package:book_trail/views/stats_screen.dart';
-import 'package:book_trail/views/search_screen.dart';
 
 class MainLayout extends StatefulWidget {
-
-
-  const MainLayout({
-    super.key,
-  });
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -60,8 +56,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
       FavoritesScreen(tabController: _tabController),
       const StatsScreen(totalPages: 50000, numberOfPages: 20389),
       const SearchScreen(),
-      SettingsScreen(
-      ),
+      SettingsScreen(),
     ];
 
     return Scaffold(

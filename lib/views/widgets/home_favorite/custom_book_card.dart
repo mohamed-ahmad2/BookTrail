@@ -1,4 +1,4 @@
-import 'package:book_trail/views/book_info.dart';
+import 'package:book_trail/views/screens/book_info.dart';
 import 'package:flutter/material.dart';
 
 class BookCard extends StatelessWidget {
@@ -39,7 +39,6 @@ class BookCard extends StatelessWidget {
                   status: status,
                   isFavorite: isFavorite,
                   onFavoriteToggle: onFavoriteToggle,
-
                 ),
           ),
         );

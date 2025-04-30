@@ -1,6 +1,5 @@
 import 'package:book_trail/book_operation.dart';
-
-import 'package:book_trail/views/book_info.dart';
+import 'package:book_trail/views/screens/book_info.dart';
 import 'package:book_trail/views/widgets/stats_search/icon_button_search_card.dart';
 import 'package:flutter/material.dart';
 

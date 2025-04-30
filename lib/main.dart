@@ -1,11 +1,11 @@
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
-import 'package:book_trail/views/main_view.dart';
+import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
+import 'package:book_trail/views/screens/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'theme_provider.dart';
-import 'user_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +35,7 @@ class BookTrailApp extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const MaterialApp(
+                  debugShowCheckedModeBanner: false,
                   home: Scaffold(
                     body: Center(child: CircularProgressIndicator()),
                   ),
@@ -46,7 +47,9 @@ class BookTrailApp extends StatelessWidget {
                   theme: ThemeData(brightness: Brightness.light),
                   darkTheme: ThemeData(brightness: Brightness.dark),
                   themeMode:
-                      themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                      themeProvider.isDarkMode
+                          ? ThemeMode.dark
+                          : ThemeMode.light,
                   home: const MainView(),
                 );
               }

@@ -1,4 +1,4 @@
-import 'package:book_trail/theme_provider.dart';
+import 'package:book_trail/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
