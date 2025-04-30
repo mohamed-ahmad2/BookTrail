@@ -4,7 +4,6 @@ import 'package:book_trail/views/widgets/stats_search/book_service.dart';
 import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
 import 'package:flutter/material.dart';
 
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -16,37 +15,48 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Book> books = [];
   List<String> favoriteTitles = [];
   String searchQuery = '';
+  bool isLoading = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Fetch initial books with a default query
-  //   _fetchBooks('books');
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _fetchBooks('books');
+  }
 
-  // Future<void> _fetchBooks(String query) async {
-  //   try {
-  //     final bookInfoList = await BookService.searchBooks(query);
-  //     setState(() {
-  //       books = bookInfoList.map((bookInfo) => BookInfoData.fromBookInfoData(bookInfo)).toList();
-  //     });
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to load books: $e')),
-  //     );
-  //   }
-  // }
+  Future<void> _fetchBooks(String query) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final bookList = await BookService.searchBooks(query);
+      if (!mounted) return;
+      setState(() {
+        books = bookList;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('failed $e')));
+      }
+    }
+  }
 
-  // List<Book> _filterBooks() {
-  //   if (searchQuery.isEmpty) {
-  //     return books;
-  //   }
-  //   return books.where((book) {
-  //     return book.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
-  //         book.author.toLowerCase().contains(searchQuery.toLowerCase());
-  //   }).toList();
-  // }
-
+  List<Book> _filterBooks() {
+    if (searchQuery.isEmpty) {
+      return books;
+    }
+    return books.where((book) {
+      final title = book.title?.toLowerCase() ?? '';
+      final author = book.author?.toLowerCase() ?? '';
+      return title.contains(searchQuery.toLowerCase()) ||
+          author.contains(searchQuery.toLowerCase());
+    }).toList();
+  }
 
   void toggleFavorite(String title) {
     setState(() {
@@ -66,16 +76,27 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 40.0),
-              child: CustomSearchBarSearch(),
-            ),
-            SizedBox(
-              height: 600,
-              child: BookListView(
-                books: books,
-                favoriteTitles: favoriteTitles,
-                toggleFavorite: toggleFavorite,
+              child: CustomSearchBarSearch(
+                onSearch: (query) {
+                  setState(() {
+                    searchQuery = query;
+                  });
+                  if (query.isNotEmpty) {
+                    _fetchBooks(query);
+                  }
+                },
               ),
             ),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : SizedBox(
+                  height: MediaQuery.of(context).size.height - 150,
+                  child: BookListView(
+                    books: _filterBooks(),
+                    favoriteTitles: favoriteTitles,
+                    toggleFavorite: toggleFavorite,
+                  ),
+                ),
           ],
         ),
       ),

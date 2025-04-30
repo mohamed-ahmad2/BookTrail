@@ -29,11 +29,15 @@ class BookListView extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: BookCard(
+            imageUrl: book.imageUrl,
             title: title,
             author: author,
             status: readingStatus,
             bookId: bookId,
-            isFavorite: book.title != null ? favoriteTitles.contains(book.title) : false,
+            isFavorite:
+                book.title != null
+                    ? favoriteTitles.contains(book.title)
+                    : false,
             onFavoriteToggle: () => toggleFavorite(title),
           ),
         );

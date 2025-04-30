@@ -6,19 +6,19 @@ class BookCard extends StatelessWidget {
   final String bookId;
   final String author;
   final String status;
+  final String? imageUrl;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
 
-
-
-  const BookCard({super.key, 
+  const BookCard({
+    super.key,
     required this.title,
     required this.bookId,
     required this.author,
     required this.status,
     required this.isFavorite,
     required this.onFavoriteToggle,
- 
+    this.imageUrl,
   });
 
   @override
@@ -33,14 +33,15 @@ class BookCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BookInfo(
-              bookId: '',
-              status: status,
-              isFavorite: isFavorite,
-              onFavoriteToggle: onFavoriteToggle,
-            ),
+            builder:
+                (context) => BookInfo(
+                  bookId: bookId,
+                  status: status,
+                  isFavorite: isFavorite,
+                  onFavoriteToggle: onFavoriteToggle,
+                ),
           ),
-        );        
+        );
       },
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -49,7 +50,21 @@ class BookCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.image, size: 50),
+              imageUrl != null
+                  ? Image.network(
+                    imageUrl!,
+                    width: 50,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) =>
+                            const Icon(Icons.image, size: 50),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  )
+                  : const Icon(Icons.image, size: 50),
               SizedBox(width: 12),
               Expanded(
                 child: Column(

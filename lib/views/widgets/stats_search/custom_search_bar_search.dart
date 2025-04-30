@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomSearchBarSearch extends StatelessWidget {
-  const CustomSearchBarSearch({super.key});
+  final Function(String) onSearch;
+  const CustomSearchBarSearch({super.key, required this.onSearch});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,12 @@ class CustomSearchBarSearch extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: TextField(
-        onTap: () => debugPrint("Search now"),
+        onChanged: (value) {
+          onSearch(value); // Call onSearch on every input change
+        },
+        onSubmitted: (value) {
+          onSearch(value); // Also call onSearch on submit
+        },
         decoration: InputDecoration(
           filled: true,
           fillColor: themeProvider.isDarkMode ? const Color(0xFF2E2E2E) : const Color(0xFFECE6F0),
