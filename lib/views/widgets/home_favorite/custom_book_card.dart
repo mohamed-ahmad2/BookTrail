@@ -7,6 +7,8 @@ class BookCard extends StatelessWidget {
   final String author;
   final String status;
   final String? imageUrl;
+  final String? clasification;
+  final String? summary;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
 
@@ -18,7 +20,9 @@ class BookCard extends StatelessWidget {
     required this.status,
     required this.isFavorite,
     required this.onFavoriteToggle,
-    this.imageUrl,
+    required this.clasification,
+    required this.summary,
+    this.imageUrl, String? classification,
   });
 
   @override
@@ -39,6 +43,10 @@ class BookCard extends StatelessWidget {
                   status: status,
                   isFavorite: isFavorite,
                   onFavoriteToggle: onFavoriteToggle,
+                  title: title,
+                  author: author,
+                  clasification: clasification,
+                  summary: summary ?? 'No summary available',
                 ),
           ),
         );

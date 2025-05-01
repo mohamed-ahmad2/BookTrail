@@ -24,6 +24,9 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
+        final imageUrl = book.imageUrl ?? '';
+        final classification = book.classification ?? 'Unknown Classification';
+        final summary = book.summary ?? 'No summary available';
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -32,8 +35,11 @@ class BookListView extends StatelessWidget {
             author: author,
             status: readingStatus,
             bookId: bookId,
+            classification: book.classification,
+            summary: book.summary,
+            imageUrl: book.imageUrl,
             isFavorite: book.title != null ? favoriteTitles.contains(book.title) : false,
-            onFavoriteToggle: () => toggleFavorite(title),
+            onFavoriteToggle: () => toggleFavorite(title), clasification: '',
           ),
         );
       },

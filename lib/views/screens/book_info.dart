@@ -20,11 +20,11 @@ class BookInfo extends StatefulWidget {
     this.author = 'The Great Author',
     this.classification = 'Classification',
     this.summary =
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        'No summary available. ',
     this.imageUrl = '',
     required String status,
     bool? isFavorite,
-    VoidCallback? onFavoriteToggle,
+    VoidCallback? onFavoriteToggle, String? clasification,
   });
 
   @override
@@ -193,7 +193,7 @@ class _BookInfoState extends State<BookInfo> {
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                                  'assets/images/placeholder_image.png',
+                                  'assets/images/22968.png',
                                   fit: BoxFit.cover,
                                 );
                               },
