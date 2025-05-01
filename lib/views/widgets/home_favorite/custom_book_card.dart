@@ -23,6 +23,7 @@ class BookCard extends StatelessWidget {
     required this.clasification,
     required this.summary,
     this.imageUrl, String? classification,
+
   });
 
   @override

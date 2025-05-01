@@ -24,9 +24,9 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
-        final imageUrl = book.imageUrl ?? '';
+        final imageUrl = book.imageUrl ?? Image.asset('assets/images/22968.jpg');// image is a string type????!
         final classification = book.classification ?? 'Unknown Classification';
-        final summary = book.summary ?? 'No summary available';
+        final summary = book.summary ?? 'No summary available.';
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
