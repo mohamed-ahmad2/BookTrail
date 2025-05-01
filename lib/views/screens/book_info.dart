@@ -12,6 +12,7 @@ class BookInfo extends StatefulWidget {
   final String classification;
   final String summary;
   final String imageUrl;
+  final String avgRating;
 
   const BookInfo({
     super.key,
@@ -19,6 +20,7 @@ class BookInfo extends StatefulWidget {
     this.title = 'Name book',
     this.author = 'The Great Author',
     this.classification = 'Classification',
+    this.avgRating ='',
     this.summary =
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     this.imageUrl = '',
@@ -45,6 +47,7 @@ class _BookInfoState extends State<BookInfo> {
   late String _classification;
   late String _summary;
   late String _imageUrl;
+  late String _avgRating;
 
   @override
   void initState() {
