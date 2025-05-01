@@ -26,6 +26,7 @@ class _LoginBodyState extends State<LoginBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 40),
               LoginThefirstlook(),
               SizedBox(height: 25),
               LoginUsername(),

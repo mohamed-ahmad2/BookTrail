@@ -1,4 +1,5 @@
 import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,10 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        backgroundColor: Colors.purple[800],
-      ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -176,7 +174,11 @@ themeProvider.toggleDarkMode();
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) =>  LoginScreen(),
+                    ));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[800],
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -185,7 +187,7 @@ themeProvider.toggleDarkMode();
                     ),
                   ),
                   child: const Text(
-                    'Delete Data',
+                    'LogOut',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
