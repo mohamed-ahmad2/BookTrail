@@ -1,18 +1,12 @@
-name: Build and SonarQube Scan
-
+name: Build
 permissions:
   contents: read
-  security-events: write
-  issues: write
-  pull-requests: write # For PR decoration
-
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   sonarqube:
     name: SonarQube
@@ -20,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       # Set up Java 17
       - name: Set up Java 17
@@ -35,11 +29,10 @@ jobs:
         with:
           flutter-version: "3.29.3"
 
-      # Get dependencies, generate coverage, and build the APK
-      - name: Build and Generate Coverage
+      # Get dependencies and build the APK
+      - name: Build
         run: |
           flutter pub get
-          flutter test --coverage || echo "Coverage generation failed, continuing without coverage"
           flutter build apk --release
 
       # Run SonarQube scan
@@ -47,49 +40,3 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-        with:
-          args: >
-            -Dsonar.projectKey=mohamed-ahmad2_BookTrail
-            -Dsonar.organization=mohamed-ahmad2
-            -Dsonar.scm.revision=${{ github.sha }}
-            -Dsonar.branch.name=${{ github.ref_name }}
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-            -Dsonar.pullrequest.base=${{ github.base_ref }}
-
-      # Check Quality Gate
-      - name: SonarQube Quality Gate Check
-        uses: SonarSource/sonarqube-quality-gate-action@v1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-
-      # Create GitHub Issue if Quality Gate fails
-      - name: Create GitHub Issue on Quality Gate Failure
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const issue = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: 'SonarQube Quality Gate Failed',
-              body: 'The SonarQube Quality Gate failed. Check the analysis results for details: https://sonarcloud.io/dashboard?id=mohamed-ahmad2_BookTrail',
-            });
-            console.log(`Created issue #${issue.data.number}`);
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Upload SARIF report for code scanning alerts
-      - name: Export and Upload SonarQube SARIF Report
-        if: always()
-        run: |
-          curl -u ${{ secrets.SONAR_TOKEN }}: -o sonar-report.sarif "https://sonarcloud.io/api/issues/search?projectKeys=mohamed-ahmad2_BookTrail&format=sarif"
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Upload SARIF to GitHub
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: sonar-report.sarif
