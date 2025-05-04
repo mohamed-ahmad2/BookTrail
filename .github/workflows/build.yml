@@ -34,10 +34,11 @@ jobs:
         with:
           flutter-version: "3.29.3"
 
-      # Get dependencies and build the APK
-      - name: Build
+      # Get dependencies, generate coverage, and build the APK
+      - name: Build and Generate Coverage
         run: |
           flutter pub get
+          flutter test --coverage # Generate coverage report
           flutter build apk --release
 
       # Run SonarQube scan
@@ -45,21 +46,23 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io # Use SonarCloud URL
         with:
           args: >
-            -Dsonar.projectKey=your-project-key
+            -Dsonar.projectKey=booktrail # Replace with your actual project key
+            -Dsonar.organization=mohamed-ahmad2 # Your organization key
             -Dsonar.sources=.
             -Dsonar.dart.coverage.reportPaths=coverage/lcov.info
             -Dsonar.scm.provider=git
             -Dsonar.scm.revision=${{ github.sha }}
+            -Dsonar.branch.name=${{ github.ref_name }} # Ensure correct branch detection
 
       # Check Quality Gate
       - name: SonarQube Quality Gate Check
         uses: SonarSource/sonarqube-quality-gate-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
 
       # Create GitHub Issue if Quality Gate fails
       - name: Create GitHub Issue on Quality Gate Failure
@@ -71,7 +74,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: 'SonarQube Quality Gate Failed',
-              body: 'The SonarQube Quality Gate failed. Check the analysis results for details: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=your-project-key',
+              body: 'The SonarQube Quality Gate failed. Check the analysis results for details: https://sonarcloud.io/dashboard?id=booktrail',
             });
             console.log(`Created issue #${issue.data.number}`);
         env:
@@ -81,10 +84,9 @@ jobs:
       - name: Export and Upload SonarQube SARIF Report
         if: always()
         run: |
-          curl -u ${{ secrets.SONAR_TOKEN }}: -o sonar-report.sarif "${{ secrets.SONAR_HOST_URL }}/api/issues/search?projectKeys=your-project-key&format=sarif"
+          curl -u ${{ secrets.SONAR_TOKEN }}: -o sonar-report.sarif "https://sonarcloud.io/api/issues/search?projectKeys=booktrail&format=sarif"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v3

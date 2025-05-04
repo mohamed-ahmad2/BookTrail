@@ -15,9 +15,11 @@
     "objc",
     "Qube",
     "Regbutton",
+    "SARIF",
     "sonarqube",
     "subosito",
     "temurin",
-    "Thefirstlook"
+    "Thefirstlook",
+    "xcworkspace"
   ]
 }

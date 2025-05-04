@@ -1,4 +1,4 @@
-name: "CodeQL Analysis"
+name: CodeQL Analysis
 
 on:
   push:
@@ -31,24 +31,38 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure full history for better analysis
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
+      # Install dependencies and set up Flutter for C++ (Linux)
       - name: Install dependencies for C++ (Linux)
-        if: matrix.language == 'cpp'
+        if: matrix.language == 'cpp' && matrix.os == 'ubuntu-latest'
         run: |
-          # Install necessary tools for compiling C++ (e.g., CMake and g++)
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake
+          sudo apt-get install -y build-essential cmake ninja-build libgtk-3-dev clang curl git unzip
+          # Install Flutter dependencies
+          sudo snap install flutter --classic || echo "Flutter snap installation failed, proceeding with manual setup"
+          flutter doctor
+
+      - name: Set up Flutter for C++ (Linux)
+        if: matrix.language == 'cpp' && matrix.os == 'ubuntu-latest'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3' # Match your Flutter version
+          channel: 'stable'
 
       - name: Build C++ (Linux)
-        if: matrix.language == 'cpp'
+        if: matrix.language == 'cpp' && matrix.os == 'ubuntu-latest'
         run: |
-          # Ensure the directory contains C++ files (e.g., CMakeLists.txt)
-          # Replace 'linux' with the actual directory of your C++ code
+          # Ensure Flutter generates necessary files
+          flutter pub get
+          flutter build linux --release
+          # Build C++ code with CMake
           if [ -d "linux" ]; then
             cd linux
             mkdir -p build && cd build
@@ -58,19 +72,27 @@ jobs:
             echo "Directory 'linux' not found. Check the path of your C++ code."
             exit 1
           fi
-          # If you use other commands (e.g., g++ directly), replace the above commands. Example:
-          # g++ -o output source.cpp
+
+      # Set up Flutter and Xcode for Swift (macOS)
+      - name: Set up Flutter for Swift (macOS)
+        if: matrix.language == 'swift' && matrix.os == 'macos-latest'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3' # Match your Flutter version
+          channel: 'stable'
 
       - name: Select Xcode version (macOS)
-        if: matrix.language == 'swift'
+        if: matrix.language == 'swift' && matrix.os == 'macos-latest'
         run: |
-          # Specify Xcode version to ensure compatibility
           sudo xcode-select -s /Applications/Xcode_15.4.app || echo "Xcode version not available, default will be used"
 
       - name: Build Swift (macOS)
-        if: matrix.language == 'swift'
+        if: matrix.language == 'swift' && matrix.os == 'macos-latest'
         run: |
-          # Ensure the 'macos' directory contains Runner.xcworkspace
+          # Ensure Flutter generates necessary files
+          flutter pub get
+          flutter build macos --release
+          # Build Swift code with xcodebuild
           if [ -d "macos" ]; then
             cd macos
             xcodebuild clean build -workspace Runner.xcworkspace -scheme Runner -configuration Debug CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
@@ -78,7 +100,6 @@ jobs:
             echo "Directory 'macos' not found. Check the path of your Xcode project."
             exit 1
           fi
-          # If the scheme (-scheme) or workspace (-workspace) name is different, modify it here
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
