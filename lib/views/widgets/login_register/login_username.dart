@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 class LoginUsername extends StatefulWidget {
-  const LoginUsername({super.key});
+  final TextEditingController controller;
 
+  const LoginUsername({super.key, required this.controller});
   @override
   State<LoginUsername> createState() => _LoginUsernameState();
 }
 
 class _LoginUsernameState extends State<LoginUsername> {
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: usernameController,
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your Username !";

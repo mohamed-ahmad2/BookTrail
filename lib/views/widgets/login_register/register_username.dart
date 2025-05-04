@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
 class RegisterUsername extends StatefulWidget {
-  const RegisterUsername({super.key});
+  final TextEditingController controller;
 
+  const RegisterUsername({super.key, required this.controller});
   @override
   State<RegisterUsername> createState() => _RegisterUsernameState();
 }
 
 class _RegisterUsernameState extends State<RegisterUsername> {
-  TextEditingController usernameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: usernameController,
+      controller: widget.controller, // استخدام widget.controller
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your Username !";
