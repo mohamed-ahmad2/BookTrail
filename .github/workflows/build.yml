@@ -1,12 +1,17 @@
-name: Build
+name: Build and SonarQube Scan
+
 permissions:
   contents: read
+  security-events: write
+  issues: write # Required for creating issues
+
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   sonarqube:
     name: SonarQube
@@ -14,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for better relevancy of analysis
 
       # Set up Java 17
       - name: Set up Java 17
@@ -40,3 +45,48 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=your-project-key
+            -Dsonar.sources=.
+            -Dsonar.dart.coverage.reportPaths=coverage/lcov.info
+            -Dsonar.scm.provider=git
+            -Dsonar.scm.revision=${{ github.sha }}
+
+      # Check Quality Gate
+      - name: SonarQube Quality Gate Check
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      # Create GitHub Issue if Quality Gate fails
+      - name: Create GitHub Issue on Quality Gate Failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'SonarQube Quality Gate Failed',
+              body: 'The SonarQube Quality Gate failed. Check the analysis results for details: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=your-project-key',
+            });
+            console.log(`Created issue #${issue.data.number}`);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload SARIF report for code scanning alerts
+      - name: Export and Upload SonarQube SARIF Report
+        if: always()
+        run: |
+          curl -u ${{ secrets.SONAR_TOKEN }}: -o sonar-report.sarif "${{ secrets.SONAR_HOST_URL }}/api/issues/search?projectKeys=your-project-key&format=sarif"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Upload SARIF to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sonar-report.sarif
