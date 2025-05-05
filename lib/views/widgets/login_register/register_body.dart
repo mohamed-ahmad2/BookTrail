@@ -28,7 +28,7 @@ class _RegisterBodyState extends State<RegisterBody> {
   void _register() async {
     if (formKey.currentState!.validate()) {
       try {
-        var box = await Hive.box<User>('users');
+        var box = Hive.box<User>('users');
         String username = usernameController.text.trim();
         String email = emailController.text.trim();
         String password = passwordController.text.trim();

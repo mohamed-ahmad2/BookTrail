@@ -30,10 +30,10 @@ class _LoginBodyState extends State<LoginBody> {
     if (formKey.currentState!.validate()) {
       try {
         var box = Hive.box<User>('users');
-        print('All users: ${box.values.toList()}');
+        debugPrint('All users: ${box.values.toList()}');
         String username = usernameController.text.trim();
         String password = passwordController.text.trim();
-        print('Username: $username, Password: $password'); // To verify the entered values
+        debugPrint('Username: $username, Password: $password');
 
         User? user = box.values.firstWhere(
           (user) => user.username == username && user.password == password,
@@ -42,7 +42,6 @@ class _LoginBodyState extends State<LoginBody> {
 
         if (user.username.isNotEmpty) {
           if (mounted) {
-            // تحديث UserProvider مع اسم المستخدم
             Provider.of<UserProvider>(context, listen: false).setUserId(username);
             Navigator.pushReplacement(
               context,
@@ -68,7 +67,7 @@ class _LoginBodyState extends State<LoginBody> {
           );
         }
       } catch (e) {
-        print('Error during login: $e');
+        debugPrint('Error during login: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Center(
@@ -85,7 +84,7 @@ class _LoginBodyState extends State<LoginBody> {
         );
       }
     } else {
-      print('Form validation failed');
+      debugPrint('Form validation failed');
     }
   }
 

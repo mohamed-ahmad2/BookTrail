@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+
+
 import 'package:book_trail/book_operation.dart';
-import 'package:book_trail/layout/main_layout.dart';
+import 'package:flutter/material.dart';
 
 class LoginLogbutton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -19,11 +20,7 @@ class LoginLogbutton extends StatelessWidget {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (context) => MainLayout(bookOperation: bookOperation)));
-        },
+        onPressed: onPressed,
         child: const Text(
           'Log in',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
