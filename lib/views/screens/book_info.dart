@@ -110,14 +110,18 @@ class _BookInfoState extends State<BookInfo> {
   }
 
   Future<void> _saveBookInfo() async {
-    if (_readingStatus == null) {
+    if (_readingStatus == null &&
+        _rating == 0 &&
+        _startDate == null &&
+        _endDate == null &&
+        _statusController.text.isEmpty) {
       showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
-              title: const Text('Missing Reading Status'),
+              title: const Text('No Changes Made'),
               content: const Text(
-                'Please select a reading status (Read, Reading, or Want to Read) to save the data.',
+                'You must change at least one field (Reading Status, Rating, Start Date, End Date, or Notes) to save the data.',
               ),
               actions: [
                 TextButton(
@@ -559,7 +563,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -580,7 +586,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -601,7 +609,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -659,7 +669,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _startDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
@@ -752,7 +764,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _endDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
