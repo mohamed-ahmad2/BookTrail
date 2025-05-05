@@ -110,14 +110,18 @@ class _BookInfoState extends State<BookInfo> {
   }
 
   Future<void> _saveBookInfo() async {
-    if (_readingStatus == null) {
+    if (_readingStatus == null &&
+        _rating == 0 &&
+        _startDate == null &&
+        _endDate == null &&
+        _statusController.text.isEmpty) {
       showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
-              title: const Text('Missing Reading Status'),
+              title: const Text('No Changes Made'),
               content: const Text(
-                'Please select a reading status (Read, Reading, or Want to Read) to save the data.',
+                'You must change at least one field (Reading Status, Rating, Start Date, End Date, or Notes) to save the data.',
               ),
               actions: [
                 TextButton(
@@ -198,35 +202,62 @@ class _BookInfoState extends State<BookInfo> {
     debugPrint('BookInfo: Updated book with ID: ${widget.bookId}');
   }
 
-  Future<void> _deleteBook() async {
-    if (_bookInfoBox == null) {
-      debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
-      return;
-    }
+Future<void> _deleteBook() async {
+  if (_bookInfoBox == null) {
+    debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
+    return;
+  }
 
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  final bookId = widget.bookId;
 
-    debugPrint('BookInfo: Attempting to delete book with ID: ${widget.bookId}');
+  debugPrint('BookInfo: Attempting to delete book with ID: $bookId');
 
-    // Delete from book info box
-    await _bookInfoBox!.delete(widget.bookId);
+  // Check if the book exists in bookInfo box
+  final bookInInfoBox = _bookInfoBox!.containsKey(bookId);
 
-    // Delete from user's Hive box
-    await widget.bookOperation.initialize((userProvider.userId!));
-    await widget.bookOperation.deleteBook(widget.bookId);
+  // Check if the book exists in the user's box
+  await widget.bookOperation.initialize(userProvider.userId!);
+  final bookInUserBox = widget.bookOperation.getBook(bookId) != null;
 
+  // If not found in either, show a message
+  if (!bookInInfoBox && !bookInUserBox) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Book deleted successfully!'),
+          content: Text('Book not found. Nothing to delete.'),
           duration: Duration(seconds: 2),
         ),
       );
-      Navigator.pop(context);
     }
-
-    debugPrint('BookInfo: Deleted book with ID: ${widget.bookId}');
+    debugPrint('BookInfo: Book with ID $bookId not found in any box.');
+    return;
   }
+
+  // Delete from book info box if exists
+  if (bookInInfoBox) {
+    await _bookInfoBox!.delete(bookId);
+    debugPrint('BookInfo: Deleted from _bookInfoBox');
+  }
+
+  // Delete from user box if exists
+  if (bookInUserBox) {
+    await widget.bookOperation.deleteBook(bookId);
+    debugPrint('BookInfo: Deleted from user box');
+  }
+
+  if (mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Book deleted successfully!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    Navigator.pop(context);
+  }
+
+  debugPrint('BookInfo: Finished deleting book with ID: $bookId');
+}
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -559,7 +590,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -580,7 +613,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -601,7 +636,9 @@ class _BookInfoState extends State<BookInfo> {
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -659,7 +696,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _startDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
@@ -752,7 +791,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _endDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
