@@ -1,5 +1,7 @@
+import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +21,11 @@ class BookInfo extends StatefulWidget {
     this.title = 'Name book',
     this.author = 'The Great Author',
     this.classification = 'Classification',
-    this.summary =
-        'No summary available. ',
+    this.summary = 'No summary available.',
     this.imageUrl = '',
-    required String status,
     bool? isFavorite,
-    VoidCallback? onFavoriteToggle, String? clasification,
+    VoidCallback? onFavoriteToggle,
+    String? clasification, required String status,
   });
 
   @override
@@ -37,9 +38,9 @@ class _BookInfoState extends State<BookInfo> {
   DateTime? _endDate;
   String? _readingStatus;
   int _rating = 0;
-  late Box<Book> _bookInfoBox;
+  Box<Book>? _bookInfoBox;
+  bool _isBoxInitialized = false;
 
-  // Variables to hold the book info (so we can save them to Hive)
   late String _title;
   late String _author;
   late String _classification;
@@ -49,31 +50,45 @@ class _BookInfoState extends State<BookInfo> {
   @override
   void initState() {
     super.initState();
-    // Initialize with the passed values
     _title = widget.title;
     _author = widget.author;
     _classification = widget.classification;
     _summary = widget.summary;
     _imageUrl = widget.imageUrl;
 
-    _openHiveBox();
-    _loadBookInfo();
+    _openHiveBox().then((_) {
+      if (mounted) _loadBookInfo();
+    });
   }
 
   Future<void> _openHiveBox() async {
-    _bookInfoBox = await Hive.openBox<Book>('bookInfoBox');
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      if (userProvider.userId == null) {
+        debugPrint('Error: userId is null in UserProvider');
+        return;
+      }
+      _bookInfoBox = await Hive.openBox<Book>(kBookBox(userProvider.userId!));
+      _isBoxInitialized = true;
+    } catch (e) {
+      debugPrint('Error opening Hive box: $e');
+    }
   }
 
   Future<void> _loadBookInfo() async {
-    final bookData = _bookInfoBox.get(widget.bookId);
-    if (bookData != null) {
+    if (!_isBoxInitialized) await _openHiveBox();
+    if (_bookInfoBox == null || !mounted) {
+      debugPrint('Cannot load book info: Box not initialized or widget not mounted');
+      return;
+    }
+    final bookData = _bookInfoBox!.get(widget.bookId);
+    if (bookData != null && mounted) {
       setState(() {
         _readingStatus = bookData.readingStatus;
         _rating = bookData.rating ?? 0;
         _startDate = bookData.startDate;
         _endDate = bookData.endDate;
         _statusController.text = bookData.notes ?? '';
-        // Load the new fields if they exist in Hive
         _title = bookData.title ?? widget.title;
         _author = bookData.author ?? widget.author;
         _classification = bookData.classification ?? widget.classification;
@@ -84,6 +99,27 @@ class _BookInfoState extends State<BookInfo> {
   }
 
   Future<void> _saveBookInfo() async {
+    if (_readingStatus == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Missing Reading Status'),
+          content: const Text(
+              'Please select a reading status (Read, Reading, or Want to Read) to save the data.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    if (_bookInfoBox == null) {
+      debugPrint('Cannot save book info: Hive box not initialized');
+      return;
+    }
     final bookData = Book(
       readingStatus: _readingStatus,
       rating: _rating,
@@ -96,7 +132,15 @@ class _BookInfoState extends State<BookInfo> {
       summary: _summary,
       imageUrl: _imageUrl,
     );
-    await _bookInfoBox.put(widget.bookId, bookData);
+    await _bookInfoBox!.put(widget.bookId, bookData);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Data saved successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
@@ -114,7 +158,6 @@ class _BookInfoState extends State<BookInfo> {
           _endDate = picked;
         }
       });
-      await _saveBookInfo();
     }
   }
 
@@ -124,9 +167,7 @@ class _BookInfoState extends State<BookInfo> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Information'),
-        actions: [
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveBookInfo),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.save), onPressed: _saveBookInfo)],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -137,17 +178,11 @@ class _BookInfoState extends State<BookInfo> {
               const SizedBox(height: 40),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -157,22 +192,16 @@ class _BookInfoState extends State<BookInfo> {
                     children: [
                       Card(
                         elevation: 4.0,
-                        color:
-                            themeProvider.isDarkMode
-                                ? Colors.grey[800]
-                                : Colors.grey[200],
+                        color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                           side: BorderSide(
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[200]!
-                                    : Colors.grey[800]!,
+                            color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                           ),
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Container(
-                          width: 150, // Reduced width
+                          width: 150,
                           height: 150,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
@@ -180,20 +209,14 @@ class _BookInfoState extends State<BookInfo> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
                             child: FadeInImage(
-                              image:
-                                  _imageUrl.isNotEmpty
-                                      ? NetworkImage(_imageUrl)
-                                      : const AssetImage(
-                                            'assets/images/placeholder_image.png',
-                                          )
-                                          as ImageProvider,
-                              placeholder: const AssetImage(
-                                'assets/images/placeholder_image.png',
-                              ),
+                              image: _imageUrl.isNotEmpty
+                                  ? NetworkImage(_imageUrl)
+                                  : const AssetImage('assets/images/22968.jpg') as ImageProvider,
+                              placeholder: const AssetImage('assets/images/22968.jpg'),
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                                  'assets/images/22968.png',
+                                  'assets/images/22968.jpg',
                                   fit: BoxFit.cover,
                                 );
                               },
@@ -203,7 +226,6 @@ class _BookInfoState extends State<BookInfo> {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        // Added Expanded to give the Column more space
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -221,10 +243,7 @@ class _BookInfoState extends State<BookInfo> {
                               'Author: $_author',
                               style: TextStyle(
                                 fontSize: 18,
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -234,15 +253,11 @@ class _BookInfoState extends State<BookInfo> {
                               'Classification: $_classification',
                               style: TextStyle(
                                 fontSize: 18,
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 8),
                           ],
                         ),
                       ),
@@ -256,17 +271,11 @@ class _BookInfoState extends State<BookInfo> {
                 width: double.infinity,
                 child: Card(
                   elevation: 4.0,
-                  color:
-                      themeProvider.isDarkMode
-                          ? Colors.grey[800]
-                          : Colors.grey[200],
+                  color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     side: BorderSide(
-                      color:
-                          themeProvider.isDarkMode
-                              ? Colors.grey[200]!
-                              : Colors.grey[800]!,
+                      color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                     ),
                   ),
                   margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -287,10 +296,7 @@ class _BookInfoState extends State<BookInfo> {
                           _summary,
                           style: TextStyle(
                             fontSize: 16,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[200]
-                                    : Colors.grey[800],
+                            color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                           ),
                         ),
                       ],
@@ -298,20 +304,14 @@ class _BookInfoState extends State<BookInfo> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 8.0),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -335,10 +335,7 @@ class _BookInfoState extends State<BookInfo> {
                           'Rating',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[900]
-                                    : Colors.black,
+                            color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.black,
                           ),
                         ),
                       ),
@@ -352,11 +349,8 @@ class _BookInfoState extends State<BookInfo> {
                               color: Colors.amber,
                               size: 30.0,
                             ),
-                            onPressed: () async {
-                              setState(() {
-                                _rating = index + 1;
-                              });
-                              await _saveBookInfo();
+                            onPressed: () {
+                              setState(() => _rating = index + 1);
                             },
                           );
                         }),
@@ -378,17 +372,11 @@ class _BookInfoState extends State<BookInfo> {
               const SizedBox(height: 8.0),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -412,10 +400,7 @@ class _BookInfoState extends State<BookInfo> {
                           'Reading Status',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[900]
-                                    : Colors.black,
+                            color: themeProvider.isDarkMode ? Colors.grey[900] : Colors.black,
                           ),
                         ),
                       ),
@@ -428,21 +413,13 @@ class _BookInfoState extends State<BookInfo> {
                           Radio<String>(
                             value: 'read',
                             groupValue: _readingStatus,
-                            onChanged: (value) async {
-                              setState(() {
-                                _readingStatus = value!;
-                              });
-                              await _saveBookInfo();
-                            },
+                            onChanged: (value) => setState(() => _readingStatus = value!),
                             activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.selected)) {
-                                return Colors.black;
-                              }
-                              return Colors.grey;
-                            }),
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) => states.contains(WidgetState.selected)
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -454,21 +431,13 @@ class _BookInfoState extends State<BookInfo> {
                           Radio<String>(
                             value: 'reading',
                             groupValue: _readingStatus,
-                            onChanged: (value) async {
-                              setState(() {
-                                _readingStatus = value!;
-                              });
-                              await _saveBookInfo();
-                            },
+                            onChanged: (value) => setState(() => _readingStatus = value!),
                             activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.selected)) {
-                                return Colors.black;
-                              }
-                              return Colors.grey;
-                            }),
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) => states.contains(WidgetState.selected)
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -480,21 +449,13 @@ class _BookInfoState extends State<BookInfo> {
                           Radio<String>(
                             value: 'want to read',
                             groupValue: _readingStatus,
-                            onChanged: (value) async {
-                              setState(() {
-                                _readingStatus = value!;
-                              });
-                              await _saveBookInfo();
-                            },
+                            onChanged: (value) => setState(() => _readingStatus = value!),
                             activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>((
-                              states,
-                            ) {
-                              if (states.contains(WidgetState.selected)) {
-                                return Colors.black;
-                              }
-                              return Colors.grey;
-                            }),
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) => states.contains(WidgetState.selected)
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -505,17 +466,11 @@ class _BookInfoState extends State<BookInfo> {
               const SizedBox(height: 8.0),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -543,14 +498,9 @@ class _BookInfoState extends State<BookInfo> {
                               Text(
                                 _startDate == null
                                     ? 'mm/dd/yyyy'
-                                    : DateFormat(
-                                      'MM/dd/yyyy',
-                                    ).format(_startDate!),
+                                    : DateFormat('MM/dd/yyyy').format(_startDate!),
                                 style: TextStyle(
-                                  color:
-                                      _startDate == null
-                                          ? Colors.grey
-                                          : Colors.black,
+                                  color: _startDate == null ? Colors.grey : Colors.black,
                                 ),
                               ),
                               const Icon(
@@ -566,19 +516,11 @@ class _BookInfoState extends State<BookInfo> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () async {
-                              setState(() {
-                                _startDate = null;
-                              });
-                              await _saveBookInfo();
-                            },
+                            onPressed: () => setState(() => _startDate = null),
                             child: Text(
                               'Clear',
                               style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                             ),
                           ),
@@ -587,10 +529,7 @@ class _BookInfoState extends State<BookInfo> {
                             child: Text(
                               'OK',
                               style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                             ),
                           ),
@@ -603,17 +542,11 @@ class _BookInfoState extends State<BookInfo> {
               const SizedBox(height: 8.0),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -641,14 +574,9 @@ class _BookInfoState extends State<BookInfo> {
                               Text(
                                 _endDate == null
                                     ? 'mm/dd/yyyy'
-                                    : DateFormat(
-                                      'MM/dd/yyyy',
-                                    ).format(_endDate!),
+                                    : DateFormat('MM/dd/yyyy').format(_endDate!),
                                 style: TextStyle(
-                                  color:
-                                      _endDate == null
-                                          ? Colors.grey
-                                          : Colors.black,
+                                  color: _endDate == null ? Colors.grey : Colors.black,
                                 ),
                               ),
                               const Icon(
@@ -664,19 +592,11 @@ class _BookInfoState extends State<BookInfo> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () async {
-                              setState(() {
-                                _endDate = null;
-                              });
-                              await _saveBookInfo();
-                            },
+                            onPressed: () => setState(() => _endDate = null),
                             child: Text(
                               'Clear',
                               style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                             ),
                           ),
@@ -685,10 +605,7 @@ class _BookInfoState extends State<BookInfo> {
                             child: Text(
                               'OK',
                               style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                                color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
                               ),
                             ),
                           ),
@@ -701,17 +618,11 @@ class _BookInfoState extends State<BookInfo> {
               const SizedBox(height: 8.0),
               Card(
                 elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
+                color: themeProvider.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
+                    color: themeProvider.isDarkMode ? Colors.grey[200]! : Colors.grey[800]!,
                   ),
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -745,9 +656,6 @@ class _BookInfoState extends State<BookInfo> {
                         child: TextField(
                           controller: _statusController,
                           maxLines: 4,
-                          onChanged: (value) async {
-                            await _saveBookInfo();
-                          },
                           decoration: const InputDecoration(
                             hintStyle: TextStyle(color: Colors.grey),
                             hintMaxLines: 1,
@@ -772,7 +680,6 @@ class _BookInfoState extends State<BookInfo> {
   @override
   void dispose() {
     _statusController.dispose();
-    Hive.close();
     super.dispose();
   }
 }
