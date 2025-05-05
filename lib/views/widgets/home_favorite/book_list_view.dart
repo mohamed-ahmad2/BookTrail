@@ -24,8 +24,11 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
+        // ignore: unused_local_variable
         final imageUrl = book.imageUrl ?? Image.asset('assets/images/22968.jpg');// image is a string type????!
+        // ignore: unused_local_variable
         final classification = book.classification ?? 'Unknown Classification';
+        // ignore: unused_local_variable
         final summary = book.summary ?? 'No summary available.';
 
         return Padding(
