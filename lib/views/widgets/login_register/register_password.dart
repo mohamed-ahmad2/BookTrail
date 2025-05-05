@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPassword extends StatefulWidget {
-  const RegisterPassword({super.key});
+  final TextEditingController controller;
 
+  const RegisterPassword({super.key, required this.controller});
   @override
   State<RegisterPassword> createState() => _RegisterPasswordState();
 }
@@ -16,9 +17,13 @@ class _RegisterPasswordState extends State<RegisterPassword> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return TextFormField(
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your password !";
+        }
+        if (value.length < 6) {
+          return "Password must be at least 6 characters!";
         }
         return null;
       },

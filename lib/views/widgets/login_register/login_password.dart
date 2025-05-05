@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPassword extends StatefulWidget {
-  const LoginPassword({super.key});
+  final TextEditingController controller;
 
+  const LoginPassword({super.key, required this.controller});
   @override
   State<LoginPassword> createState() => _LoginPasswordState();
 }
@@ -17,6 +18,7 @@ class _LoginPasswordState extends State<LoginPassword> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return TextFormField(
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your password !";

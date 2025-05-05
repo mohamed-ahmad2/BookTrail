@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-class RegisterLogbutton extends StatefulWidget {
-  const RegisterLogbutton({super.key});
+class RegisterLogbutton extends StatelessWidget {
+  final VoidCallback onPressed;
 
-  @override
-  State<RegisterLogbutton> createState() => _RegisterLogbuttonState();
-}
+  const RegisterLogbutton({super.key, required this.onPressed});
 
-class _RegisterLogbuttonState extends State<RegisterLogbutton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,14 +12,12 @@ class _RegisterLogbuttonState extends State<RegisterLogbutton> {
       width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 87, 55, 61),
+          backgroundColor: const Color(0xFF492532),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {
-          
-        },
+        onPressed: onPressed,
         child: const Text(
           'Log in',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

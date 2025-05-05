@@ -5,13 +5,16 @@ import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/views/screens/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:book_trail/models/user.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-Future<void> main() async {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(BookAdapter());
-
+  Hive.registerAdapter(UserAdapter());
+  await Hive.openBox<User>('users');
   runApp(const BookTrailApp());
 }
 
@@ -29,7 +32,6 @@ class BookTrailApp extends StatelessWidget {
         builder: (context) {
           final themeProvider = Provider.of<ThemeProvider>(context);
           final userProvider = Provider.of<UserProvider>(context);
-
           return FutureBuilder(
             future: Hive.openBox<Book>(kBookBox(userProvider.userId!)),
             builder: (context, snapshot) {

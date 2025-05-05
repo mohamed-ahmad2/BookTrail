@@ -1,14 +1,10 @@
-import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
-class LoginLogbutton extends StatefulWidget {
-  const LoginLogbutton({super.key});
+class LoginLogbutton extends StatelessWidget {
+  final VoidCallback onPressed;
 
-  @override
-  State<LoginLogbutton> createState() => _LoginLogbuttonState();
-}
+  const LoginLogbutton({super.key, required this.onPressed});
 
-class _LoginLogbuttonState extends State<LoginLogbutton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,11 +17,7 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (context) => MainLayout()));
-        },
+        onPressed: onPressed,
         child: const Text(
           'Log in',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-class LoginRegbutton extends StatefulWidget {
-  const LoginRegbutton({super.key});
+class LoginRegbutton extends StatelessWidget {
+  final VoidCallback onPressed;
 
-  @override
-  State<LoginRegbutton> createState() => _LoginRegbuttonState();
-}
+  const LoginRegbutton({super.key, required this.onPressed});
 
-class _LoginRegbuttonState extends State<LoginRegbutton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -20,7 +17,7 @@ class _LoginRegbuttonState extends State<LoginRegbutton> {
             borderRadius: BorderRadius.circular(35),
           ),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: const Text(
           'Register',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
