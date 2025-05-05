@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/views/widgets/login_register/login_guest_textbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_password.dart';
@@ -7,7 +8,8 @@ import 'package:book_trail/views/widgets/login_register/login_username.dart';
 import 'package:flutter/material.dart';
 
 class LoginBody extends StatefulWidget {
-  const LoginBody({super.key});
+    final BookOperation bookOperation;
+  const LoginBody({super.key, required this.bookOperation});
 
   @override
   State<LoginBody> createState() => _LoginBodyState();
@@ -33,7 +35,7 @@ class _LoginBodyState extends State<LoginBody> {
               SizedBox(height: 20),
               LoginPassword(),
               SizedBox(height: 25),
-              LoginLogbutton(),
+              LoginLogbutton(bookOperation: widget.bookOperation),
               SizedBox(height: 40),
               Text(
                 '------------------------------Or------------------------------',

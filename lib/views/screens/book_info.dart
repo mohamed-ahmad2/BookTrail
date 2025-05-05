@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/providers/theme_provider.dart';
@@ -14,6 +15,7 @@ class BookInfo extends StatefulWidget {
   final String classification;
   final String summary;
   final String imageUrl;
+  final BookOperation bookOperation;
 
   const BookInfo({
     super.key,
@@ -26,6 +28,7 @@ class BookInfo extends StatefulWidget {
     bool? isFavorite,
     VoidCallback? onFavoriteToggle,
     required String status,
+    required this.bookOperation,
   });
 
   @override
@@ -69,7 +72,9 @@ class _BookInfoState extends State<BookInfo> {
         return;
       }
       _bookInfoBox = await Hive.openBox<Book>(kBookBox(userProvider.userId!));
-      debugPrint('BookInfo: Hive box opened for userId: ${userProvider.userId}');
+      debugPrint(
+        'BookInfo: Hive box opened for userId: ${userProvider.userId}',
+      );
       _isBoxInitialized = true;
     } catch (e) {
       debugPrint('BookInfo: Error opening Hive box: $e');
@@ -124,11 +129,17 @@ class _BookInfoState extends State<BookInfo> {
       );
       return;
     }
+
     if (_bookInfoBox == null) {
       debugPrint('BookInfo: Cannot save book info: Hive box not initialized');
       return;
     }
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    /// Create the book instance
     final bookData = Book(
+      bookId: widget.bookId,
       readingStatus: _readingStatus,
       rating: _rating,
       startDate: _startDate,
@@ -139,17 +150,52 @@ class _BookInfoState extends State<BookInfo> {
       classification: _classification,
       summary: _summary,
       imageUrl: _imageUrl,
+      userId: userProvider.userId,
     );
+
+    /// Save to local screen box
     await _bookInfoBox!.put(widget.bookId, bookData);
+
+    /// Create a separate copy for the user's box to avoid reusing the same HiveObject
+    final userBookData = Book(
+      bookId: widget.bookId,
+      readingStatus: _readingStatus,
+      rating: _rating,
+      startDate: _startDate,
+      endDate: _endDate,
+      notes: _statusController.text,
+      title: _title,
+      author: _author,
+      classification: _classification,
+      summary: _summary,
+      imageUrl: _imageUrl,
+      userId: userProvider.userId,
+    );
+
+    /// Save to user's personal Hive box
+    await widget.bookOperation.initialize((userProvider.userId!));
+    await widget.bookOperation.updateBook(userBookData);
+
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Data saved successfully!'),
-          duration: Duration(seconds: 2),
-        ),
+      showDialog(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: const Text('Success'),
+              content: const Text(
+                'The book information has been updated successfully.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
       );
     }
-    debugPrint('BookInfo: Saved book with ID: ${widget.bookId}');
+
+    debugPrint('BookInfo: Updated book with ID: ${widget.bookId}');
   }
 
   Future<void> _deleteBook() async {
@@ -157,8 +203,18 @@ class _BookInfoState extends State<BookInfo> {
       debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
       return;
     }
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     debugPrint('BookInfo: Attempting to delete book with ID: ${widget.bookId}');
+
+    // Delete from book info box
     await _bookInfoBox!.delete(widget.bookId);
+
+    // Delete from user's Hive box
+    await widget.bookOperation.initialize((userProvider.userId!));
+    await widget.bookOperation.deleteBook(widget.bookId);
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -168,6 +224,7 @@ class _BookInfoState extends State<BookInfo> {
       );
       Navigator.pop(context);
     }
+
     debugPrint('BookInfo: Deleted book with ID: ${widget.bookId}');
   }
 

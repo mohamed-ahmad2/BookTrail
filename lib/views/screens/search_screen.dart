@@ -9,7 +9,8 @@ import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+    final BookOperation bookOperation;
+  const SearchScreen({super.key, required this.bookOperation});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -109,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: MediaQuery.of(context).size.height - 150,
                   child: BookListView(
                     books: _filterBooks(),
-                    bookOperation: BookOperation(),
+                    bookOperation: widget.bookOperation,
                   ),
                 ),
           ],

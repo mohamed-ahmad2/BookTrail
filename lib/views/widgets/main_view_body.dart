@@ -1,8 +1,10 @@
+import 'package:book_trail/book_operation.dart' show BookOperation;
 import 'package:book_trail/views/widgets/body_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainViewBody extends StatefulWidget {
-  const MainViewBody({super.key});
+    final BookOperation bookOperation;
+  const MainViewBody({super.key, required this.bookOperation});
 
   @override
   State<MainViewBody> createState() => _MainViewBodyState();
@@ -15,7 +17,7 @@ class _MainViewBodyState extends State<MainViewBody> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [BodyScreen()],
+        children: [BodyScreen(bookOperation: widget.bookOperation)],
       ),
     );
   }

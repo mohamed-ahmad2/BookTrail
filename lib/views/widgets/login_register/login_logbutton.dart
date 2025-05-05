@@ -1,8 +1,10 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
 class LoginLogbutton extends StatefulWidget {
-  const LoginLogbutton({super.key});
+    final BookOperation bookOperation;
+  const LoginLogbutton({super.key, required this.bookOperation});
 
   @override
   State<LoginLogbutton> createState() => _LoginLogbuttonState();
@@ -24,7 +26,7 @@ class _LoginLogbuttonState extends State<LoginLogbutton> {
         onPressed: () {
           Navigator.of(
             context,
-          ).push(MaterialPageRoute(builder: (context) => MainLayout()));
+          ).push(MaterialPageRoute(builder: (context) => MainLayout(bookOperation: widget.bookOperation)));
         },
         child: const Text(
           'Log in',

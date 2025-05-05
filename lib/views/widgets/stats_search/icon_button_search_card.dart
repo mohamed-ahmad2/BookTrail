@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:book_trail/book_operation.dart';
-import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
@@ -12,6 +11,10 @@ class IconButtonSearchCard extends StatefulWidget {
   final String title;
   final String bookId;
   final String status;
+  final String author;
+  final String classification;
+  final String summary;
+  final String imageUrl;
   final BookOperation bookOperation;
 
   const IconButtonSearchCard({
@@ -19,6 +22,10 @@ class IconButtonSearchCard extends StatefulWidget {
     required this.title,
     required this.bookId,
     required this.status,
+    required this.author,
+    required this.classification,
+    required this.summary,
+    required this.imageUrl,
     required this.bookOperation,
   });
 
@@ -39,7 +46,7 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
   Future<void> _checkIfBookExists() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    await widget.bookOperation.initialize(kBookBox(userProvider.userId));
+    await widget.bookOperation.initialize(userProvider.userId!);
 
     final existingBook = widget.bookOperation.getBook(widget.bookId);
 
@@ -75,9 +82,7 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
                   listen: false,
                 );
 
-                await widget.bookOperation.initialize(
-                  kBookBox(userProvider.userId),
-                );
+                await widget.bookOperation.initialize(userProvider.userId!);
 
                 final existingBook = widget.bookOperation.getBook(
                   widget.bookId,
@@ -98,6 +103,11 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
                   bookId: widget.bookId,
                   title: widget.title,
                   readingStatus: widget.status,
+                  author: widget.author,
+                  classification: widget.classification,
+                  summary: widget.summary,
+                  imageUrl: widget.imageUrl,
+                  userId: userProvider.userId,
                 );
 
                 await widget.bookOperation.addBook(book);
