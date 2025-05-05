@@ -26,27 +26,38 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchBooks(String query) async {
+  setState(() {
+    isLoading = true;
+  });
+
+  final bookStorage = BookOperation();
+  await bookStorage.initialize('searchBox');
+
+  try {
+    final bookList = await BookService.searchBooks(query);
+
+    if (!mounted) return;
+
+    for (final book in bookList) {
+      await bookStorage.addBook(book);
+    }
+
     setState(() {
-      isLoading = true;
+      books = bookList;
+      isLoading = false;
     });
-    try {
-      final bookList = await BookService.searchBooks(query);
-      if (!mounted) return;
-      setState(() {
-        books = bookList;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('failed $e')));
-      }
+  } catch (e) {
+    setState(() {
+      isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('failed $e')));
     }
   }
+}
+
 
   List<Book> _filterBooks() {
     if (searchQuery.isEmpty) {
