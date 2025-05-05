@@ -24,11 +24,8 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
-        // ignore: unused_local_variable
-        final imageUrl = book.imageUrl ?? Image.asset('assets/images/22968.jpg');// image is a string type????!
-        // ignore: unused_local_variable
+        final imageUrl = book.imageUrl;
         final classification = book.classification ?? 'Unknown Classification';
-        // ignore: unused_local_variable
         final summary = book.summary ?? 'No summary available.';
 
         return Padding(
@@ -38,11 +35,13 @@ class BookListView extends StatelessWidget {
             author: author,
             status: readingStatus,
             bookId: bookId,
-            classification: book.classification,
-            summary: book.summary,
-            imageUrl: book.imageUrl,
-            isFavorite: book.title != null ? favoriteTitles.contains(book.title) : false,
-            onFavoriteToggle: () => toggleFavorite(title), clasification: '',
+            classification: classification,
+            summary: summary,
+            imageUrl: imageUrl,
+            isFavorite:
+                book.title != null ? favoriteTitles.contains(book.title) : false,
+            onFavoriteToggle: () => toggleFavorite(title),
+            clasification: classification,
           ),
         );
       },

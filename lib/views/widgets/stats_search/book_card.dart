@@ -9,6 +9,8 @@ class BookCard extends StatefulWidget {
   final String author;
   final String status;
   final String? imageUrl;
+  final String? classification;
+  final String? summary;
   final BookOperation bookOperation;
 
   const BookCard({
@@ -19,6 +21,8 @@ class BookCard extends StatefulWidget {
     required this.status,
     required this.bookOperation,
     this.imageUrl,
+    this.classification,
+    this.summary,
   });
 
   @override
@@ -40,9 +44,15 @@ class _BookCardState extends State<BookCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) =>
-                    BookInfo(bookId: widget.bookId, status: widget.status),
+            builder: (context) => BookInfo(
+              bookId: widget.bookId,
+              status: widget.status,
+              title: widget.title,
+              author: widget.author,
+              classification: widget.classification ?? 'Unknown Classification',
+              summary: widget.summary ?? 'No summary available.',
+              imageUrl: widget.imageUrl ?? '',
+            ),
           ),
         );
       },
@@ -55,18 +65,17 @@ class _BookCardState extends State<BookCard> {
             children: [
               widget.imageUrl != null && widget.imageUrl!.isNotEmpty
                   ? Image.network(
-                    widget.imageUrl!,
-                    width: 50,
-                    height: 70,
-                    fit: BoxFit.cover,
-                    errorBuilder:
-                        (context, error, stackTrace) =>
-                            const Icon(Icons.image, size: 50),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  )
+                      widget.imageUrl!,
+                      width: 50,
+                      height: 70,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.image, size: 50),
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    )
                   : const Icon(Icons.image, size: 50),
               const SizedBox(width: 12),
               Expanded(
