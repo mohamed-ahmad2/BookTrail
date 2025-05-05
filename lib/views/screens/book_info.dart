@@ -175,41 +175,150 @@ class _BookInfoState extends State<BookInfo> {
           IconButton(icon: const Icon(Icons.save), onPressed: _saveBookInfo),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Card(
+      body: FutureBuilder(
+        future: _loadBookInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 40),
+                    Card(
+                      elevation: 4.0,
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
+                        ),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Card(
+                              elevation: 4.0,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? Colors.grey[800]
+                                      : Colors.grey[200],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                side: BorderSide(
+                                  color:
+                                      themeProvider.isDarkMode
+                                          ? Colors.grey[200]!
+                                          : Colors.grey[800]!,
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: FadeInImage(
+                                    image:
+                                        _imageUrl.isNotEmpty
+                                            ? NetworkImage(_imageUrl)
+                                            : const AssetImage(
+                                                  'assets/images/22968.jpg',
+                                                )
+                                                as ImageProvider,
+                                    placeholder: const AssetImage(
+                                      'assets/images/22968.jpg',
+                                    ),
+                                    fit: BoxFit.cover,
+                                    imageErrorBuilder: (
+                                      context,
+                                      error,
+                                      stackTrace,
+                                    ) {
+                                      return Image.asset(
+                                        'assets/images/22968.jpg',
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                    height: 150,
+                                    width: 100,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _title,
+                                    style: const TextStyle(
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Text(
+                                    'Author: $_author',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Classification: $_classification',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    // ignore: sized_box_for_whitespace
+                    Container(
+                      width: double.infinity,
+                      child: Card(
                         elevation: 4.0,
                         color:
                             themeProvider.isDarkMode
                                 ? Colors.grey[800]
                                 : Colors.grey[200],
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(
                             color:
                                 themeProvider.isDarkMode
@@ -218,565 +327,498 @@ class _BookInfoState extends State<BookInfo> {
                           ),
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: FadeInImage(
-                              image:
-                                  _imageUrl.isNotEmpty
-                                      ? NetworkImage(_imageUrl)
-                                      : const AssetImage(
-                                            'assets/images/22968.jpg',
-                                          )
-                                          as ImageProvider,
-                              placeholder: const AssetImage(
-                                'assets/images/22968.jpg',
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Summary book',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/22968.jpg',
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
+                              const SizedBox(height: 8),
+                              Text(
+                                _summary,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color:
+                                      themeProvider.isDarkMode
+                                          ? Colors.grey[200]
+                                          : Colors.grey[800],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
+                    ),
+                    const SizedBox(height: 8.0),
+                    Card(
+                      elevation: 4.0,
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
+                        ),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              _title,
-                              style: const TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 4.0,
                               ),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Text(
+                                'Rating',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      themeProvider.isDarkMode
+                                          ? Colors.grey[900]
+                                          : Colors.black,
+                                ),
+                              ),
                             ),
-                            const SizedBox(height: 30),
-                            Text(
-                              'Author: $_author',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
-                              ),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
+                            const SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(5, (index) {
+                                return IconButton(
+                                  icon: Icon(
+                                    index < _rating
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                    size: 30.0,
+                                  ),
+                                  onPressed: () {
+                                    setState(() => _rating = index + 1);
+                                  },
+                                );
+                              }),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Classification: $_classification',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
+                            const SizedBox(height: 8.0),
+                            Center(
+                              child: Text(
+                                'Selected Rating: $_rating/5',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14.0,
+                                ),
                               ),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              // ignore: sized_box_for_whitespace
-              Container(
-                width: double.infinity,
-                child: Card(
-                  elevation: 4.0,
-                  color:
-                      themeProvider.isDarkMode
-                          ? Colors.grey[800]
-                          : Colors.grey[200],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(
+                    ),
+                    const SizedBox(height: 8.0),
+                    Card(
+                      elevation: 4.0,
                       color:
                           themeProvider.isDarkMode
-                              ? Colors.grey[200]!
-                              : Colors.grey[800]!,
-                    ),
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Summary book',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          _summary,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[200]
-                                    : Colors.grey[800],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: Text(
-                          'Rating',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[900]
-                                    : Colors.black,
-                          ),
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
                         ),
                       ),
-                      const SizedBox(height: 8.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(5, (index) {
-                          return IconButton(
-                            icon: Icon(
-                              index < _rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              setState(() => _rating = index + 1);
-                            },
-                          );
-                        }),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Center(
-                        child: Text(
-                          'Selected Rating: $_rating/5',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: Text(
-                          'Reading Status',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color:
-                                themeProvider.isDarkMode
-                                    ? Colors.grey[900]
-                                    : Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Row(
-                        children: [
-                          Icon(Icons.done, color: Colors.grey[650]),
-                          const SizedBox(width: 8.0),
-                          const Expanded(child: Text('read')),
-                          Radio<String>(
-                            value: 'read',
-                            groupValue: _readingStatus,
-                            onChanged:
-                                (value) =>
-                                    setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>(
-                              (states) =>
-                                  states.contains(WidgetState.selected)
-                                      ? Colors.black
-                                      : Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.book, color: Colors.grey[650]),
-                          const SizedBox(width: 8.0),
-                          const Expanded(child: Text('reading')),
-                          Radio<String>(
-                            value: 'reading',
-                            groupValue: _readingStatus,
-                            onChanged:
-                                (value) =>
-                                    setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>(
-                              (states) =>
-                                  states.contains(WidgetState.selected)
-                                      ? Colors.black
-                                      : Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.bookmark_border, color: Colors.grey[650]),
-                          const SizedBox(width: 8.0),
-                          const Expanded(child: Text('want to read')),
-                          Radio<String>(
-                            value: 'want to read',
-                            groupValue: _readingStatus,
-                            onChanged:
-                                (value) =>
-                                    setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
-                            fillColor: WidgetStateProperty.resolveWith<Color>(
-                              (states) =>
-                                  states.contains(WidgetState.selected)
-                                      ? Colors.black
-                                      : Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Start date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8.0),
-                      GestureDetector(
-                        onTap: () => _selectDate(context, true),
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _startDate == null
-                                    ? 'mm/dd/yyyy'
-                                    : DateFormat(
-                                      'MM/dd/yyyy',
-                                    ).format(_startDate!),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Text(
+                                'Reading Status',
                                 style: TextStyle(
+                                  fontWeight: FontWeight.bold,
                                   color:
+                                      themeProvider.isDarkMode
+                                          ? Colors.grey[900]
+                                          : Colors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                Icon(Icons.done, color: Colors.grey[650]),
+                                const SizedBox(width: 8.0),
+                                const Expanded(child: Text('read')),
+                                Radio<String>(
+                                  value: 'read',
+                                  groupValue: _readingStatus,
+                                  onChanged:
+                                      (value) => setState(
+                                        () => _readingStatus = value!,
+                                      ),
+                                  activeColor: Colors.blue,
+                                  fillColor:
+                                      WidgetStateProperty.resolveWith<Color>(
+                                        (states) =>
+                                            states.contains(
+                                                  WidgetState.selected,
+                                                )
+                                                ? Colors.black
+                                                : Colors.grey,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.book, color: Colors.grey[650]),
+                                const SizedBox(width: 8.0),
+                                const Expanded(child: Text('reading')),
+                                Radio<String>(
+                                  value: 'reading',
+                                  groupValue: _readingStatus,
+                                  onChanged:
+                                      (value) => setState(
+                                        () => _readingStatus = value!,
+                                      ),
+                                  activeColor: Colors.blue,
+                                  fillColor:
+                                      WidgetStateProperty.resolveWith<Color>(
+                                        (states) =>
+                                            states.contains(
+                                                  WidgetState.selected,
+                                                )
+                                                ? Colors.black
+                                                : Colors.grey,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.bookmark_border,
+                                  color: Colors.grey[650],
+                                ),
+                                const SizedBox(width: 8.0),
+                                const Expanded(child: Text('want to read')),
+                                Radio<String>(
+                                  value: 'want to read',
+                                  groupValue: _readingStatus,
+                                  onChanged:
+                                      (value) => setState(
+                                        () => _readingStatus = value!,
+                                      ),
+                                  activeColor: Colors.blue,
+                                  fillColor:
+                                      WidgetStateProperty.resolveWith<Color>(
+                                        (states) =>
+                                            states.contains(
+                                                  WidgetState.selected,
+                                                )
+                                                ? Colors.black
+                                                : Colors.grey,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Card(
+                      elevation: 4.0,
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
+                        ),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Start date',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8.0),
+                            GestureDetector(
+                              onTap: () => _selectDate(context, true),
+                              child: Container(
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
                                       _startDate == null
-                                          ? Colors.grey
-                                          : Colors.black,
+                                          ? 'mm/dd/yyyy'
+                                          : DateFormat(
+                                            'MM/dd/yyyy',
+                                          ).format(_startDate!),
+                                      style: TextStyle(
+                                        color:
+                                            _startDate == null
+                                                ? Colors.grey
+                                                : Colors.black,
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.calendar_today,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.calendar_today,
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed:
+                                      () => setState(() => _startDate = null),
+                                  child: Text(
+                                    'Clear',
+                                    style: TextStyle(
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'OK',
+                                    style: TextStyle(
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 8.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => setState(() => _startDate = null),
-                            child: Text(
-                              'Clear',
-                              style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'OK',
-                              style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
-                              ),
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Card(
+                      elevation: 4.0,
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'End date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8.0),
-                      GestureDetector(
-                        onTap: () => _selectDate(context, false),
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _endDate == null
-                                    ? 'mm/dd/yyyy'
-                                    : DateFormat(
-                                      'MM/dd/yyyy',
-                                    ).format(_endDate!),
-                                style: TextStyle(
-                                  color:
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'End date',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8.0),
+                            GestureDetector(
+                              onTap: () => _selectDate(context, false),
+                              child: Container(
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
                                       _endDate == null
-                                          ? Colors.grey
-                                          : Colors.black,
+                                          ? 'mm/dd/yyyy'
+                                          : DateFormat(
+                                            'MM/dd/yyyy',
+                                          ).format(_endDate!),
+                                      style: TextStyle(
+                                        color:
+                                            _endDate == null
+                                                ? Colors.grey
+                                                : Colors.black,
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.calendar_today,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.calendar_today,
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed:
+                                      () => setState(() => _endDate = null),
+                                  child: Text(
+                                    'Clear',
+                                    style: TextStyle(
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'OK',
+                                    style: TextStyle(
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? Colors.grey[200]
+                                              : Colors.grey[800],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 8.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => setState(() => _endDate = null),
-                            child: Text(
-                              'Clear',
-                              style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'OK',
-                              style: TextStyle(
-                                color:
-                                    themeProvider.isDarkMode
-                                        ? Colors.grey[200]
-                                        : Colors.grey[800],
-                              ),
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Card(
+                      elevation: 4.0,
+                      color:
+                          themeProvider.isDarkMode
+                              ? Colors.grey[800]
+                              : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color:
+                              themeProvider.isDarkMode
+                                  ? Colors.grey[200]!
+                                  : Colors.grey[800]!,
+                        ),
                       ),
-                    ],
-                  ),
+                      margin: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  color: Colors.grey[650],
+                                  size: 20.0,
+                                ),
+                                const SizedBox(width: 8.0),
+                                const Text(
+                                  'Notes',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8.0),
+                            Container(
+                              height: 100,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              padding: const EdgeInsets.all(10.0),
+                              child: TextField(
+                                controller: _statusController,
+                                maxLines: 4,
+                                decoration: const InputDecoration(
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  hintMaxLines: 1,
+                                  contentPadding: EdgeInsets.all(8.0),
+                                  border: InputBorder.none,
+                                  hintText: 'Add your notes here',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                  ],
                 ),
               ),
-              const SizedBox(height: 8.0),
-              Card(
-                elevation: 4.0,
-                color:
-                    themeProvider.isDarkMode
-                        ? Colors.grey[800]
-                        : Colors.grey[200],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: BorderSide(
-                    color:
-                        themeProvider.isDarkMode
-                            ? Colors.grey[200]!
-                            : Colors.grey[800]!,
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.edit, color: Colors.grey[650], size: 20.0),
-                          const SizedBox(width: 8.0),
-                          const Text(
-                            'Notes',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Container(
-                        height: 100,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextField(
-                          controller: _statusController,
-                          maxLines: 4,
-                          decoration: const InputDecoration(
-                            hintStyle: TextStyle(color: Colors.grey),
-                            hintMaxLines: 1,
-                            contentPadding: EdgeInsets.all(8.0),
-                            border: InputBorder.none,
-                            hintText: 'Add your notes here',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }
