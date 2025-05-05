@@ -2,6 +2,7 @@ import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/providers/user_provider.dart';
+import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/views/widgets/login_register/login_guest_textbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_password.dart';
@@ -45,10 +46,17 @@ class _LoginBodyState extends State<LoginBody> {
               listen: false,
             ).setUserId(user.username);
 
+            Provider.of<UsernameProvider>(
+              context,
+              listen: false,
+            ).setUsername(user.username);
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MainLayout(bookOperation: widget.bookOperation),
+                builder:
+                    (context) =>
+                        MainLayout(bookOperation: widget.bookOperation),
               ),
             );
           }
@@ -118,12 +126,15 @@ class _LoginBodyState extends State<LoginBody> {
               ),
               const SizedBox(height: 25),
               LoginRegbutton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Register(bookOperation: widget.bookOperation),
-                  ),
-                ),
+                onPressed:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                Register(bookOperation: widget.bookOperation),
+                      ),
+                    ),
               ),
               const SizedBox(height: 30),
               LoginGuestTextbutton(bookOperation: widget.bookOperation),

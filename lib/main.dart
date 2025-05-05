@@ -5,9 +5,9 @@ import 'package:book_trail/models/book.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
+import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +32,7 @@ class BookTrailApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => UsernameProvider()),
       ],
       child: Consumer2<UserProvider, ThemeProvider>(
         builder: (context, userProvider, themeProvider, _) {
@@ -43,7 +44,7 @@ class BookTrailApp extends StatelessWidget {
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             initialRoute: userProvider.userId == null ? '/login' : '/main',
             routes: {
-              '/login': (context) =>  LoginScreen(bookOperation: bookOperation,),
+              '/login': (context) => LoginScreen(bookOperation: bookOperation),
               '/main': (context) => FutureBuilder(
                     future: Hive.openBox<Book>(kBookBox(userProvider.userId!)),
                     builder: (context, snapshot) {

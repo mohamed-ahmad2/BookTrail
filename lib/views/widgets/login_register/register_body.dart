@@ -2,6 +2,7 @@ import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/providers/user_provider.dart';
+import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:book_trail/views/widgets/login_register/register_email.dart';
 import 'package:book_trail/views/widgets/login_register/register_logbutton.dart';
@@ -84,6 +85,9 @@ class _RegisterBodyState extends State<RegisterBody> {
 
           // ⬇️ حفظ userId في UserProvider
           Provider.of<UserProvider>(context, listen: false).setUserId(username);
+          
+          // ⬇️ حفظ username في UsernameProvider
+          Provider.of<UsernameProvider>(context, listen: false).setUsername(username);
 
           if (mounted) {
             Navigator.pushReplacement(
