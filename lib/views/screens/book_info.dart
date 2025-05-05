@@ -14,15 +14,17 @@ class BookInfo extends StatefulWidget {
   final String classification;
   final String summary;
   final String imageUrl;
+  final String avgRating;
 
   const BookInfo({
     super.key,
     required this.bookId,
     this.title = 'Name book',
     this.author = 'The Great Author',
-    this.classification = 'Classification',
-    this.summary = 'No summary available.',
-    this.imageUrl = '',
+this.classification = 'Classification',
+this.summary = 'No summary available.',
+this.avgRating = '',
+this.imageUrl = '',
     bool? isFavorite,
     VoidCallback? onFavoriteToggle,
     String? clasification, required String status,
@@ -46,6 +48,8 @@ class _BookInfoState extends State<BookInfo> {
   late String _classification;
   late String _summary;
   late String _imageUrl;
+  // ignore: unused_field
+  late String _avgRating;
 
   @override
   void initState() {

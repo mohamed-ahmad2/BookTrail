@@ -4,13 +4,23 @@
   "flutterTools.displayRiverpodContextMenu": false,
   "flutterTools.displayModularContextMenu": false,
   "cSpell.words": [
+    "adoptopenjdk",
+    "animatedpulserectangle",
+    "autobuild",
     "cupertino",
     "Dsonar",
+    "formkey",
     "kconstant",
     "Logbutton",
+    "objc",
+    "pullrequest",
     "Qube",
     "Regbutton",
+    "SARIF",
     "sonarqube",
-    "Thefirstlook"
+    "subosito",
+    "temurin",
+    "Thefirstlook",
+    "xcworkspace"
   ]
 }

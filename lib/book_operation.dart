@@ -6,8 +6,8 @@ class BookOperation {
   Box<Book>? box;
 
 
-  Future<void> initialize(String userId) async {
-    box = await Hive.openBox<Book>(kBookBox(userId));
+  Future<void> initialize(String nameId) async {
+    box = await Hive.openBox<Book>(kBookBox(nameId));
   }
 
   Future<void> addBook(Book book) async {
