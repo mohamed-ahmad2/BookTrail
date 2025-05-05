@@ -13,7 +13,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: widget.controller, // استخدام widget.controller
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your Email !";

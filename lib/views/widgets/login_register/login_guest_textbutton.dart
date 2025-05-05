@@ -1,3 +1,4 @@
+import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
 class LoginGuestTextbutton extends StatefulWidget {
@@ -41,25 +42,25 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
                 ).animate(curvedAnimation),
                 child: AlertDialog(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Rounded corners
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   backgroundColor: const Color.fromARGB(255, 230, 229, 229),
                   title: Column(
                     children: [
                       Icon(
-                        Icons.help_outline, // Question mark icon
+                        Icons.help_outline,
                         color: Colors.blueAccent,
                         size: 50,
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        'Confirmation', // Dialog title
+                        'Confirmation',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                   content: const Text(
-                    'Are you sure you want to continue as a guest?', // Dialog message
+                    'Are you sure you want to continue as a guest?',
                     textAlign: TextAlign.center,
                   ),
                   actionsAlignment: MainAxisAlignment.center,
@@ -67,16 +68,23 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
                     // "No" button
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
                       child: const Text(
                         'No',
                         style: TextStyle(color: Colors.redAccent),
                       ),
                     ),
+                    // "Yes" button
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainLayout()),
+                          );
+                        }
                       },
                       child: const Text(
                         'Yes',
@@ -90,7 +98,7 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
           },
           transitionDuration: const Duration(
             milliseconds: 400,
-          ), // Animation duration
+          ),
         );
       },
       child: Text(

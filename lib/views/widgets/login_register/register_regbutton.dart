@@ -12,7 +12,7 @@ class RegisterRegbutton extends StatelessWidget {
       width: 400,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: const Color(0xFF65558f),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(35),
           ),

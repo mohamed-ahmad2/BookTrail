@@ -1,4 +1,6 @@
+import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
+import 'package:book_trail/views/_login.dart';
 import 'package:book_trail/views/widgets/login_register/register_email.dart';
 import 'package:book_trail/views/widgets/login_register/register_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/register_password.dart';
@@ -28,26 +30,59 @@ class _RegisterBodyState extends State<RegisterBody> {
       String email = emailController.text.trim();
       String password = passwordController.text.trim();
 
-      // التحقق مما إذا كان اسم المستخدم أو البريد الإلكتروني موجودًا
+      // Check if your username or email exists
       if (box.values.any((user) => user.username == username)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('اسم المستخدم موجود بالفعل!')),
+          const SnackBar(content:
+            Center(
+              child: Text(
+                'Username already exists !',
+                style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold 
+                ),
+              ),
+            ),
+          ),
         );
       } else if (box.values.any((user) => user.email == email)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('البريد الإلكتروني موجود بالفعل!')),
+          const SnackBar(content:
+            Center(
+              child: Text(
+              'Email already exists !',
+                style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+          ),
         );
       } else {
-        // إضافة مستخدم جديد
+        // Add a new user
         await box.add(User(
           username: username,
           email: email,
           password: password,
         ));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم التسجيل بنجاح!')),
+          const SnackBar(content:
+            Center(
+              child: Text(
+                'Registration completed successfully_😎',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+          ),
         );
-        Navigator.pushReplacementNamed(context, '/login');
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainLayout()),
+      );
       }
     }
   }
@@ -73,12 +108,15 @@ class _RegisterBodyState extends State<RegisterBody> {
               RegisterRegbutton(onPressed: _register),
               const SizedBox(height: 40),
               const Text(
-                '--------------------------------------Or--------------------------------------',
+                '------------------------------Or------------------------------',
                 style: TextStyle(color: Colors.grey),
               ),
               const SizedBox(height: 25),
               RegisterLogbutton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      ),
               ),
             ],
           ),

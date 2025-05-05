@@ -12,7 +12,7 @@ class RegisterLogbutton extends StatelessWidget {
       width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 87, 55, 61),
+          backgroundColor: const Color(0xFF492532),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(35),
           ),

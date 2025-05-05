@@ -9,12 +9,12 @@ class LoginUsername extends StatefulWidget {
 }
 
 class _LoginUsernameState extends State<LoginUsername> {
-  TextEditingController controller = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      controller: widget.controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "please enter your Username !";
@@ -24,7 +24,7 @@ class _LoginUsernameState extends State<LoginUsername> {
       keyboardType: TextInputType.text,
       obscureText: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person),
+        prefixIcon: const Icon(Icons.person),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         labelText: 'Username',
         hintText: 'Enter your Username',
