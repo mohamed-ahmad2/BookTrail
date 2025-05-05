@@ -30,10 +30,8 @@ class _LoginBodyState extends State<LoginBody> {
     if (formKey.currentState!.validate()) {
       try {
         var box = Hive.box<User>('users');
-        debugPrint('All users: ${box.values.toList()}');
         String username = usernameController.text.trim();
         String password = passwordController.text.trim();
-        debugPrint('Username: $username, Password: $password');
 
         User? user = box.values.firstWhere(
           (user) => user.username == username && user.password == password,
@@ -42,7 +40,11 @@ class _LoginBodyState extends State<LoginBody> {
 
         if (user.username.isNotEmpty) {
           if (mounted) {
-            Provider.of<UserProvider>(context, listen: false).setUserId(username);
+            Provider.of<UserProvider>(
+              context,
+              listen: false,
+            ).setUserId(user.username);
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -105,7 +107,10 @@ class _LoginBodyState extends State<LoginBody> {
               const SizedBox(height: 20),
               LoginPassword(controller: passwordController),
               const SizedBox(height: 25),
-              LoginLogbutton(onPressed: _login, bookOperation: widget.bookOperation),
+              LoginLogbutton(
+                onPressed: _login,
+                bookOperation: widget.bookOperation,
+              ),
               const SizedBox(height: 40),
               const Text(
                 '------------------------------Or------------------------------',

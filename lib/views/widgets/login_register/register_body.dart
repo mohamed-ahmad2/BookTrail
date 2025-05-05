@@ -1,15 +1,17 @@
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
+import 'package:book_trail/providers/user_provider.dart';
+import 'package:book_trail/views/screens/_login.dart';
 import 'package:book_trail/views/widgets/login_register/register_email.dart';
 import 'package:book_trail/views/widgets/login_register/register_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/register_password.dart';
 import 'package:book_trail/views/widgets/login_register/register_regbutton.dart';
 import 'package:book_trail/views/widgets/login_register/register_thefirstlook.dart';
 import 'package:book_trail/views/widgets/login_register/register_username.dart';
-import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
 class RegisterBody extends StatefulWidget {
   final BookOperation bookOperation;
@@ -33,13 +35,12 @@ class _RegisterBodyState extends State<RegisterBody> {
         String email = emailController.text.trim();
         String password = passwordController.text.trim();
 
-        // Check if username or email exists
         if (box.values.any((user) => user.username == username)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Center(
                 child: Text(
-                  'Username already exists !',
+                  'Username already exists!',
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -53,7 +54,7 @@ class _RegisterBodyState extends State<RegisterBody> {
             const SnackBar(
               content: Center(
                 child: Text(
-                  'Email already exists !',
+                  'Email already exists!',
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -63,17 +64,15 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
           );
         } else {
-          // Add a new user
-          await box.add(User(
-            username: username,
-            email: email,
-            password: password,
-          ));
+          await box.add(
+            User(username: username, email: email, password: password),
+          );
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Center(
                 child: Text(
-                  'Registration completed successfully_😎',
+                  'Registration completed successfully 😎',
                   style: TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
@@ -82,6 +81,10 @@ class _RegisterBodyState extends State<RegisterBody> {
               ),
             ),
           );
+
+          // ⬇️ حفظ userId في UserProvider
+          Provider.of<UserProvider>(context, listen: false).setUserId(username);
+
           if (mounted) {
             Navigator.pushReplacement(
               context,

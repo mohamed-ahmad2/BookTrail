@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {
-  String? _userId = "5";
+  String? _userId;
 
   String? get userId => _userId;
 

@@ -3,7 +3,7 @@ import 'package:book_trail/views/widgets/login_register/login_body.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-    final BookOperation bookOperation;
+  final BookOperation bookOperation;
   const LoginScreen({super.key, required this.bookOperation});
 
   @override
@@ -13,8 +13,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  body: LoginBody(bookOperation: widget.bookOperation),
-);
+    return Scaffold(
+      body: LoginBody(bookOperation: widget.bookOperation),
+    );
   }
 }
