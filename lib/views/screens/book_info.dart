@@ -70,9 +70,10 @@ class _BookInfoState extends State<BookInfo> {
         return;
       }
       _bookInfoBox = await Hive.openBox<Book>(kBookBox(userProvider.userId!));
+      debugPrint('BookInfo: Hive box opened for userId: ${userProvider.userId}');
       _isBoxInitialized = true;
     } catch (e) {
-      debugPrint('Error opening Hive box: $e');
+      debugPrint('BookInfo: Error opening Hive box: $e');
     }
   }
 
@@ -80,7 +81,7 @@ class _BookInfoState extends State<BookInfo> {
     if (!_isBoxInitialized) await _openHiveBox();
     if (_bookInfoBox == null || !mounted) {
       debugPrint(
-        'Cannot load book info: Box not initialized or widget not mounted',
+        'BookInfo: Cannot load book info: Box not initialized or widget not mounted',
       );
       return;
     }
@@ -98,6 +99,9 @@ class _BookInfoState extends State<BookInfo> {
         _summary = bookData.summary ?? widget.summary;
         _imageUrl = bookData.imageUrl ?? widget.imageUrl;
       });
+      debugPrint('BookInfo: Loaded book with ID: ${widget.bookId}');
+    } else {
+      debugPrint('BookInfo: No book found with ID: ${widget.bookId}');
     }
   }
 
@@ -122,7 +126,7 @@ class _BookInfoState extends State<BookInfo> {
       return;
     }
     if (_bookInfoBox == null) {
-      debugPrint('Cannot save book info: Hive box not initialized');
+      debugPrint('BookInfo: Cannot save book info: Hive box not initialized');
       return;
     }
     final bookData = Book(
@@ -146,6 +150,26 @@ class _BookInfoState extends State<BookInfo> {
         ),
       );
     }
+    debugPrint('BookInfo: Saved book with ID: ${widget.bookId}');
+  }
+
+  Future<void> _deleteBook() async {
+    if (_bookInfoBox == null) {
+      debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
+      return;
+    }
+    debugPrint('BookInfo: Attempting to delete book with ID: ${widget.bookId}');
+    await _bookInfoBox!.delete(widget.bookId);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Book deleted successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.pop(context);
+    }
+    debugPrint('BookInfo: Deleted book with ID: ${widget.bookId}');
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
@@ -173,6 +197,7 @@ class _BookInfoState extends State<BookInfo> {
       appBar: AppBar(
         title: const Text('Book Information'),
         actions: [
+          IconButton(icon: const Icon(Icons.delete), onPressed: _deleteBook),
           IconButton(icon: const Icon(Icons.save), onPressed: _saveBookInfo),
         ],
       ),
@@ -474,11 +499,16 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
+                            activeColor:
+                                themeProvider.isDarkMode
+                                    ? Colors.blue
+                                    : Colors.black,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -495,11 +525,16 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
+                            activeColor:
+                                themeProvider.isDarkMode
+                                    ? Colors.blue
+                                    : Colors.black,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -516,11 +551,16 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor: Colors.blue,
+                            activeColor:
+                                themeProvider.isDarkMode
+                                    ? Colors.blue
+                                    : Colors.black,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? Colors.black
+                                      ? (themeProvider.isDarkMode
+                                          ? Colors.blue
+                                          : Colors.black)
                                       : Colors.grey,
                             ),
                           ),
@@ -578,7 +618,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _startDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
@@ -671,7 +713,9 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _endDate == null
                                           ? Colors.grey
-                                          : Colors.black,
+                                          : (themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
                                 ),
                               ),
                               const Icon(
