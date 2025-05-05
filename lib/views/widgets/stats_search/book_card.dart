@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/views/screens/book_info.dart';
+import 'package:book_trail/views/widgets/stats_search/download_image_to_file.dart';
 import 'package:book_trail/views/widgets/stats_search/icon_button_search_card.dart';
 import 'package:flutter/material.dart';
 
@@ -44,15 +47,17 @@ class _BookCardState extends State<BookCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BookInfo(
-              bookId: widget.bookId,
-              status: widget.status,
-              title: widget.title,
-              author: widget.author,
-              classification: widget.classification ?? 'Unknown Classification',
-              summary: widget.summary ?? 'No summary available.',
-              imageUrl: widget.imageUrl ?? '',
-            ),
+            builder:
+                (context) => BookInfo(
+                  bookId: widget.bookId,
+                  status: widget.status,
+                  title: widget.title,
+                  author: widget.author,
+                  classification:
+                      widget.classification ?? 'Unknown Classification',
+                  summary: widget.summary ?? 'No summary available.',
+                  imageUrl: widget.imageUrl ?? '',
+                ),
           ),
         );
       },
@@ -63,20 +68,28 @@ class _BookCardState extends State<BookCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              widget.imageUrl != null && widget.imageUrl!.isNotEmpty
-                  ? Image.network(
-                      widget.imageUrl!,
+              FutureBuilder<File>(
+                future: downloadImageToFile(
+                  widget.imageUrl!,
+                  'book_${widget.bookId}.jpg',
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return const Icon(Icons.image, size: 50);
+                  } else if (snapshot.hasData) {
+                    return Image.file(
+                      snapshot.data!,
                       width: 50,
                       height: 70,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image, size: 50),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                    )
-                  : const Icon(Icons.image, size: 50),
+                    );
+                  } else {
+                    return const Icon(Icons.broken_image, size: 50);
+                  }
+                },
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

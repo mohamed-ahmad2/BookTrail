@@ -4,6 +4,7 @@ import 'package:book_trail/models/book.dart';
 
 import 'package:book_trail/views/widgets/stats_search/book_service.dart';
 import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
+import 'package:book_trail/views/widgets/stats_search/download_image_to_file.dart';
 import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +30,34 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       isLoading = true;
     });
+
+    final bookStorage = BookOperation();
+    await bookStorage.initialize('searchBox');
+
     try {
       final bookList = await BookService.searchBooks(query);
+
       if (!mounted) return;
+
+      for (final book in bookList) {
+        final existingBook = bookStorage.getBook(book.bookId!);
+
+        if (existingBook == null) {
+          if (book.imageUrl != null && book.imageUrl!.isNotEmpty) {
+            await downloadImageToFile(
+              book.imageUrl!,
+              'book_${book.bookId}.jpg',
+            );
+          }
+
+          await bookStorage.addBook(book);
+        }
+      }
+
+      final hiveBooks = bookStorage.getAllBooks();
+
       setState(() {
-        books = bookList;
+        books = hiveBooks;
         isLoading = false;
       });
     } catch (e) {

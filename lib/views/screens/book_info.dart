@@ -25,7 +25,6 @@ class BookInfo extends StatefulWidget {
     this.imageUrl = '',
     bool? isFavorite,
     VoidCallback? onFavoriteToggle,
-    String? clasification,
     required String status,
   });
 
@@ -499,16 +498,11 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor:
-                                themeProvider.isDarkMode
-                                    ? Colors.blue
-                                    : Colors.black,
+                            activeColor: Colors.blue,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? (themeProvider.isDarkMode
-                                          ? Colors.blue
-                                          : Colors.black)
+                                      ? Colors.black
                                       : Colors.grey,
                             ),
                           ),
@@ -525,16 +519,11 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor:
-                                themeProvider.isDarkMode
-                                    ? Colors.blue
-                                    : Colors.black,
+                            activeColor: Colors.blue,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? (themeProvider.isDarkMode
-                                          ? Colors.blue
-                                          : Colors.black)
+                                      ? Colors.black
                                       : Colors.grey,
                             ),
                           ),
@@ -551,16 +540,11 @@ class _BookInfoState extends State<BookInfo> {
                             onChanged:
                                 (value) =>
                                     setState(() => _readingStatus = value!),
-                            activeColor:
-                                themeProvider.isDarkMode
-                                    ? Colors.blue
-                                    : Colors.black,
+                            activeColor: Colors.blue,
                             fillColor: WidgetStateProperty.resolveWith<Color>(
                               (states) =>
                                   states.contains(WidgetState.selected)
-                                      ? (themeProvider.isDarkMode
-                                          ? Colors.blue
-                                          : Colors.black)
+                                      ? Colors.black
                                       : Colors.grey,
                             ),
                           ),
@@ -618,9 +602,7 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _startDate == null
                                           ? Colors.grey
-                                          : (themeProvider.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black),
+                                          : Colors.black,
                                 ),
                               ),
                               const Icon(
@@ -713,9 +695,7 @@ class _BookInfoState extends State<BookInfo> {
                                   color:
                                       _endDate == null
                                           ? Colors.grey
-                                          : (themeProvider.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black),
+                                          : Colors.black,
                                 ),
                               ),
                               const Icon(
