@@ -1,5 +1,7 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/views/widgets/login_register/login_guest_textbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_password.dart';
@@ -9,15 +11,17 @@ import 'package:book_trail/views/widgets/login_register/login_username.dart';
 import 'package:book_trail/views/screens/_register.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
 class LoginBody extends StatefulWidget {
-  const LoginBody({super.key});
+  final BookOperation bookOperation;
+  const LoginBody({super.key, required this.bookOperation});
 
   @override
   State<LoginBody> createState() => _LoginBodyState();
 }
 
-class _LoginBodyState extends State<LoginBody> with SingleTickerProviderStateMixin {
+class _LoginBodyState extends State<LoginBody> {
   final formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -38,30 +42,46 @@ class _LoginBodyState extends State<LoginBody> with SingleTickerProviderStateMix
 
         if (user.username.isNotEmpty) {
           if (mounted) {
+            // تحديث UserProvider مع اسم المستخدم
+            Provider.of<UserProvider>(context, listen: false).setUserId(username);
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => MainLayout()),
+              MaterialPageRoute(
+                builder: (context) => MainLayout(bookOperation: widget.bookOperation),
+              ),
             );
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Center(
-                  child: Text(
-                  'Incorrect username or password !',
+                child: Text(
+                  'Incorrect username or password!',
                   style: TextStyle(
                     color: Colors.red,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              duration: Duration(seconds: 3),
             ),
           );
         }
       } catch (e) {
         print('Error during login: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred during login: $e')),
+          const SnackBar(
+            content: Center(
+              child: Text(
+                'Failed to login. Please try again.',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            duration: Duration(seconds: 3),
+          ),
         );
       }
     } else {
@@ -79,14 +99,14 @@ class _LoginBodyState extends State<LoginBody> with SingleTickerProviderStateMix
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               const LoginThefirstlook(),
               const SizedBox(height: 25),
               LoginUsername(controller: usernameController),
               const SizedBox(height: 20),
               LoginPassword(controller: passwordController),
               const SizedBox(height: 25),
-              LoginLogbutton(onPressed: _login),
+              LoginLogbutton(onPressed: _login, bookOperation: widget.bookOperation),
               const SizedBox(height: 40),
               const Text(
                 '------------------------------Or------------------------------',
@@ -96,11 +116,13 @@ class _LoginBodyState extends State<LoginBody> with SingleTickerProviderStateMix
               LoginRegbutton(
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Register()),
+                  MaterialPageRoute(
+                    builder: (context) => Register(bookOperation: widget.bookOperation),
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
-              const LoginGuestTextbutton(),
+              LoginGuestTextbutton(bookOperation: widget.bookOperation),
             ],
           ),
         ),

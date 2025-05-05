@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/views/screens/favorites_screen.dart';
 import 'package:book_trail/views/screens/home_screen.dart';
 import 'package:book_trail/views/screens/search_screen.dart';
@@ -9,7 +10,8 @@ import 'package:book_trail/views/widgets/home_favorite/custom_navigation_bar.dar
 import 'package:book_trail/views/widgets/home_favorite/custom_tabbar.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  final BookOperation bookOperation;
+  const MainLayout({super.key, required this.bookOperation});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -52,11 +54,14 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
     final bool showTabs = _currentIndex == 0 || _currentIndex == 1;
 
     final List<Widget> screens = [
-      HomeScreen(tabController: _tabController),
+      HomeScreen(
+        tabController: _tabController,
+        bookOperation: widget.bookOperation,
+      ),
       FavoritesScreen(tabController: _tabController),
       const StatsScreen(totalPages: 50000, numberOfPages: 20389),
-      const SearchScreen(),
-      SettingsScreen(),
+      SearchScreen(bookOperation: widget.bookOperation),
+      SettingsScreen(bookOperation: widget.bookOperation),
     ];
 
     return Scaffold(

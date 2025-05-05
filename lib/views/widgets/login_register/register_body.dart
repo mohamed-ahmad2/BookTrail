@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/views/widgets/login_register/register_email.dart';
@@ -11,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class RegisterBody extends StatefulWidget {
-  const RegisterBody({super.key});
+  final BookOperation bookOperation;
+  const RegisterBody({super.key, required this.bookOperation});
 
   @override
   State<RegisterBody> createState() => _RegisterBodyState();
@@ -25,64 +27,84 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   void _register() async {
     if (formKey.currentState!.validate()) {
-      var box = Hive.box<User>('users');
-      String username = usernameController.text.trim();
-      String email = emailController.text.trim();
-      String password = passwordController.text.trim();
+      try {
+        var box = await Hive.box<User>('users');
+        String username = usernameController.text.trim();
+        String email = emailController.text.trim();
+        String password = passwordController.text.trim();
 
-      // Check if your username or email exists
-      if (box.values.any((user) => user.username == username)) {
+        // Check if username or email exists
+        if (box.values.any((user) => user.username == username)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Center(
+                child: Text(
+                  'Username already exists !',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if (box.values.any((user) => user.email == email)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Center(
+                child: Text(
+                  'Email already exists !',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          // Add a new user
+          await box.add(User(
+            username: username,
+            email: email,
+            password: password,
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Center(
+                child: Text(
+                  'Registration completed successfully_😎',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainLayout(bookOperation: widget.bookOperation),
+              ),
+            );
+          }
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content:
-            Center(
+          SnackBar(
+            content: Center(
               child: Text(
-                'Username already exists !',
-                style: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.bold 
+                'An error occurred during registration: $e',
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
         );
-      } else if (box.values.any((user) => user.email == email)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content:
-            Center(
-              child: Text(
-              'Email already exists !',
-                style: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-          ),
-        );
-      } else {
-        // Add a new user
-        await box.add(User(
-          username: username,
-          email: email,
-          password: password,
-        ));
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content:
-            Center(
-              child: Text(
-                'Registration completed successfully_😎',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-          ),
-        );
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainLayout()),
-      );
       }
     }
   }
@@ -114,9 +136,11 @@ class _RegisterBodyState extends State<RegisterBody> {
               const SizedBox(height: 25),
               RegisterLogbutton(
                 onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      ),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(bookOperation: widget.bookOperation),
+                  ),
+                ),
               ),
             ],
           ),

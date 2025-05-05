@@ -1,8 +1,10 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:flutter/material.dart';
 
 class LoginGuestTextbutton extends StatefulWidget {
-  const LoginGuestTextbutton({super.key});
+  final BookOperation bookOperation;
+  const LoginGuestTextbutton({super.key, required this.bookOperation});
 
   @override
   State<LoginGuestTextbutton> createState() => _LoginGuestTextbuttonState();
@@ -16,16 +18,12 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
         // Open a custom animated dialog
         showGeneralDialog(
           context: context,
-          barrierDismissible:
-              true, // Allow dismissing the dialog by tapping outside
-          barrierLabel:
-              'GuestLogin', // Label for the barrier (not critical here)
-
+          barrierDismissible: true, // Allow dismissing the dialog by tapping outside
+          barrierLabel: 'GuestLogin', // Label for the barrier (not critical here)
           pageBuilder: (context, animation, secondaryAnimation) {
             // We must return a widget here even if it's empty
             return const SizedBox();
           },
-
           transitionBuilder: (context, animation, secondaryAnimation, child) {
             // Create a smooth curved animation
             final curvedAnimation = CurvedAnimation(
@@ -80,10 +78,22 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         if (mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => MainLayout()),
-                          );
+                          try {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainLayout(
+                                  bookOperation: widget.bookOperation,
+                                ),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error navigating to MainLayout: $e'),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: const Text(
@@ -96,12 +106,10 @@ class _LoginGuestTextbuttonState extends State<LoginGuestTextbutton> {
               ),
             );
           },
-          transitionDuration: const Duration(
-            milliseconds: 400,
-          ),
+          transitionDuration: const Duration(milliseconds: 400),
         );
       },
-      child: Text(
+      child: const Text(
         'Continue as Guest',
         style: TextStyle(
           color: Colors.blueAccent,

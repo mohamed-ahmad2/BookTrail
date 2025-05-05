@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:book_trail/views/widgets/_animatedpulserectangle.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BodyScreen extends StatefulWidget {
-  const BodyScreen({super.key});
+    final BookOperation bookOperation;
+  const BodyScreen({super.key, required this.bookOperation});
 
   @override
   State<BodyScreen> createState() => _BodyScreenState();
@@ -34,7 +36,7 @@ class _BodyScreenState extends State<BodyScreen> with SingleTickerProviderStateM
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
+            MaterialPageRoute(builder: (context) => LoginScreen(bookOperation: widget.bookOperation)),
           );
         });
       });

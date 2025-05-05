@@ -14,7 +14,7 @@ class BookListView extends StatelessWidget {
   });
 
   @override
-  Widget build( context) {
+  Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: books.length,
       itemBuilder: (context, index) {
@@ -23,7 +23,7 @@ class BookListView extends StatelessWidget {
         final author = book.author ?? 'Unknown Author';
         final readingStatus = book.readingStatus ?? 'None';
         final bookId = book.bookId ?? 'unknown_${index.hashCode}';
-        final imageUrl = book.imageUrl;
+        final imageUrl = book.imageUrl ?? ''; // Default to an empty string if null
         final classification = book.classification ?? 'Unknown Classification';
         final summary = book.summary ?? 'No summary available.';
 

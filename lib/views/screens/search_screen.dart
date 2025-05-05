@@ -1,7 +1,5 @@
 import 'package:book_trail/book_operation.dart';
-
 import 'package:book_trail/models/book.dart';
-
 import 'package:book_trail/views/widgets/stats_search/book_service.dart';
 import 'package:book_trail/views/widgets/stats_search/custom_search_bar_search.dart';
 import 'package:book_trail/views/widgets/stats_search/download_image_to_file.dart';
@@ -9,7 +7,8 @@ import 'package:book_trail/views/widgets/stats_search/list_view_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final BookOperation bookOperation;
+  const SearchScreen({super.key, required this.bookOperation});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -84,35 +83,42 @@ class _SearchScreenState extends State<SearchScreen> {
     }).toList();
   }
 
+  Future<void> _handleRefresh() async {
+    await _fetchBooks(searchQuery);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 40.0),
-              child: CustomSearchBarSearch(
-                onSearch: (query) {
-                  setState(() {
-                    searchQuery = query;
-                  });
-                  if (query.isNotEmpty) {
-                    _fetchBooks(query);
-                  }
-                },
-              ),
-            ),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SizedBox(
-                  height: MediaQuery.of(context).size.height - 150,
-                  child: BookListView(
-                    books: _filterBooks(),
-                    bookOperation: BookOperation(),
-                  ),
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: CustomSearchBarSearch(
+                  onSearch: (query) {
+                    setState(() {
+                      searchQuery = query;
+                    });
+                    if (query.isNotEmpty) {
+                      _fetchBooks(query);
+                    }
+                  },
                 ),
-          ],
+              ),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.height - 150,
+                      child: BookListView(
+                        books: _filterBooks(),
+                        bookOperation: widget.bookOperation,
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );

@@ -22,9 +22,9 @@ class BookOperation {
     }
   }
 
-  Future<void> deleteBook(Book book) async {
+  Future<void> deleteBook(String?  bookId) async {
     if (box != null) {
-      await box!.delete(book.bookId!);
+      await box!.delete(bookId!);
     }
   }
 

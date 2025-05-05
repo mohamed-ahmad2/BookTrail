@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/providers/theme_provider.dart';
@@ -9,17 +10,19 @@ import 'package:book_trail/models/user.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-
-void main() async {
+Future<void> main() async {
+  final BookOperation bookOperation = BookOperation();
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(BookAdapter());
   await Hive.openBox<User>('users');
-  runApp(const BookTrailApp());
+  runApp(BookTrailApp(bookOperation: bookOperation));
 }
 
 class BookTrailApp extends StatelessWidget {
-  const BookTrailApp({super.key});
+  final BookOperation bookOperation;
+  const BookTrailApp({super.key, required this.bookOperation});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class BookTrailApp extends StatelessWidget {
                       themeProvider.isDarkMode
                           ? ThemeMode.dark
                           : ThemeMode.light,
-                  home: const MainView(),
+                  home: MainView(bookOperation: bookOperation),
                 );
               }
             },

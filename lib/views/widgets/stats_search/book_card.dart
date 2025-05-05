@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 class BookCard extends StatefulWidget {
   final String title;
   final String bookId;
-  final String author;
   final String status;
-  final String? imageUrl;
-  final String? classification;
-  final String? summary;
+  final String author;
+  final String classification;
+  final String summary;
+  final String imageUrl;
   final BookOperation bookOperation;
 
   const BookCard({
@@ -23,9 +23,9 @@ class BookCard extends StatefulWidget {
     required this.author,
     required this.status,
     required this.bookOperation,
-    this.imageUrl,
-    this.classification,
-    this.summary,
+    required this.classification,
+    required this.summary,
+    required this.imageUrl,
   });
 
   @override
@@ -49,14 +49,14 @@ class _BookCardState extends State<BookCard> {
           MaterialPageRoute(
             builder:
                 (context) => BookInfo(
+                  bookOperation: widget.bookOperation,
                   bookId: widget.bookId,
                   status: widget.status,
                   title: widget.title,
                   author: widget.author,
-                  classification:
-                      widget.classification ?? 'Unknown Classification',
-                  summary: widget.summary ?? 'No summary available.',
-                  imageUrl: widget.imageUrl ?? '',
+                  classification: widget.classification,
+                  summary: widget.summary,
+                  imageUrl: widget.imageUrl,
                 ),
           ),
         );
@@ -70,7 +70,7 @@ class _BookCardState extends State<BookCard> {
             children: [
               FutureBuilder<File>(
                 future: downloadImageToFile(
-                  widget.imageUrl!,
+                  widget.imageUrl,
                   'book_${widget.bookId}.jpg',
                 ),
                 builder: (context, snapshot) {
@@ -114,8 +114,13 @@ class _BookCardState extends State<BookCard> {
                     title: widget.title,
                     bookId: widget.bookId,
                     status: widget.status,
+                    author: widget.author,
+                    classification: widget.classification,
+                    summary: widget.summary,
+                    imageUrl: widget.imageUrl,
                     bookOperation: widget.bookOperation,
                   ),
+
                   Text(widget.status, style: const TextStyle(fontSize: 10)),
                 ],
               ),

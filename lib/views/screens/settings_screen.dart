@@ -1,10 +1,12 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+    final BookOperation bookOperation;
+  const SettingsScreen({super.key, required this.bookOperation});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -176,7 +178,7 @@ themeProvider.toggleDarkMode();
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) =>  LoginScreen(),
+                      builder: (context) =>  LoginScreen(bookOperation: widget.bookOperation),
                     ));
                   },
                   style: ElevatedButton.styleFrom(

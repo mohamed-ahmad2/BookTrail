@@ -1,3 +1,4 @@
+import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/views/screens/book_info.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class BookCard extends StatelessWidget {
   final String? summary;
   final bool isFavorite;
   final VoidCallback onFavoriteToggle;
+  final BookOperation bookOperation;
 
   const BookCard({
     super.key,
@@ -23,7 +25,7 @@ class BookCard extends StatelessWidget {
     required this.clasification,
     required this.summary,
     this.imageUrl,
-    String? classification,
+    String? classification, required this.bookOperation,
   });
 
   @override
@@ -38,17 +40,19 @@ class BookCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BookInfo(
-              bookId: bookId,
-              status: status,
-              isFavorite: isFavorite,
-              onFavoriteToggle: onFavoriteToggle,
-              title: title,
-              author: author,
-              classification: clasification ?? 'Unknown Classification',
-              summary: summary ?? 'No summary available.',
-              imageUrl: imageUrl ?? '',
-            ),
+            builder:
+                (context) => BookInfo(
+                  bookOperation: bookOperation,
+                  bookId: bookId,
+                  status: status,
+                  isFavorite: isFavorite,
+                  onFavoriteToggle: onFavoriteToggle,
+                  title: title,
+                  author: author,
+                  classification: clasification ?? 'Unknown Classification',
+                  summary: summary ?? 'No summary available.',
+                  imageUrl: imageUrl ?? '',
+                ),
           ),
         );
       },
@@ -61,17 +65,18 @@ class BookCard extends StatelessWidget {
             children: [
               imageUrl != null
                   ? Image.network(
-                      imageUrl!,
-                      width: 50,
-                      height: 70,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image, size: 50),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                    )
+                    imageUrl!,
+                    width: 50,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) =>
+                            const Icon(Icons.image, size: 50),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  )
                   : const Icon(Icons.image, size: 50),
               SizedBox(width: 12),
               Expanded(
