@@ -25,7 +25,6 @@ class BookInfo extends StatefulWidget {
     this.imageUrl = '',
     bool? isFavorite,
     VoidCallback? onFavoriteToggle,
-    String? clasification,
     required String status,
   });
 
@@ -220,8 +219,6 @@ class _BookInfoState extends State<BookInfo> {
                         ),
                         margin: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Container(
-                          width: 150,
-                          height: 150,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -260,7 +257,7 @@ class _BookInfoState extends State<BookInfo> {
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold,
                               ),
-                              maxLines: 2,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 30),
@@ -273,7 +270,7 @@ class _BookInfoState extends State<BookInfo> {
                                         ? Colors.grey[200]
                                         : Colors.grey[800],
                               ),
-                              maxLines: 1,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 8),
@@ -286,7 +283,7 @@ class _BookInfoState extends State<BookInfo> {
                                         ? Colors.grey[200]
                                         : Colors.grey[800],
                               ),
-                              maxLines: 1,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
