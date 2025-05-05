@@ -3,6 +3,7 @@
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
+import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,51 +31,87 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
   bool isButtonDisabled = false;
 
   @override
+  void initState() {
+    super.initState();
+    _checkIfBookExists();
+  }
+
+  Future<void> _checkIfBookExists() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    await widget.bookOperation.initialize(kBookBox(userProvider.userId));
+
+    final existingBook = widget.bookOperation.getBook(widget.bookId);
+
+    if (existingBook != null) {
+      setState(() {
+        isButtonDisabled = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return IconButton(
       icon: Icon(
         Icons.add,
-        color: isButtonDisabled ? Colors.grey : const Color.fromARGB(255, 0, 0, 0),
+        color:
+            themeProvider.isDarkMode
+                ? (isButtonDisabled
+                    ? const Color.fromARGB(255, 84, 84, 84)
+                    : const Color.fromARGB(255, 255, 255, 255))
+                : (isButtonDisabled
+                    ? Colors.grey
+                    : const Color.fromARGB(255, 0, 0, 0)),
       ),
-      onPressed: isButtonDisabled
-          ? null
-          : () async {
-              await widget.bookOperation.initialize(
-                kBookBox(userProvider.userId),
-              );
+      onPressed:
+          isButtonDisabled
+              ? null
+              : () async {
+                final userProvider = Provider.of<UserProvider>(
+                  context,
+                  listen: false,
+                );
 
-              final existingBook = widget.bookOperation.getBook(widget.bookId);
+                await widget.bookOperation.initialize(
+                  kBookBox(userProvider.userId),
+                );
 
-              if (existingBook != null) {
+                final existingBook = widget.bookOperation.getBook(
+                  widget.bookId,
+                );
+
+                if (existingBook != null) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('This book is already added!'),
+                      ),
+                    );
+                  }
+                  return;
+                }
+
+                Book book = Book(
+                  bookId: widget.bookId,
+                  title: widget.title,
+                  readingStatus: widget.status,
+                );
+
+                await widget.bookOperation.addBook(book);
+
+                setState(() {
+                  isButtonDisabled = true;
+                });
+
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('This book is already added!')),
+                    const SnackBar(content: Text('Book added successfully!')),
                   );
                 }
-                return;
-              }
-
-              Book book = Book(
-                bookId: widget.bookId,
-                title: widget.title,
-                readingStatus: widget.status,
-              );
-
-              await widget.bookOperation.addBook(book);
-
-              setState(() {
-                isButtonDisabled = true;
-              });
-
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Book added successfully!')),
-                );
-              }
-            },
+              },
     );
   }
 }
-
