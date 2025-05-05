@@ -26,38 +26,42 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchBooks(String query) async {
-  setState(() {
-    isLoading = true;
-  });
-
-  final bookStorage = BookOperation();
-  await bookStorage.initialize('searchBox');
-
-  try {
-    final bookList = await BookService.searchBooks(query);
-
-    if (!mounted) return;
-
-    for (final book in bookList) {
-      await bookStorage.addBook(book);
-    }
-
     setState(() {
-      books = bookList;
-      isLoading = false;
+      isLoading = true;
     });
-  } catch (e) {
-    setState(() {
-      isLoading = false;
-    });
-    if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('failed $e')));
+
+    final bookStorage = BookOperation();
+    await bookStorage.initialize('searchBox');
+
+    try {
+      final bookList = await BookService.searchBooks(query);
+
+      if (!mounted) return;
+
+      for (final book in bookList) {
+        final existingBook = bookStorage.getBook(book.bookId!);
+        if (existingBook == null) {
+          await bookStorage.addBook(book);
+        }
+      }
+
+      final hiveBooks = bookStorage.getAllBooks();
+
+      setState(() {
+        books = hiveBooks;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('failed $e')));
+      }
     }
   }
-}
-
 
   List<Book> _filterBooks() {
     if (searchQuery.isEmpty) {
