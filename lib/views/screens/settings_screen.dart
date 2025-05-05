@@ -1,15 +1,17 @@
 import 'package:book_trail/book_operation.dart';
+import 'package:book_trail/models/user.dart';
 import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
-    final BookOperation bookOperation;
+  final BookOperation bookOperation;
   const SettingsScreen({super.key, required this.bookOperation});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -19,9 +21,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+
+    User? user = userProvider.user;
 
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -30,7 +34,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               const SizedBox(height: 16),
 
-              // Username
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -42,15 +45,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Username:', style: TextStyle(fontSize: 16)),
-                      Text('', style: TextStyle(fontSize: 16)),
+                      const Text('Username:', style: TextStyle(fontSize: 16)),
+                      Text(
+                        user?.username ?? 'N/A',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 8),
 
-              // Email
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -62,15 +67,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Email:', style: TextStyle(fontSize: 16)),
-                      Text('', style: TextStyle(fontSize: 16)),
+                      const Text('Email:', style: TextStyle(fontSize: 16)),
+                      Text(
+                        user?.email ?? 'N/A',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 8),
 
-              // Dark Mode
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -83,16 +90,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: [
+                        children: const [
                           Icon(Icons.dark_mode),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Text('Dark mode', style: TextStyle(fontSize: 16)),
                         ],
                       ),
                       Switch(
                         value: themeProvider.isDarkMode,
                         onChanged: (value) {
-themeProvider.toggleDarkMode();
+                          themeProvider.toggleDarkMode();
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,
@@ -103,7 +110,6 @@ themeProvider.toggleDarkMode();
               ),
               const SizedBox(height: 8),
 
-              // Notifications
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -115,7 +121,10 @@ themeProvider.toggleDarkMode();
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Notifications', style: TextStyle(fontSize: 16)),
+                      const Text(
+                        'Notifications',
+                        style: TextStyle(fontSize: 16),
+                      ),
                       Switch(
                         value: _notificationsEnabled,
                         onChanged: (value) {
@@ -132,7 +141,6 @@ themeProvider.toggleDarkMode();
               ),
               const SizedBox(height: 8),
 
-              // Language
               Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
@@ -143,7 +151,7 @@ themeProvider.toggleDarkMode();
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Text('Language:', style: TextStyle(fontSize: 16)),
                       Text('English', style: TextStyle(fontSize: 16)),
                     ],
@@ -152,7 +160,6 @@ themeProvider.toggleDarkMode();
               ),
               const SizedBox(height: 16),
 
-              // Change Password Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -172,14 +179,20 @@ themeProvider.toggleDarkMode();
               ),
               const SizedBox(height: 8),
 
-              // Delete Data Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) =>  LoginScreen(bookOperation: widget.bookOperation),
-                    ));
+                    Provider.of<UserProvider>(context, listen: false);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => LoginScreen(
+                              bookOperation: widget.bookOperation,
+                            ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[800],
