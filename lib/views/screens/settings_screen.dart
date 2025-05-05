@@ -23,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   final _passwordController = TextEditingController();
   final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void initState() {
@@ -30,7 +31,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _username = Provider.of<UsernameProvider>(context, listen: false).username;
     _loadUserData();
   }
-
 
   Future<void> _loadUserData() async {
     if (_username != null) {
@@ -48,7 +48,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-
   Future<void> _updatePassword() async {
     if (_username != null) {
       var box = await Hive.openBox<User>('users');
@@ -58,8 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
 
       if (user.username.isNotEmpty) {
-        if (user.password == _passwordController.text.trim()) {
-
+        if (user.password == _passwordController.text.trim() && _newPasswordController.text.trim() == _confirmPasswordController.text.trim()) {
           user.password = _newPasswordController.text.trim();
           await user.save();
           ScaffoldMessenger.of(context).showSnackBar(
@@ -68,16 +66,89 @@ class _SettingsScreenState extends State<SettingsScreen> {
               duration: Duration(seconds: 3),
             ),
           );
-        } else {
+          Navigator.of(context).pop();
+          _passwordController.clear();
+          _newPasswordController.clear();
+          _confirmPasswordController.clear();
+        } else if (user.password != _passwordController.text.trim()) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Incorrect current password'),
               duration: Duration(seconds: 3),
             ),
           );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('New passwords do not match'),
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
       }
     }
+  }
+
+  void _showChangePasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Text('Change Password'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Current Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _newPasswordController,
+                  decoration: const InputDecoration(
+                    labelText: 'New Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _confirmPasswordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm New Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _passwordController.clear();
+                _newPasswordController.clear();
+                _confirmPasswordController.clear();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: _updatePassword,
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -215,28 +286,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Change Password
-              TextField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Current Password',
-                  border: OutlineInputBorder(),
+              // Change Password Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _showChangePasswordDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown[800],
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  child: const Text(
+                    'Change Password',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _newPasswordController,
-                decoration: const InputDecoration(
-                  labelText: 'New Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _updatePassword,
-                child: const Text('Update Password'),
               ),
               const SizedBox(height: 8),
 
@@ -248,10 +314,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder:
-                            (context) => LoginScreen(
-                              bookOperation: widget.bookOperation,
-                            ),
+                        builder: (context) => LoginScreen(
+                          bookOperation: widget.bookOperation,
+                        ),
                       ),
                     );
                   },
