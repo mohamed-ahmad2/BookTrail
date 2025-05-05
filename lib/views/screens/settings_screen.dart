@@ -1,6 +1,6 @@
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/providers/theme_provider.dart';
-import 'package:book_trail/providers/username_provider.dart'; // استيراد UsernameProvider
+import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadUserData();
   }
 
-  // دالة لتحميل البيانات الخاصة بالمستخدم (البريد الإلكتروني)
+
   Future<void> _loadUserData() async {
     if (_username != null) {
       var box = await Hive.openBox<User>('users');
@@ -42,13 +42,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (user.username.isNotEmpty) {
         setState(() {
-          _email = user.email; // تحديث البريد الإلكتروني
+          _email = user.email;
         });
       }
     }
   }
 
-  // دالة لتحديث كلمة المرور
+
   Future<void> _updatePassword() async {
     if (_username != null) {
       var box = await Hive.openBox<User>('users');
@@ -59,6 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (user.username.isNotEmpty) {
         if (user.password == _passwordController.text.trim()) {
+
           user.password = _newPasswordController.text.trim();
           await user.save();
           ScaffoldMessenger.of(context).showSnackBar(
