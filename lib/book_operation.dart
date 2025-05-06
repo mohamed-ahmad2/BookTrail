@@ -55,10 +55,28 @@ class BookOperation {
 
   Future<List<Book>> getBooksByClassification(String classification) async {
     if (box != null) {
-      final filteredBooks = box!.values
-          .where((book) => book.classification == classification)
-          .toList();
+      final filteredBooks =
+          box!.values
+              .where((book) => book.classification == classification)
+              .toList();
       return filteredBooks;
+    }
+    return [];
+  }
+
+  Future toggleFavorite(String bookId) async {
+    if (box != null) {
+      final book = box!.get(bookId);
+      if (book != null) {
+        book.isFavorite = !(book.isFavorite ?? false);
+        await box!.put(bookId, book);
+      }
+    }
+  }
+
+  List<Book> getFavoriteBooks() {
+    if (box != null) {
+      return box!.values.where((book) => book.isFavorite ?? false).toList();
     }
     return [];
   }

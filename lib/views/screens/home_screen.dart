@@ -24,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Box<Book>? _bookBox;
   bool _isBoxInitialized = false;
-  List<String> favoriteTitles = [];
 
   @override
   void initState() {
@@ -55,16 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void toggleFavorite(String title) {
-    setState(() {
-      if (favoriteTitles.contains(title)) {
-        favoriteTitles.remove(title);
-      } else {
-        favoriteTitles.add(title);
-      }
-    });
-  }
-
   List<Book> _filterBooks(List<Book> currentBooks) {
     switch (widget.tabController.index) {
       case 1:
@@ -73,7 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .toList();
       case 2:
         return currentBooks
-            .where((book) => book.readingStatus?.toLowerCase() == "want to read")
+            .where(
+              (book) => book.readingStatus?.toLowerCase() == "want to read",
+            )
             .toList();
       case 3:
         return currentBooks
@@ -105,8 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, _) {
             return BookListView(
               books: _filterBooks(books),
-              favoriteTitles: favoriteTitles,
-              toggleFavorite: toggleFavorite,
               bookOperation: widget.bookOperation,
             );
           },

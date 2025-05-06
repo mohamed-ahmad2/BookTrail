@@ -11,7 +11,6 @@ class BookCard extends StatelessWidget {
   final String? clasification;
   final String? summary;
   final bool isFavorite;
-  final VoidCallback onFavoriteToggle;
   final BookOperation bookOperation;
 
   const BookCard({
@@ -21,11 +20,11 @@ class BookCard extends StatelessWidget {
     required this.author,
     required this.status,
     required this.isFavorite,
-    required this.onFavoriteToggle,
     required this.clasification,
     required this.summary,
     this.imageUrl,
-    String? classification, required this.bookOperation,
+    String? classification,
+    required this.bookOperation,
   });
 
   @override
@@ -45,8 +44,6 @@ class BookCard extends StatelessWidget {
                   bookOperation: bookOperation,
                   bookId: bookId,
                   status: status,
-                  isFavorite: isFavorite,
-                  onFavoriteToggle: onFavoriteToggle,
                   title: title,
                   author: author,
                   classification: clasification ?? 'Unknown Classification',
@@ -97,7 +94,9 @@ class BookCard extends StatelessWidget {
                       isFavorite ? Icons.star : Icons.star_border,
                       color: isFavorite ? Colors.yellow : null,
                     ),
-                    onPressed: onFavoriteToggle,
+                    onPressed: () {
+                      bookOperation.toggleFavorite(bookId);
+                    },
                   ),
                   Text(status, style: TextStyle(fontSize: 10)),
                 ],

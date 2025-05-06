@@ -29,8 +29,6 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
     "Settings",
   ];
 
-  // final List<Widget> _screens = const [];
-
   void _onTap(int index) {
     setState(() {
       _currentIndex = index;
@@ -58,7 +56,10 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
         tabController: _tabController,
         bookOperation: widget.bookOperation,
       ),
-      FavoritesScreen(tabController: _tabController),
+      FavoritesScreen(
+        tabController: _tabController,
+        bookOperation: widget.bookOperation,
+      ),
       StatsScreen(bookOperation: widget.bookOperation),
       SearchScreen(bookOperation: widget.bookOperation),
       SettingsScreen(bookOperation: widget.bookOperation),
