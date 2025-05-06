@@ -1,7 +1,6 @@
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/providers/notification_provider.dart';
 import 'package:book_trail/providers/theme_provider.dart';
-import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/views/screens/_login.dart';
