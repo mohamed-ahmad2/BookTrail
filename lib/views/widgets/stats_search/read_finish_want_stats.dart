@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReadFinishWantStats extends StatelessWidget {
-  final int count;
+  final double count;
   final IconData iconStats;
   final String nameStats;
   const ReadFinishWantStats({
