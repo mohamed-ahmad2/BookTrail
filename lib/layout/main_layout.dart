@@ -59,7 +59,7 @@ class _MainLayoutState extends State<MainLayout> with TickerProviderStateMixin {
         bookOperation: widget.bookOperation,
       ),
       FavoritesScreen(tabController: _tabController),
-      const StatsScreen(totalPages: 50000, numberOfPages: 20389),
+      StatsScreen(bookOperation: widget.bookOperation),
       SearchScreen(bookOperation: widget.bookOperation),
       SettingsScreen(bookOperation: widget.bookOperation),
     ];

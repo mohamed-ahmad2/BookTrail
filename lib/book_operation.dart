@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 class BookOperation {
   Box<Book>? box;
 
-
   Future<void> initialize(String nameId) async {
     box = await Hive.openBox<Book>(kBookBox(nameId));
   }
@@ -22,7 +21,7 @@ class BookOperation {
     }
   }
 
-  Future<void> deleteBook(String?  bookId) async {
+  Future<void> deleteBook(String? bookId) async {
     if (box != null) {
       await box!.delete(bookId!);
     }
@@ -52,5 +51,15 @@ class BookOperation {
       return box!.get(bookId);
     }
     return null;
+  }
+
+  Future<List<Book>> getBooksByClassification(String classification) async {
+    if (box != null) {
+      final filteredBooks = box!.values
+          .where((book) => book.classification == classification)
+          .toList();
+      return filteredBooks;
+    }
+    return [];
   }
 }

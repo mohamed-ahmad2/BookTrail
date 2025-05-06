@@ -1,4 +1,8 @@
+import 'dart:math';
+import 'package:book_trail/book_operation.dart';
+
 import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/views/widgets/stats_search/card_stats.dart';
 import 'package:book_trail/views/widgets/stats_search/color_text_pi_chart.dart';
 import 'package:book_trail/views/widgets/stats_search/pie_chart_stats_screen.dart';
@@ -6,33 +10,77 @@ import 'package:book_trail/views/widgets/stats_search/progress_read_card_stats.d
 import 'package:book_trail/views/widgets/stats_search/read_finish_want_card.dart';
 import 'package:book_trail/views/widgets/stats_search/total_pages_books_read.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 class StatsScreen extends StatefulWidget {
-  const StatsScreen({
-    super.key,
-    required this.totalPages,
-    required this.numberOfPages,
-  });
-
-  final int numberOfPages;
-  final int totalPages;
+  final BookOperation bookOperation;
+  const StatsScreen({super.key, required this.bookOperation});
 
   @override
   State<StatsScreen> createState() => _StatsScreenState();
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Fantasy', 'value': 40, 'color': Color(0xFF42A5F5)},
-    {'name': 'Horror', 'value': 28, 'color': Color(0xFF4CAF50)},
-    {'name': 'Adventures', 'value': 32, 'color': Color(0xFFAB47BC)},
-    {'name': 'Mystery', 'value': 23, 'color': Color(0xFFFFB300)},
-  ];
+  late int numberOfPages = 1000;
+  late int totalPages = 4000;
+  List<Map<String, dynamic>> categories = [];
+  int numberOfBooks = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _generateCategoriesFromHive();
+  }
+
+  Color generateRandomColor() {
+    final Random random = Random();
+    return Color(0xFF000000 + random.nextInt(0xFFFFFF));
+  }
+
+  Future<void> _generateCategoriesFromHive() async {
+    await Future.delayed(Duration.zero);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userId = userProvider.userId;
+
+    if (userId == null) {
+      debugPrint("User ID is null. Cannot load books.");
+      return;
+    }
+
+    await widget.bookOperation.initialize(userId);
+    final bookList = widget.bookOperation.getAllBooks();
+
+    final Map<String, int> classificationCounts = {};
+
+    for (var book in bookList) {
+      final classification = book.classification ?? 'Unknown';
+      classificationCounts[classification] =
+          (classificationCounts[classification] ?? 0) + 1;
+    }
+
+    final List<Map<String, dynamic>> generatedCategories =
+        classificationCounts.entries.map((entry) {
+          final color = generateRandomColor();
+          return {'name': entry.key, 'value': entry.value, 'color': color};
+        }).toList();
+
+    setState(() {
+      categories = generatedCategories;
+      numberOfBooks = classificationCounts.values.fold(
+        0,
+        (sum, val) => sum + val,
+      );
+    });
+
+    debugPrint("Loaded ${generatedCategories.length} categories from Hive");
+    debugPrint("Categories: $generatedCategories");
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -50,7 +98,10 @@ class _StatsScreenState extends State<StatsScreen> {
 
             CardStats(
               cards: [
-                PieChartStatsScreen(categories: categories, numberOfBooks: 135),
+                PieChartStatsScreen(
+                  categories: categories,
+                  numberOfBooks: numberOfBooks,
+                ),
                 SizedBox(height: 20),
                 ColorTextPiChart(categories: categories),
               ],
@@ -72,8 +123,8 @@ class _StatsScreenState extends State<StatsScreen> {
               child: CardStats(
                 cards: [
                   ProgressReadCardStats(
-                    numberOfPages: widget.numberOfPages,
-                    totalPages: widget.totalPages,
+                    numberOfPages: numberOfPages,
+                    totalPages: totalPages,
                   ),
                 ],
               ),
@@ -115,7 +166,7 @@ class _StatsScreenState extends State<StatsScreen> {
             CardStats(
               cards: [
                 TotalPagesBooksRead(
-                  countBooks: 135,
+                  countBooks: numberOfBooks,
                   countPages: 50000,
                   countRead: 20389,
                 ),
