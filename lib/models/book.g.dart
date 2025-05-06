@@ -28,7 +28,7 @@ class BookAdapter extends TypeAdapter<Book> {
       classification: fields[8] as String?,
       summary: fields[9] as String?,
       imageUrl: fields[10] as String?,
-      avgRating: fields[11] as String?,
+      numberOfPages: fields[11] as int?,
       userId: fields[12] as String?,
     );
   }
@@ -60,7 +60,7 @@ class BookAdapter extends TypeAdapter<Book> {
       ..writeByte(10)
       ..write(obj.imageUrl)
       ..writeByte(11)
-      ..write(obj.avgRating)
+      ..write(obj.numberOfPages)
       ..writeByte(12)
       ..write(obj.userId);
   }

@@ -13,6 +13,7 @@ import 'package:book_trail/views/widgets/stats_search/total_pages_books_read.dar
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class StatsScreen extends StatefulWidget {
   final BookOperation bookOperation;
@@ -29,14 +30,49 @@ class _StatsScreenState extends State<StatsScreen> {
   double finishedCount = 0;
   double readingCount = 0;
   double toReadCount = 0;
-  int numberOfPages = 100;
-  int totalPages = 1000;
+  int numberOfPages = 0;
+  int totalPages = 500;
   double avgRate = 0;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  Box<Book>? bookBox;
+  late Stream<BoxEvent> boxStream;
+  Box<int>? totalPagesBox;
 
   @override
   void initState() {
     super.initState();
-    _generateCategoriesFromHive();
+    _initializeNotifications();
+    _setupHiveListener();
+    _loadTotalPages();
+  }
+
+  void _initializeNotifications() {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> _showCelebrationNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+          'celebration_channel',
+          'Celebration Notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+          showWhen: false,
+        );
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Congratulations!',
+      'You reached your reading goal of $totalPages pages! Keep it up!',
+      platformChannelSpecifics,
+    );
   }
 
   Color generateRandomColor() {
@@ -44,8 +80,7 @@ class _StatsScreenState extends State<StatsScreen> {
     return Color(0xFF000000 + random.nextInt(0xFFFFFF));
   }
 
-  Future<void> _generateCategoriesFromHive() async {
-    await Future.delayed(Duration.zero);
+  Future<void> _setupHiveListener() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final userId = userProvider.userId;
 
@@ -54,19 +89,45 @@ class _StatsScreenState extends State<StatsScreen> {
       return;
     }
 
-    final bookBox = Hive.box<Book>(kBookBox(userId));
-    final Map<String, int> classificationCounts = {};
+    bookBox = Hive.box<Book>(kBookBox(userId));
+    boxStream = bookBox!.watch();
+    _generateCategoriesFromHive();
 
+    boxStream.listen((event) {
+      _generateCategoriesFromHive();
+    });
+  }
+
+  Future<void> _loadTotalPages() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userId = userProvider.userId;
+
+    if (userId == null) {
+      debugPrint("User ID is null. Cannot load totalPages.");
+      return;
+    }
+
+    totalPagesBox = await Hive.openBox<int>('totalPagesBox_$userId');
+    final savedTotalPages = totalPagesBox!.get('totalPages') ?? 500;
+    setState(() {
+      totalPages = savedTotalPages;
+    });
+  }
+
+  Future<void> _generateCategoriesFromHive() async {
+    if (bookBox == null) return;
+
+    final Map<String, int> classificationCounts = {};
     double localFinished = 0;
     double localReading = 0;
     double localToRead = 0;
     int totalRatings = 0;
     int ratedBooksCount = 0;
+    int totalPagesRead = 0;
 
-    final bookList = bookBox.values.toList();
+    final bookList = bookBox!.values.toList();
 
     for (var book in bookList) {
-    
       final classification = book.classification ?? 'Unclassified';
       classificationCounts[classification] =
           (classificationCounts[classification] ?? 0) + 1;
@@ -84,17 +145,25 @@ class _StatsScreenState extends State<StatsScreen> {
         totalRatings += book.rating!;
         ratedBooksCount++;
       }
+
+      if (book.numberOfPages != null && book.numberOfPages! > 0) {
+        totalPagesRead += book.numberOfPages!;
+      }
     }
 
-    
-    final double avg =
-        ratedBooksCount > 0 ? totalRatings / ratedBooksCount : 0;
-
+    final double avg = ratedBooksCount > 0 ? totalRatings / ratedBooksCount : 0;
     final List<Map<String, dynamic>> generatedCategories =
         classificationCounts.entries.map((entry) {
-      final color = generateRandomColor();
-      return {'name': entry.key, 'value': entry.value, 'color': color};
-    }).toList();
+          final color = generateRandomColor();
+          return {'name': entry.key, 'value': entry.value, 'color': color};
+        }).toList();
+
+    bool shouldCelebrate = totalPagesRead >= totalPages;
+    if (shouldCelebrate) {
+      totalPages += 200;
+      await totalPagesBox!.put('totalPages', totalPages);
+      _showCelebrationNotification();
+    }
 
     setState(() {
       categories = generatedCategories;
@@ -103,9 +172,16 @@ class _StatsScreenState extends State<StatsScreen> {
       readingCount = localReading;
       toReadCount = localToRead;
       avgRate = avg;
+      numberOfPages = totalPagesRead;
     });
 
-    debugPrint("Categories loaded: $categories");
+    debugPrint(
+      "Categories loaded: $categories, numberOfPages: $numberOfPages, totalPages: $totalPages",
+    );
+  }
+
+  Future<void> _onRefresh() async {
+    await _generateCategoriesFromHive();
   }
 
   @override
@@ -113,87 +189,95 @@ class _StatsScreenState extends State<StatsScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            Text(
-              "CHART",
-              style: TextStyle(
-                fontSize: 14,
-                color: themeProvider.isDarkMode
-                    ? const Color(0xFFB0BEC5)
-                    : Colors.grey[600],
-              ),
-            ),
-            CardStats(
-              cards: [
-                PieChartStatsScreen(
-                  categories: categories,
-                  numberOfBooks: numberOfBooks,
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                "CHART",
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      themeProvider.isDarkMode
+                          ? const Color(0xFFB0BEC5)
+                          : Colors.grey[600],
                 ),
-                const SizedBox(height: 20),
-                ColorTextPiChart(categories: categories),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              "TOTAL PAGES",
-              style: TextStyle(
-                fontSize: 14,
-                color: themeProvider.isDarkMode
-                    ? const Color(0xFFB0BEC5)
-                    : Colors.grey[600],
               ),
-            ),
-            CardStats(
-              cards: [
-                ProgressReadCardStats(
-                  numberOfPages: numberOfPages,
-                  totalPages: totalPages,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              "BOOKS BY STATUS",
-              style: TextStyle(
-                fontSize: 14,
-                color: themeProvider.isDarkMode
-                    ? const Color(0xFFB0BEC5)
-                    : Colors.grey[600],
+              CardStats(
+                cards: [
+                  PieChartStatsScreen(
+                    categories: categories,
+                    numberOfBooks: numberOfBooks,
+                  ),
+                  const SizedBox(height: 20),
+                  ColorTextPiChart(categories: categories),
+                ],
               ),
-            ),
-            CardStats(
-              cards: [
-                ReadFinishWantCard(
-                  finishedCount: finishedCount,
-                  readingCount: readingCount,
-                  toReadCount: toReadCount,
-                  avgRate: avgRate,
+              const SizedBox(height: 16),
+              Text(
+                "TOTAL PAGES",
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      themeProvider.isDarkMode
+                          ? const Color(0xFFB0BEC5)
+                          : Colors.grey[600],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              "TOTAL BOOK STATS",
-              style: TextStyle(
-                fontSize: 14,
-                color: themeProvider.isDarkMode
-                    ? const Color(0xFFB0BEC5)
-                    : Colors.grey[600],
               ),
-            ),
-            CardStats(
-              cards: [
-                TotalPagesBooksRead(
-                  countBooks: numberOfBooks,
-                  countPages: 50000,
-                  countRead: 20389,
+              CardStats(
+                cards: [
+                  ProgressReadCardStats(
+                    numberOfPages: numberOfPages,
+                    totalPages: totalPages,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "BOOKS BY STATUS",
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      themeProvider.isDarkMode
+                          ? const Color(0xFFB0BEC5)
+                          : Colors.grey[600],
                 ),
-              ],
-            ),
-          ],
+              ),
+              CardStats(
+                cards: [
+                  ReadFinishWantCard(
+                    finishedCount: finishedCount,
+                    readingCount: readingCount,
+                    toReadCount: toReadCount,
+                    avgRate: avgRate,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "TOTAL BOOK STATS",
+                style: TextStyle(
+                  fontSize: 14,
+                  color:
+                      themeProvider.isDarkMode
+                          ? const Color(0xFFB0BEC5)
+                          : Colors.grey[600],
+                ),
+              ),
+              CardStats(
+                cards: [
+                  TotalPagesBooksRead(
+                    countBooks: numberOfBooks,
+                    countPages: totalPages,
+                    countRead: numberOfPages,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -38,7 +38,7 @@ class Book extends HiveObject {
   String? imageUrl;
 
   @HiveField(11)
-  String? avgRating;
+  int? numberOfPages;
 
   @HiveField(12)
   String? userId;
@@ -55,7 +55,7 @@ class Book extends HiveObject {
     this.classification,
     this.summary,
     this.imageUrl,
-    this.avgRating,
+    this.numberOfPages,
     this.userId,
   });
 

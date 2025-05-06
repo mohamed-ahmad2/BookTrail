@@ -37,6 +37,7 @@ class BookInfo extends StatefulWidget {
 
 class _BookInfoState extends State<BookInfo> {
   final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _numberOfPagesController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
   String? _readingStatus;
@@ -49,6 +50,7 @@ class _BookInfoState extends State<BookInfo> {
   late String _classification;
   late String _summary;
   late String _imageUrl;
+  int? _numberOfPages;
 
   @override
   void initState() {
@@ -102,6 +104,8 @@ class _BookInfoState extends State<BookInfo> {
         _classification = bookData.classification ?? widget.classification;
         _summary = bookData.summary ?? widget.summary;
         _imageUrl = bookData.imageUrl ?? widget.imageUrl;
+        _numberOfPages = bookData.numberOfPages;
+        _numberOfPagesController.text = _numberOfPages?.toString() ?? '';
       });
       debugPrint('BookInfo: Loaded book with ID: ${widget.bookId}');
     } else {
@@ -114,14 +118,15 @@ class _BookInfoState extends State<BookInfo> {
         _rating == 0 &&
         _startDate == null &&
         _endDate == null &&
-        _statusController.text.isEmpty) {
+        _statusController.text.isEmpty &&
+        _numberOfPagesController.text.isEmpty) {
       showDialog(
         context: context,
         builder:
             (context) => AlertDialog(
               title: const Text('No Changes Made'),
               content: const Text(
-                'You must change at least one field (Reading Status, Rating, Start Date, End Date, or Notes) to save the data.',
+                'You must change at least one field (Reading Status, Rating, Start Date, End Date, Notes, or Number of Pages) to save the data.',
               ),
               actions: [
                 TextButton(
@@ -154,6 +159,7 @@ class _BookInfoState extends State<BookInfo> {
       classification: _classification,
       summary: _summary,
       imageUrl: _imageUrl,
+      numberOfPages: int.tryParse(_numberOfPagesController.text),
       userId: userProvider.userId,
     );
 
@@ -173,6 +179,7 @@ class _BookInfoState extends State<BookInfo> {
       classification: _classification,
       summary: _summary,
       imageUrl: _imageUrl,
+      numberOfPages: int.tryParse(_numberOfPagesController.text),
       userId: userProvider.userId,
     );
 
@@ -699,7 +706,7 @@ Future<void> _deleteBook() async {
                                           : (themeProvider.isDarkMode
                                               ? Colors.white
                                               : Colors.black),
-                                ),
+                               ),
                               ),
                               const Icon(
                                 Icons.calendar_today,
@@ -862,6 +869,65 @@ Future<void> _deleteBook() async {
                     children: [
                       Row(
                         children: [
+                          Icon(Icons.book, color: Colors.grey[650], size: 20.0),
+                          const SizedBox(width: 8.0),
+                          const Text(
+                            'Number of Pages Read',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          controller: _numberOfPagesController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            hintStyle: TextStyle(color: Colors.grey),
+                            contentPadding: EdgeInsets.all(8.0),
+                            border: InputBorder.none,
+                            hintText: 'Enter number of pages read',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Card(
+                elevation: 4.0,
+                color:
+                    themeProvider.isDarkMode
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  side: BorderSide(
+                    color:
+                        themeProvider.isDarkMode
+                            ? Colors.grey[200]!
+                            : Colors.grey[800]!,
+                  ),
+                ),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
                           Icon(Icons.edit, color: Colors.grey[650], size: 20.0),
                           const SizedBox(width: 8.0),
                           const Text(
@@ -909,6 +975,7 @@ Future<void> _deleteBook() async {
   @override
   void dispose() {
     _statusController.dispose();
+    _numberOfPagesController.dispose();
     super.dispose();
   }
 }
