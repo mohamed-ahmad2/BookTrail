@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class BookService {
   static Future<List<Book>> searchBooks(String query) async {
     final url = Uri.parse(
-      'https://www.googleapis.com/books/v1/volumes?q=$query',
+      "https://www.googleapis.com/books/v1/volumes?q=$query",
     );
 
     final response = await http.get(url);

@@ -16,7 +16,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Book> books = [];
-  String searchQuery = 'a';
+  String searchQuery = '';
   bool isLoading = false;
 
   @override
