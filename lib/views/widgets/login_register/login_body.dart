@@ -3,7 +3,7 @@ import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
-import 'package:book_trail/views/widgets/login_register/login_guest_textbutton.dart';
+//import 'package:book_trail/views/widgets/login_register/login_guest_textbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_logbutton.dart';
 import 'package:book_trail/views/widgets/login_register/login_password.dart';
 import 'package:book_trail/views/widgets/login_register/login_regbutton.dart';
@@ -137,7 +137,7 @@ class _LoginBodyState extends State<LoginBody> {
                     ),
               ),
               const SizedBox(height: 30),
-              LoginGuestTextbutton(bookOperation: widget.bookOperation),
+              //LoginGuestTextbutton(bookOperation: widget.bookOperation),
             ],
           ),
         ),
