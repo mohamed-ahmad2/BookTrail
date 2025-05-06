@@ -5,15 +5,12 @@ import 'package:book_trail/views/widgets/home_favorite/custom_book_card.dart';
 
 class BookListView extends StatelessWidget {
   final List<Book> books;
-  final List<String> favoriteTitles;
-  final Function(String) toggleFavorite;
-    final BookOperation bookOperation;
+  final BookOperation bookOperation;
 
   const BookListView({
     super.key,
     required this.books,
-    required this.favoriteTitles,
-    required this.toggleFavorite, required this.bookOperation,
+    required this.bookOperation,
   });
 
   @override
@@ -40,10 +37,9 @@ class BookListView extends StatelessWidget {
             classification: classification,
             summary: summary,
             imageUrl: imageUrl,
-            isFavorite:
-                book.title != null ? favoriteTitles.contains(book.title) : false,
-            onFavoriteToggle: () => toggleFavorite(title),
-            clasification: classification, bookOperation: bookOperation,
+            isFavorite: book.isFavorite ?? false,
+            clasification: classification,
+            bookOperation: bookOperation,
           ),
         );
       },

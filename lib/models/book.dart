@@ -43,6 +43,8 @@ class Book extends HiveObject {
   @HiveField(12)
   String? userId;
 
+  @HiveField(13)
+  bool? isFavorite;
   Book({
     this.bookId,
     this.readingStatus,
@@ -57,6 +59,7 @@ class Book extends HiveObject {
     this.imageUrl,
     this.numberOfPages,
     this.userId,
+    this.isFavorite,
   });
 
   @override

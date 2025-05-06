@@ -25,8 +25,6 @@ class BookInfo extends StatefulWidget {
     this.classification = 'Classification',
     this.summary = 'No summary available.',
     this.imageUrl = '',
-    bool? isFavorite,
-    VoidCallback? onFavoriteToggle,
     required String status,
     required this.bookOperation,
   });
@@ -161,6 +159,7 @@ class _BookInfoState extends State<BookInfo> {
       imageUrl: _imageUrl,
       numberOfPages: int.tryParse(_numberOfPagesController.text),
       userId: userProvider.userId,
+      isFavorite: _bookInfoBox!.get(widget.bookId)!.isFavorite,
     );
 
     /// Save to local screen box
@@ -181,6 +180,7 @@ class _BookInfoState extends State<BookInfo> {
       imageUrl: _imageUrl,
       numberOfPages: int.tryParse(_numberOfPagesController.text),
       userId: userProvider.userId,
+      isFavorite: _bookInfoBox!.get(widget.bookId)!.isFavorite,
     );
 
     /// Save to user's personal Hive box
@@ -209,62 +209,62 @@ class _BookInfoState extends State<BookInfo> {
     debugPrint('BookInfo: Updated book with ID: ${widget.bookId}');
   }
 
-Future<void> _deleteBook() async {
-  if (_bookInfoBox == null) {
-    debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
-    return;
-  }
+  Future<void> _deleteBook() async {
+    if (_bookInfoBox == null) {
+      debugPrint('BookInfo: Cannot delete book: Hive box not initialized');
+      return;
+    }
 
-  final userProvider = Provider.of<UserProvider>(context, listen: false);
-  final bookId = widget.bookId;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final bookId = widget.bookId;
 
-  debugPrint('BookInfo: Attempting to delete book with ID: $bookId');
+    debugPrint('BookInfo: Attempting to delete book with ID: $bookId');
 
-  // Check if the book exists in bookInfo box
-  final bookInInfoBox = _bookInfoBox!.containsKey(bookId);
+    // Check if the book exists in bookInfo box
+    final bookInInfoBox = _bookInfoBox!.containsKey(bookId);
 
-  // Check if the book exists in the user's box
-  await widget.bookOperation.initialize(userProvider.userId!);
-  final bookInUserBox = widget.bookOperation.getBook(bookId) != null;
+    // Check if the book exists in the user's box
+    await widget.bookOperation.initialize(userProvider.userId!);
+    final bookInUserBox = widget.bookOperation.getBook(bookId) != null;
 
-  // If not found in either, show a message
-  if (!bookInInfoBox && !bookInUserBox) {
+    // If not found in either, show a message
+    if (!bookInInfoBox && !bookInUserBox) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Book not found. Nothing to delete.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      debugPrint('BookInfo: Book with ID $bookId not found in any box.');
+      return;
+    }
+
+    // Delete from book info box if exists
+    if (bookInInfoBox) {
+      await _bookInfoBox!.delete(bookId);
+      debugPrint('BookInfo: Deleted from _bookInfoBox');
+    }
+
+    // Delete from user box if exists
+    if (bookInUserBox) {
+      await widget.bookOperation.deleteBook(bookId);
+      debugPrint('BookInfo: Deleted from user box');
+    }
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Book not found. Nothing to delete.'),
+          content: Text('Book deleted successfully!'),
           duration: Duration(seconds: 2),
         ),
       );
+      Navigator.pop(context);
     }
-    debugPrint('BookInfo: Book with ID $bookId not found in any box.');
-    return;
-  }
 
-  // Delete from book info box if exists
-  if (bookInInfoBox) {
-    await _bookInfoBox!.delete(bookId);
-    debugPrint('BookInfo: Deleted from _bookInfoBox');
+    debugPrint('BookInfo: Finished deleting book with ID: $bookId');
   }
-
-  // Delete from user box if exists
-  if (bookInUserBox) {
-    await widget.bookOperation.deleteBook(bookId);
-    debugPrint('BookInfo: Deleted from user box');
-  }
-
-  if (mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Book deleted successfully!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-    Navigator.pop(context);
-  }
-
-  debugPrint('BookInfo: Finished deleting book with ID: $bookId');
-}
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
