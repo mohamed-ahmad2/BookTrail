@@ -13,7 +13,6 @@ import 'package:book_trail/views/widgets/stats_search/total_pages_books_read.dar
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class StatsScreen extends StatefulWidget {
   final BookOperation bookOperation;
@@ -33,51 +32,15 @@ class _StatsScreenState extends State<StatsScreen> {
   int numberOfPages = 0;
   int totalPages = 500;
   double avgRate = 0;
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   Box<Book>? bookBox;
   late Stream<BoxEvent> boxStream;
-  Box<int>? totalPagesBox;
+  Box<int>? settingsBox;
 
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
     _setupHiveListener();
     _loadTotalPages();
-  }
-
-  void _initializeNotifications() {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future<void> _showCelebrationNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-          'celebration_channel',
-          'Celebration Notifications',
-          importance: Importance.max,
-          priority: Priority.high,
-          showWhen: false,
-        );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Congratulations!',
-      'You reached your reading goal of $totalPages pages! Keep it up!',
-      platformChannelSpecifics,
-    );
-  }
-
-  Color generateRandomColor() {
-    final Random random = Random();
-    return Color(0xFF000000 + random.nextInt(0xFFFFFF));
   }
 
   Future<void> _setupHiveListener() async {
@@ -90,6 +53,7 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     bookBox = Hive.box<Book>(kBookBox(userId));
+    settingsBox = await Hive.openBox<int>('settingsBox');
     boxStream = bookBox!.watch();
     _generateCategoriesFromHive();
 
@@ -99,19 +63,13 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Future<void> _loadTotalPages() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final userId = userProvider.userId;
+    settingsBox = await Hive.openBox<int>('settingsBox');
+    totalPages = settingsBox?.get('totalPages') ?? 500;
+    setState(() {});
+  }
 
-    if (userId == null) {
-      debugPrint("User ID is null. Cannot load totalPages.");
-      return;
-    }
-
-    totalPagesBox = await Hive.openBox<int>('totalPagesBox_$userId');
-    final savedTotalPages = totalPagesBox!.get('totalPages') ?? 500;
-    setState(() {
-      totalPages = savedTotalPages;
-    });
+  Future<void> _saveTotalPages(int newTotalPages) async {
+    await settingsBox?.put('totalPages', newTotalPages);
   }
 
   Future<void> _generateCategoriesFromHive() async {
@@ -154,15 +112,14 @@ class _StatsScreenState extends State<StatsScreen> {
     final double avg = ratedBooksCount > 0 ? totalRatings / ratedBooksCount : 0;
     final List<Map<String, dynamic>> generatedCategories =
         classificationCounts.entries.map((entry) {
-          final color = generateRandomColor();
-          return {'name': entry.key, 'value': entry.value, 'color': color};
-        }).toList();
+      final color = generateRandomColor();
+      return {'name': entry.key, 'value': entry.value, 'color': color};
+    }).toList();
 
     bool shouldCelebrate = totalPagesRead >= totalPages;
     if (shouldCelebrate) {
       totalPages += 200;
-      await totalPagesBox!.put('totalPages', totalPages);
-      _showCelebrationNotification();
+      await _saveTotalPages(totalPages);
     }
 
     setState(() {
@@ -182,6 +139,11 @@ class _StatsScreenState extends State<StatsScreen> {
 
   Future<void> _onRefresh() async {
     await _generateCategoriesFromHive();
+  }
+
+  Color generateRandomColor() {
+    final Random random = Random();
+    return Color(0xFF000000 + random.nextInt(0xFFFFFF));
   }
 
   @override
