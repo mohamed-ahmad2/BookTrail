@@ -83,11 +83,15 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
           );
 
-          // ⬇️ حفظ userId في UserProvider
+          // Save userId in UserProvider
           Provider.of<UserProvider>(context, listen: false).setUserId(username);
           
-          // ⬇️ حفظ username في UsernameProvider
+          // Save username in UsernameProvider
           Provider.of<UsernameProvider>(context, listen: false).setUsername(username);
+
+          // Save userId to authBox for persistence
+          var authBox = Hive.box<String>('authBox');
+          await authBox.put('userId', username);
 
           if (mounted) {
             Navigator.pushReplacement(

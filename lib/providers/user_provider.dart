@@ -12,4 +12,9 @@ class UserProvider with ChangeNotifier {
     _userId = id;
     notifyListeners();
   }
+
+  void clearUserId() {
+    _userId = null;
+    notifyListeners();
+  }
 }

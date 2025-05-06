@@ -34,13 +34,23 @@ class _StatsScreenState extends State<StatsScreen> {
   double avgRate = 0;
   Box<Book>? bookBox;
   late Stream<BoxEvent> boxStream;
-  Box<int>? settingsBox;
+  Box<int>? totalPagesBox;
 
   @override
   void initState() {
     super.initState();
     _setupHiveListener();
     _loadTotalPages();
+  }
+
+  Color generateRandomColor() {
+    final Random random = Random();
+    return Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
   }
 
   Future<void> _setupHiveListener() async {
@@ -53,7 +63,6 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     bookBox = Hive.box<Book>(kBookBox(userId));
-    settingsBox = await Hive.openBox<int>('settingsBox');
     boxStream = bookBox!.watch();
     _generateCategoriesFromHive();
 
@@ -63,17 +72,44 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Future<void> _loadTotalPages() async {
-    settingsBox = await Hive.openBox<int>('settingsBox');
-    totalPages = settingsBox?.get('totalPages') ?? 500;
-    setState(() {});
+    try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userId = userProvider.userId;
+
+      if (userId == null) {
+        debugPrint("User ID is null. Cannot load totalPages.");
+        return;
+      }
+
+      totalPagesBox = await Hive.openBox<int>('totalPagesBox_$userId');
+      final savedTotalPages = totalPagesBox!.get('totalPages') ?? 500;
+
+      if (mounted) {
+        setState(() {
+          totalPages = savedTotalPages;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error loading totalPages: $e");
+    }
   }
 
-  Future<void> _saveTotalPages(int newTotalPages) async {
-    await settingsBox?.put('totalPages', newTotalPages);
+  void _showCelebrationMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          '🎉 Congratulations! You reached your reading goal! Keep going!',
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Future<void> _generateCategoriesFromHive() async {
-    if (bookBox == null) return;
+    if (bookBox == null || bookBox!.isEmpty) return;
 
     final Map<String, int> classificationCounts = {};
     double localFinished = 0;
@@ -110,27 +146,31 @@ class _StatsScreenState extends State<StatsScreen> {
     }
 
     final double avg = ratedBooksCount > 0 ? totalRatings / ratedBooksCount : 0;
+
     final List<Map<String, dynamic>> generatedCategories =
         classificationCounts.entries.map((entry) {
-      final color = generateRandomColor();
-      return {'name': entry.key, 'value': entry.value, 'color': color};
-    }).toList();
+          final color = generateRandomColor();
+          return {'name': entry.key, 'value': entry.value, 'color': color};
+        }).toList();
 
     bool shouldCelebrate = totalPagesRead >= totalPages;
     if (shouldCelebrate) {
       totalPages += 200;
-      await _saveTotalPages(totalPages);
+      await totalPagesBox?.put('totalPages', totalPages);
+      _showCelebrationMessage();
     }
 
-    setState(() {
-      categories = generatedCategories;
-      numberOfBooks = bookList.length;
-      finishedCount = localFinished;
-      readingCount = localReading;
-      toReadCount = localToRead;
-      avgRate = avg;
-      numberOfPages = totalPagesRead;
-    });
+    if (mounted) {
+      setState(() {
+        categories = generatedCategories;
+        numberOfBooks = bookList.length;
+        finishedCount = localFinished;
+        readingCount = localReading;
+        toReadCount = localToRead;
+        avgRate = avg;
+        numberOfPages = totalPagesRead;
+      });
+    }
 
     debugPrint(
       "Categories loaded: $categories, numberOfPages: $numberOfPages, totalPages: $totalPages",
@@ -139,11 +179,6 @@ class _StatsScreenState extends State<StatsScreen> {
 
   Future<void> _onRefresh() async {
     await _generateCategoriesFromHive();
-  }
-
-  Color generateRandomColor() {
-    final Random random = Random();
-    return Color(0xFF000000 + random.nextInt(0xFFFFFF));
   }
 
   @override

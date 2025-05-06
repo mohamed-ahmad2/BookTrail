@@ -9,4 +9,9 @@ class UsernameProvider with ChangeNotifier {
     _username = username;
     notifyListeners();
   }
+
+  void clearUsername() {
+    _username = null;
+    notifyListeners();
+  }
 }

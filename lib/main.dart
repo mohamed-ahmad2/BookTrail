@@ -3,6 +3,7 @@ import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/layout/main_layout.dart';
 import 'package:book_trail/models/book.dart';
 import 'package:book_trail/models/user.dart';
+import 'package:book_trail/providers/notification_provider.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
@@ -18,6 +19,9 @@ Future<void> main() async {
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(BookAdapter());
   await Hive.openBox<User>('users');
+  await Hive.openBox<bool>('notificationBox');
+  await Hive.openBox<bool>('themeBox');
+  await Hive.openBox<String>('authBox');
 
   runApp(BookTrailApp(bookOperation: bookOperation));
 }
@@ -31,17 +35,34 @@ class BookTrailApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) {
+          final userProvider = UserProvider();
+          // Load persisted userId from authBox
+          final authBox = Hive.box<String>('authBox');
+          final userId = authBox.get('userId');
+          if (userId != null) {
+            userProvider.setUserId(userId);
+          }
+          return userProvider;
+        }),
         ChangeNotifierProvider(create: (_) => UsernameProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: Consumer2<UserProvider, ThemeProvider>(
         builder: (context, userProvider, themeProvider, _) {
+          final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
           return MaterialApp(
             title: 'Book Trail',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(brightness: Brightness.light),
             darkTheme: ThemeData(brightness: Brightness.dark),
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            builder: (context, child) {
+              return ScaffoldMessenger(
+                key: notificationProvider.scaffoldMessengerKey,
+                child: child!,
+              );
+            },
             initialRoute: userProvider.userId == null ? '/login' : '/main',
             routes: {
               '/login': (context) => LoginScreen(bookOperation: bookOperation),

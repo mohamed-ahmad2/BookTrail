@@ -51,12 +51,14 @@ class _LoginBodyState extends State<LoginBody> {
               listen: false,
             ).setUsername(user.username);
 
+            // Save userId to authBox for persistence
+            var authBox = Hive.box<String>('authBox');
+            await authBox.put('userId', user.username);
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder:
-                    (context) =>
-                        MainLayout(bookOperation: widget.bookOperation),
+                builder: (context) => MainLayout(bookOperation: widget.bookOperation),
               ),
             );
           }
@@ -126,15 +128,12 @@ class _LoginBodyState extends State<LoginBody> {
               ),
               const SizedBox(height: 25),
               LoginRegbutton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) =>
-                                Register(bookOperation: widget.bookOperation),
-                      ),
-                    ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Register(bookOperation: widget.bookOperation),
+                  ),
+                ),
               ),
               const SizedBox(height: 30),
               //LoginGuestTextbutton(bookOperation: widget.bookOperation),

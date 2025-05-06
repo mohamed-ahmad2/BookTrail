@@ -1,5 +1,7 @@
 import 'package:book_trail/book_operation.dart';
+import 'package:book_trail/providers/notification_provider.dart';
 import 'package:book_trail/providers/theme_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/views/screens/_login.dart';
@@ -17,7 +19,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notificationsEnabled = false;
   String? _email;
   String? _username;
 
@@ -151,9 +152,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Future<void> _logout() async {
+    // Clear userId from UserProvider
+    Provider.of<UserProvider>(context, listen: false).clearUserId();
+    // Clear username from UsernameProvider
+    Provider.of<UsernameProvider>(context, listen: false).clearUsername();
+    // Clear userId from authBox
+    var authBox = Hive.box<String>('authBox');
+    await authBox.delete('userId');
+
+    // Navigate to LoginScreen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(bookOperation: widget.bookOperation),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final notificationProvider = Provider.of<NotificationProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -251,11 +271,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Text('Notifications', style: TextStyle(fontSize: 16)),
                       Switch(
-                        value: _notificationsEnabled,
+                        value: notificationProvider.notificationsEnabled,
                         onChanged: (value) {
-                          setState(() {
-                            _notificationsEnabled = value;
-                          });
+                          notificationProvider.toggleNotifications(value, context);
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,
@@ -310,16 +328,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(
-                          bookOperation: widget.bookOperation,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: _logout,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[800],
                     padding: const EdgeInsets.symmetric(vertical: 16),
