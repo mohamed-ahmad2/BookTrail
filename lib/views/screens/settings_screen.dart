@@ -154,20 +154,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _logout() async {
     // Clear userId from UserProvider
-    Provider.of<UserProvider>(context, listen: false).clearUserId();
-    // Clear username from UsernameProvider
-    Provider.of<UsernameProvider>(context, listen: false).clearUsername();
     // Clear userId from authBox
     var authBox = Hive.box<String>('authBox');
     await authBox.delete('userId');
 
-    // Navigate to LoginScreen
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginScreen(bookOperation: widget.bookOperation),
-      ),
-    );
+    // Check if widget is still mounted before using context
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(bookOperation: widget.bookOperation),
+        ),
+      );
+    }
   }
 
   @override
