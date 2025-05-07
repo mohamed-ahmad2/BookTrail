@@ -2,6 +2,7 @@ import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/providers/notification_provider.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
+import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/models/user.dart';
 import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _username = Provider.of<UsernameProvider>(context, listen: false).username;
+    // Load user data when the screen initializes
     _loadUserData();
   }
 
   Future<void> _loadUserData() async {
+    final usernameProvider = Provider.of<UsernameProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    // Get username from UsernameProvider or userId from UserProvider
+    _username = usernameProvider.username ?? userProvider.userId;
+    
     if (_username != null) {
       var box = await Hive.openBox<User>('users');
       User? user = box.values.firstWhere(
@@ -40,10 +47,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         orElse: () => User(username: '', password: '', email: ''),
       );
 
-      if (user.username.isNotEmpty) {
+      if (user.username.isNotEmpty && mounted) {
         setState(() {
           _email = user.email;
+          _username = user.username; // Ensure username is set
         });
+        // Update UsernameProvider if it was null
+        if (usernameProvider.username == null) {
+          usernameProvider.setUsername(user.username);
+        }
       }
     }
   }
@@ -57,10 +69,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
 
       if (user.username.isNotEmpty) {
-        if (user.password == _passwordController.text.trim() && _newPasswordController.text.trim() == _confirmPasswordController.text.trim()) {
+        if (user.password == _passwordController.text.trim() &&
+            _newPasswordController.text.trim() ==
+                _confirmPasswordController.text.trim()) {
           user.password = _newPasswordController.text.trim();
           await user.save();
-          ScaffoldMessenger.of(context).showSnackBar(
+          final notificationProvider = Provider.of<NotificationProvider>(
+            context,
+            listen: false,
+          );
+          notificationProvider.scaffoldMessengerKey.currentState?.showSnackBar(
             const SnackBar(
               content: Text('Password updated successfully'),
               duration: Duration(seconds: 3),
@@ -71,14 +89,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _newPasswordController.clear();
           _confirmPasswordController.clear();
         } else if (user.password != _passwordController.text.trim()) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          final notificationProvider = Provider.of<NotificationProvider>(
+            context,
+            listen: false,
+          );
+          notificationProvider.scaffoldMessengerKey.currentState?.showSnackBar(
             const SnackBar(
               content: Text('Incorrect current password'),
               duration: Duration(seconds: 3),
             ),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
+          final notificationProvider = Provider.of<NotificationProvider>(
+            context,
+            listen: false,
+          );
+          notificationProvider.scaffoldMessengerKey.currentState?.showSnackBar(
             const SnackBar(
               content: Text('New passwords do not match'),
               duration: Duration(seconds: 3),
@@ -153,6 +179,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _logout() async {
     // Clear userId from UserProvider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.clearUserId();
+
+    // Clear username from UsernameProvider
+    final usernameProvider = Provider.of<UsernameProvider>(context, listen: false);
+    usernameProvider.clearUsername();
+
     // Clear userId from authBox
     var authBox = Hive.box<String>('authBox');
     await authBox.delete('userId');
@@ -174,6 +207,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final notificationProvider = Provider.of<NotificationProvider>(context);
 
     return Scaffold(
+      // Removed key: notificationProvider.scaffoldMessengerKey to avoid GlobalKey conflict
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -194,8 +228,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Username:', style: TextStyle(fontSize: 16)),
-                      Text(_username ?? '', style: TextStyle(fontSize: 16)),
+                      const Text('Username:', style: TextStyle(fontSize: 16)),
+                      Text(
+                        _username ?? '',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                 ),
@@ -214,8 +251,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Email:', style: TextStyle(fontSize: 16)),
-                      Text(_email ?? '', style: TextStyle(fontSize: 16)),
+                      const Text('Email:', style: TextStyle(fontSize: 16)),
+                      Text(_email ?? '', style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -235,9 +272,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: [
+                        children: const [
                           Icon(Icons.dark_mode),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10),
                           Text('Dark mode', style: TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -267,11 +304,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Notifications', style: TextStyle(fontSize: 16)),
+                      const Text(
+                        'Notifications',
+                        style: TextStyle(fontSize: 16),
+                      ),
                       Switch(
                         value: notificationProvider.notificationsEnabled,
-                        onChanged: (value) {
-                          notificationProvider.toggleNotifications(value, context);
+                        onChanged: (value) async {
+                          try {
+                            await notificationProvider.toggleNotifications(
+                              value,
+                              context,
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Failed to toggle notifications: $e',
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          }
                         },
                         activeColor: Colors.blue,
                         inactiveThumbColor: Colors.grey,
@@ -293,7 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Text('Language:', style: TextStyle(fontSize: 16)),
                       Text('English', style: TextStyle(fontSize: 16)),
                     ],

@@ -11,11 +11,22 @@ import 'package:book_trail/views/screens/_login.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 
 
 Future<void> main() async {
   final BookOperation bookOperation = BookOperation();
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  tz.initializeTimeZones();
+
+
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(BookAdapter());
@@ -23,9 +34,34 @@ Future<void> main() async {
   await Hive.openBox<bool>('notificationBox');
   await Hive.openBox<bool>('themeBox');
   await Hive.openBox<String>('authBox');
-  
+
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await requestNotificationPermission();
 
   runApp(BookTrailApp(bookOperation: bookOperation));
+}
+
+
+Future<void> requestNotificationPermission() async {
+  try {
+    final androidPlugin = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin != null) {
+      await androidPlugin.requestNotificationsPermission();
+    }
+  } catch (e) {
+    debugPrint('Notification permission error: $e');
+  }
 }
 
 class BookTrailApp extends StatelessWidget {
@@ -40,7 +76,6 @@ class BookTrailApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) {
             final userProvider = UserProvider();
-            // Load persisted userId from authBox
             final authBox = Hive.box<String>('authBox');
             final userId = authBox.get('userId');
             if (userId != null) {
@@ -49,7 +84,17 @@ class BookTrailApp extends StatelessWidget {
             return userProvider;
           },
         ),
-        ChangeNotifierProvider(create: (_) => UsernameProvider()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final usernameProvider = UsernameProvider();
+            final authBox = Hive.box<String>('authBox');
+            final userId = authBox.get('userId');
+            if (userId != null) {
+              usernameProvider.setUsername(userId); // Username is same as userId
+            }
+            return usernameProvider;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: Consumer2<UserProvider, ThemeProvider>(
@@ -73,12 +118,14 @@ class BookTrailApp extends StatelessWidget {
             },
             initialRoute: userProvider.userId == null ? '/login' : '/main',
             routes: {
-              '/login': (context) => LoginScreen(bookOperation: bookOperation),
-              '/main':
-                  (context) => FutureBuilder(
-                    future: Hive.openBox<Book>(kBookBox(userProvider.userId!)),
+              '/login': (context) =>
+                  LoginScreen(bookOperation: bookOperation),
+              '/main': (context) => FutureBuilder(
+                    future:
+                        Hive.openBox<Book>(kBookBox(userProvider.userId!)),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
                         return const Scaffold(
                           body: Center(child: CircularProgressIndicator()),
                         );

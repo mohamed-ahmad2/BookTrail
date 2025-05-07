@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';

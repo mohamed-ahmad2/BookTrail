@@ -1,121 +1,186 @@
-import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
+import 'package:timezone/data/latest_10y.dart' as tz show initializeTimeZones;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationProvider with ChangeNotifier {
+  late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   bool _notificationsEnabled = false;
-  Timer? _timer;
-  Box<bool>? _notificationBox;
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  final List<String> _motivationalQuotes = [
-    "Keep pushing forward, you're doing amazing! 🚀",
-    "Every page you read brings you closer to your goal! 📚",
-    "You're unstoppable, keep up the great work! 💪",
-    "Believe in yourself, you've got this! 🌟",
-    "Your dedication is inspiring, keep going! 🔥",
-    "Turn your dreams into reality, one step at a time! ✨",
-    "Stay focused and conquer your goals! 🎯",
-    "You're stronger than you know, keep shining! 💡",
-    "Embrace the journey, you're making progress! 🛤️",
-    "Keep reading, your mind is growing! 🌱",
-  ];
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   NotificationProvider() {
-    _loadNotificationState();
+    _initializeNotifications();
   }
 
   bool get notificationsEnabled => _notificationsEnabled;
 
+  Future<void> _initializeNotifications() async {
+    tz.initializeTimeZones();
+
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    // Android initialization settings
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // iOS initialization settings
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        );
+
+    // Combine platform-specific settings
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
+
+    // Initialize the plugin
+    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // Request permissions for Android 13+
+    if (await _flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()
+            ?.areNotificationsEnabled() ==
+        false) {
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.requestNotificationsPermission();
+    }
+
+    // Load notification state from Hive
+    await _loadNotificationState();
+  }
+
   Future<void> _loadNotificationState() async {
-    _notificationBox = await Hive.openBox<bool>('notificationBox');
-    _notificationsEnabled = _notificationBox?.get('enabled') ?? false;
-    if (_notificationsEnabled) {
-      _startTimer(null); // Context will be passed later if needed
-    }
+    var box = await Hive.openBox<bool>('notificationBox');
+    _notificationsEnabled =
+        box.get('notificationsEnabled', defaultValue: false)!;
     notifyListeners();
+
+    // If notifications are enabled, schedule them
+    if (_notificationsEnabled) {
+      await _scheduleNotification();
+    }
   }
 
-  void toggleNotifications(bool value, BuildContext context) {
+  Future<void> _saveNotificationState() async {
+    var box = await Hive.openBox<bool>('notificationBox');
+    await box.put('notificationsEnabled', _notificationsEnabled);
+  }
+
+  Future<void> showNotification({
+    required int id,
+    required String title,
+    required String body,
+    String? channelId = 'book_trail_channel',
+    String? channelName = 'Book Trail',
+  }) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+          'celebration_channel',
+          'Celebration Notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+          showWhen: true,
+        );
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    await _flutterLocalNotificationsPlugin.show(
+      id,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
+  }
+
+  Future<void> toggleNotifications(bool value, BuildContext context) async {
     _notificationsEnabled = value;
-    _notificationBox?.put('enabled', value);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    if (_notificationsEnabled) {
-      _startTimer(context);
-      scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            'Motivational messages enabled! 🎉',
-            style: TextStyle(
-              fontSize: 16,
-              color: isDarkMode ? Colors.black : Colors.white,
-            ),
-          ),
-          backgroundColor: isDarkMode ? Colors.blue[300] : Colors.blue[800],
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } else {
-      _stopTimer();
-      scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            'Motivational messages disabled. 😴',
-            style: TextStyle(
-              fontSize: 16,
-              color: isDarkMode ? Colors.black : Colors.white,
-            ),
-          ),
-          backgroundColor: isDarkMode ? Colors.blue[300] : Colors.blue[800],
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
+    await _saveNotificationState();
     notifyListeners();
-  }
 
-  void _startTimer(BuildContext? context) {
-    _timer?.cancel(); // Cancel any existing timer
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      _showMotivationalMessage(context);
-    });
-  }
-
-  void _stopTimer() {
-    _timer?.cancel();
-    _timer = null;
-  }
-
-  void _showMotivationalMessage(BuildContext? context) {
-    final random = Random();
-    final quote = _motivationalQuotes[random.nextInt(_motivationalQuotes.length)];
     if (_notificationsEnabled) {
-      // Use context if available, otherwise rely on scaffoldMessengerKey
-      final isDarkMode = context != null
-          ? Theme.of(context).brightness == Brightness.dark
-          : false; // Fallback to light mode if context is null
-      scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            quote,
-            style: TextStyle(
-              fontSize: 16,
-              color: isDarkMode ? Colors.black : Colors.white,
-            ),
-          ),
-          backgroundColor: isDarkMode ? Colors.green[300] : Colors.green[800],
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      await _scheduleNotification();
+    } else {
+      await _cancelNotifications();
     }
   }
 
-  @override
-  void dispose() {
-    _stopTimer();
-    super.dispose();
+  Future<void> _scheduleNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+          'book_trail_channel',
+          'Book Trail',
+          importance: Importance.max,
+          priority: Priority.high,
+          showWhen: false,
+        );
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    // List of motivational messages
+    final List<String> messages = [
+      '“A reader lives a thousand lives before he dies.” – George R.R. Martin',
+      '“The more that you read, the more things you will know.” – Dr. Seuss',
+      '“Reading is essential for those who seek to rise above the ordinary.” – Jim Rohn',
+      '“Books are a uniquely portable magic.” – Stephen King',
+      '“Until I feared I would lose it, I never loved to read. One does not love breathing.” – Harper Lee',
+      '“Reading gives us someplace to go when we have to stay where we are.” – Mason Cooley',
+      '“Once you learn to read, you will be forever free.” – Frederick Douglass',
+      '“A room without books is like a body without a soul.” – Marcus Tullius Cicero',
+      '“That’s the thing about books. They let you travel without moving your feet.” – Jhumpa Lahiri',
+      'Keep going! Each page you read is a step toward growth.',
+      'Stay motivated! Your future self will thank you for reading today.',
+      'Reading is your daily investment in a better you. Don’t stop now!',
+    ];
+
+    var now = tz.TZDateTime.now(tz.local);
+    for (int i = 0; i < 12; i++) {
+      // Schedule notifications every 5 minutes
+      var scheduledDate = now.add(Duration(minutes: 5 * i));
+
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+        i, // Each notification should have a unique ID
+        'Book Trail Reminder',
+        messages[i % messages.length], // Rotate through the messages
+        scheduledDate,
+        platformChannelSpecifics,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents:
+            DateTimeComponents.time, // Optional: for daily repeat at same time
+      );
+    }
+
+    // Show confirmation message
+    scaffoldMessengerKey.currentState?.showSnackBar(
+      const SnackBar(
+        content: Text('Notification scheduled for 5 minutes from now.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> _cancelNotifications() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+
+    // Show confirmation message
+    scaffoldMessengerKey.currentState?.showSnackBar(
+      const SnackBar(
+        content: Text('Notifications canceled.'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }

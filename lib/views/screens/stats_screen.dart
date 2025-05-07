@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
+import 'package:book_trail/providers/notification_provider.dart';
 import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/views/widgets/stats_search/card_stats.dart';
@@ -94,17 +95,18 @@ class _StatsScreenState extends State<StatsScreen> {
     }
   }
 
-  void _showCelebrationMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          '🎉 Congratulations! You reached your reading goal! Keep going!',
-          style: TextStyle(fontSize: 16, color: Colors.white),
-        ),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
-        behavior: SnackBarBehavior.floating,
-      ),
+  Future<void> _showCelebrationMessage() async {
+    final notificationProvider = Provider.of<NotificationProvider>(
+      context,
+      listen: false,
+    );
+
+    await notificationProvider.showNotification(
+      id: Random().nextInt(1000),
+      title: 'Reading Goal Achieved!',
+      body: '🎉 Congratulations! You reached your reading goal! Keep going!',
+      channelId: 'celebration_channel',
+      channelName: 'Celebration Notifications',
     );
   }
 
@@ -154,10 +156,11 @@ class _StatsScreenState extends State<StatsScreen> {
         }).toList();
 
     bool shouldCelebrate = totalPagesRead >= totalPages;
+
     if (shouldCelebrate) {
       totalPages += 200;
       await totalPagesBox?.put('totalPages', totalPages);
-      _showCelebrationMessage();
+      await _showCelebrationMessage();
     }
 
     if (mounted) {
