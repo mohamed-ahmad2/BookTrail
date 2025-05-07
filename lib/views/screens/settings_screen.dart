@@ -178,13 +178,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _logout() async {
-    // Clear userId from UserProvider
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.clearUserId();
-
-    // Clear username from UsernameProvider
-    final usernameProvider = Provider.of<UsernameProvider>(context, listen: false);
-    usernameProvider.clearUsername();
 
     // Clear userId from authBox
     var authBox = Hive.box<String>('authBox');
