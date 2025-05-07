@@ -8,6 +8,7 @@ import 'package:book_trail/providers/theme_provider.dart';
 import 'package:book_trail/providers/user_provider.dart';
 import 'package:book_trail/providers/username_provider.dart';
 import 'package:book_trail/views/screens/_login.dart';
+import 'package:book_trail/views/widgets/body_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,15 +18,11 @@ import 'package:timezone/data/latest.dart' as tz;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-
-
 Future<void> main() async {
   final BookOperation bookOperation = BookOperation();
   WidgetsFlutterBinding.ensureInitialized();
 
-
   tz.initializeTimeZones();
-
 
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
@@ -34,7 +31,6 @@ Future<void> main() async {
   await Hive.openBox<bool>('notificationBox');
   await Hive.openBox<bool>('themeBox');
   await Hive.openBox<String>('authBox');
-
 
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -49,7 +45,6 @@ Future<void> main() async {
 
   runApp(BookTrailApp(bookOperation: bookOperation));
 }
-
 
 Future<void> requestNotificationPermission() async {
   try {
@@ -116,16 +111,14 @@ class BookTrailApp extends StatelessWidget {
                 child: child!,
               );
             },
-            initialRoute: userProvider.userId == null ? '/login' : '/main',
+            initialRoute: '/body', // Set BodyScreen as initial route
             routes: {
-              '/login': (context) =>
-                  LoginScreen(bookOperation: bookOperation),
+              '/body': (context) => BodyScreen(bookOperation: bookOperation),
+              '/login': (context) => LoginScreen(bookOperation: bookOperation),
               '/main': (context) => FutureBuilder(
-                    future:
-                        Hive.openBox<Book>(kBookBox(userProvider.userId!)),
+                    future: Hive.openBox<Book>(kBookBox(userProvider.userId!)),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Scaffold(
                           body: Center(child: CircularProgressIndicator()),
                         );
