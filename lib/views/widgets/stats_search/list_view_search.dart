@@ -26,6 +26,9 @@ class BookListView extends StatelessWidget {
         final imageUrl = book.imageUrl ?? ''; // Default to an empty string if null
         final classification = book.classification ?? 'Unknown Classification';
         final summary = book.summary ?? 'No summary available.';
+        final webReaderLink = book.webReaderLink; // Pass webReaderLink
+        final viewability = book.viewability; // Pass viewability
+        final embeddable = book.embeddable; // Pass embeddable (bool?)
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -38,6 +41,9 @@ class BookListView extends StatelessWidget {
             classification: classification,
             summary: summary,
             bookOperation: bookOperation,
+            webReaderLink: webReaderLink,
+            viewability: viewability,
+            embeddable: embeddable, // Pass nullable embeddable
           ),
         );
       },

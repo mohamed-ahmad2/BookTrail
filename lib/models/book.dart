@@ -45,6 +45,16 @@ class Book extends HiveObject {
 
   @HiveField(13)
   bool? isFavorite;
+
+  @HiveField(14)
+  final String? webReaderLink;
+
+  @HiveField(15)
+  final String? viewability;
+
+  @HiveField(16)
+  final bool? embeddable;
+
   Book({
     this.bookId,
     this.readingStatus,
@@ -60,6 +70,9 @@ class Book extends HiveObject {
     this.numberOfPages,
     this.userId,
     this.isFavorite,
+    this.webReaderLink,
+    this.viewability,
+  this.embeddable,
   });
 
   @override

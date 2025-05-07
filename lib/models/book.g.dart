@@ -31,13 +31,16 @@ class BookAdapter extends TypeAdapter<Book> {
       numberOfPages: fields[11] as int?,
       userId: fields[12] as String?,
       isFavorite: fields[13] as bool?,
+      webReaderLink: fields[14] as String?,
+      viewability: fields[15] as String?,
+      embeddable: fields[16] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Book obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.bookId)
       ..writeByte(1)
@@ -65,7 +68,13 @@ class BookAdapter extends TypeAdapter<Book> {
       ..writeByte(12)
       ..write(obj.userId)
       ..writeByte(13)
-      ..write(obj.isFavorite);
+      ..write(obj.isFavorite)
+      ..writeByte(14)
+      ..write(obj.webReaderLink)
+      ..writeByte(15)
+      ..write(obj.viewability)
+      ..writeByte(16)
+      ..write(obj.embeddable);
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/views/screens/book_info.dart';
 import 'package:book_trail/views/widgets/stats_search/download_image_to_file.dart';
@@ -15,6 +14,9 @@ class BookCard extends StatefulWidget {
   final String summary;
   final String imageUrl;
   final BookOperation bookOperation;
+  final String? webReaderLink;
+  final String? viewability; // Added viewability
+  final bool? embeddable;   // Changed to nullable, no default
 
   const BookCard({
     super.key,
@@ -26,6 +28,9 @@ class BookCard extends StatefulWidget {
     required this.classification,
     required this.summary,
     required this.imageUrl,
+    this.webReaderLink,
+    this.viewability,
+    this.embeddable, // Removed default value
   });
 
   @override
@@ -47,17 +52,19 @@ class _BookCardState extends State<BookCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) => BookInfo(
-                  bookOperation: widget.bookOperation,
-                  bookId: widget.bookId,
-                  status: widget.status,
-                  title: widget.title,
-                  author: widget.author,
-                  classification: widget.classification,
-                  summary: widget.summary,
-                  imageUrl: widget.imageUrl,
-                ),
+            builder: (context) => BookInfo(
+              bookOperation: widget.bookOperation,
+              bookId: widget.bookId,
+              status: widget.status,
+              title: widget.title,
+              author: widget.author,
+              classification: widget.classification,
+              summary: widget.summary,
+              imageUrl: widget.imageUrl,
+              webReaderLink: widget.webReaderLink,
+              viewability: widget.viewability,
+              embeddable: widget.embeddable, // Pass nullable embeddable
+            ),
           ),
         );
       },
@@ -119,8 +126,10 @@ class _BookCardState extends State<BookCard> {
                     summary: widget.summary,
                     imageUrl: widget.imageUrl,
                     bookOperation: widget.bookOperation,
+                    webReaderLink: widget.webReaderLink,
+                    viewability: widget.viewability,
+                    embeddable: widget.embeddable, // Pass nullable embeddable
                   ),
-
                   Text(widget.status, style: const TextStyle(fontSize: 10)),
                 ],
               ),

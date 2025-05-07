@@ -16,6 +16,9 @@ class IconButtonSearchCard extends StatefulWidget {
   final String summary;
   final String imageUrl;
   final BookOperation bookOperation;
+  final String? webReaderLink; // Add webReaderLink
+  final String? viewability; // Added viewability
+  final bool? embeddable; // Added embeddable
 
   const IconButtonSearchCard({
     super.key,
@@ -27,6 +30,9 @@ class IconButtonSearchCard extends StatefulWidget {
     required this.summary,
     required this.imageUrl,
     required this.bookOperation,
+    this.webReaderLink, // Add webReaderLink
+    this.viewability, // Added to constructor
+    this.embeddable = false, // Added to constructor
   });
 
   @override
@@ -108,6 +114,9 @@ class _IconButtonSearchCardState extends State<IconButtonSearchCard> {
                   summary: widget.summary,
                   imageUrl: widget.imageUrl,
                   userId: userProvider.userId,
+                  webReaderLink: widget.webReaderLink, // Add webReaderLink
+                  viewability: widget.viewability, // Added viewability
+                  embeddable: widget.embeddable, // Added embeddable
                 );
 
                 await widget.bookOperation.addBook(book);

@@ -5,6 +5,8 @@
   "flutterTools.displayModularContextMenu": false,
   "cSpell.words": [
     "adoptopenjdk",
+    "allprojects",
+    "androidx",
     "animatedpulserectangle",
     "appbar",
     "autobuild",
@@ -14,6 +16,7 @@
     "formkey",
     "kconstant",
     "Logbutton",
+    "multidex",
     "objc",
     "pullrequest",
     "Qube",
@@ -21,9 +24,13 @@
     "SARIF",
     "sonarqube",
     "subosito",
+    "Subproject",
+    "subprojects",
     "temurin",
     "Thefirstlook",
     "toread",
+    "viewability",
+    "webviewflutter",
     "xcworkspace"
   ]
 }

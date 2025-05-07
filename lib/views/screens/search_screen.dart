@@ -49,7 +49,28 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           }
 
-          await bookStorage.addBook(book);
+          // Ensure all fields including viewability and embeddable are copied
+          final bookToAdd = Book(
+            bookId: book.bookId,
+            title: book.title,
+            author: book.author,
+            classification: book.classification,
+            summary: book.summary,
+            imageUrl: book.imageUrl,
+            readingStatus: book.readingStatus,
+            rating: book.rating,
+            startDate: book.startDate,
+            endDate: book.endDate,
+            notes: book.notes,
+            userId: book.userId,
+            isFavorite: book.isFavorite,
+            webReaderLink: book.webReaderLink,
+            viewability: book.viewability, // Added viewability
+            embeddable: book.embeddable, // Added embeddable
+            numberOfPages: book.numberOfPages,
+          );
+
+          await bookStorage.addBook(bookToAdd);
         }
       }
 
