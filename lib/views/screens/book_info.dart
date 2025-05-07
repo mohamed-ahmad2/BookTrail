@@ -1,5 +1,3 @@
-// ignore_for_file: sized_box_for_whitespace
-
 import 'package:book_trail/book_operation.dart';
 import 'package:book_trail/kconstant.dart';
 import 'package:book_trail/models/book.dart';
@@ -514,6 +512,7 @@ class _BookInfoState extends State<BookInfo> {
                 ),
               ),
               const SizedBox(height: 8.0),
+              // ignore: sized_box_for_whitespace
               Container(
                 width: double.infinity,
                 child: Card(
@@ -980,29 +979,33 @@ class _BookInfoState extends State<BookInfo> {
                 margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Book Content Availability',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      const SizedBox(height: 8.0),
-                      Text(
-                        'Viewability: ${_viewability ?? "Unknown"}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
+                  // ignore: sized_box_for_whitespace
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Book Content Availability',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                      ),
-                      Text(
-                        'Embeddable: ${_embeddable == true ? "Yes" : "No"}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
+                        const SizedBox(height: 8.0),
+                        Text(
+                          'Viewability: ${_viewability ?? "Unknown"}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
+                          ),
                         ),
-                      ),
-                    ],
+                        Text(
+                          'Embeddable: ${_embeddable == true ? "Yes" : "No"}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: themeProvider.isDarkMode ? Colors.grey[200] : Colors.grey[800],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
